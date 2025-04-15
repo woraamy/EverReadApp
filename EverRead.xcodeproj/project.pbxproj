@@ -1,0 +1,614 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7F303E0E2DAE93B3005B6F83 /* EverReadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */; };
+		7F303E102DAE93B3005B6F83 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E0F2DAE93B3005B6F83 /* ContentView.swift */; };
+		7F303E122DAE93B4005B6F83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F303E112DAE93B4005B6F83 /* Assets.xcassets */; };
+		7F303E162DAE93B4005B6F83 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F303E152DAE93B4005B6F83 /* Preview Assets.xcassets */; };
+		7F303E202DAE93B5005B6F83 /* EverReadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E1F2DAE93B5005B6F83 /* EverReadTests.swift */; };
+		7F303E2A2DAE93B5005B6F83 /* EverReadUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E292DAE93B5005B6F83 /* EverReadUITests.swift */; };
+		7F303E2C2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E2B2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7F303E1C2DAE93B5005B6F83 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7F303E022DAE93B3005B6F83 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F303E092DAE93B3005B6F83;
+			remoteInfo = EverRead;
+		};
+		7F303E262DAE93B5005B6F83 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7F303E022DAE93B3005B6F83 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7F303E092DAE93B3005B6F83;
+			remoteInfo = EverRead;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7F303E0A2DAE93B3005B6F83 /* EverRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EverRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverReadApp.swift; sourceTree = "<group>"; };
+		7F303E0F2DAE93B3005B6F83 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7F303E112DAE93B4005B6F83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7F303E132DAE93B4005B6F83 /* EverRead.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EverRead.entitlements; sourceTree = "<group>"; };
+		7F303E152DAE93B4005B6F83 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7F303E1B2DAE93B5005B6F83 /* EverReadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EverReadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F303E1F2DAE93B5005B6F83 /* EverReadTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverReadTests.swift; sourceTree = "<group>"; };
+		7F303E252DAE93B5005B6F83 /* EverReadUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EverReadUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F303E292DAE93B5005B6F83 /* EverReadUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverReadUITests.swift; sourceTree = "<group>"; };
+		7F303E2B2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverReadUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7F303E072DAE93B3005B6F83 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F303E182DAE93B5005B6F83 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F303E222DAE93B5005B6F83 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7F303E012DAE93B3005B6F83 = {
+			isa = PBXGroup;
+			children = (
+				7F303E0C2DAE93B3005B6F83 /* EverRead */,
+				7F303E1E2DAE93B5005B6F83 /* EverReadTests */,
+				7F303E282DAE93B5005B6F83 /* EverReadUITests */,
+				7F303E0B2DAE93B3005B6F83 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7F303E0B2DAE93B3005B6F83 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7F303E0A2DAE93B3005B6F83 /* EverRead.app */,
+				7F303E1B2DAE93B5005B6F83 /* EverReadTests.xctest */,
+				7F303E252DAE93B5005B6F83 /* EverReadUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7F303E0C2DAE93B3005B6F83 /* EverRead */ = {
+			isa = PBXGroup;
+			children = (
+				7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */,
+				7F303E0F2DAE93B3005B6F83 /* ContentView.swift */,
+				7F303E112DAE93B4005B6F83 /* Assets.xcassets */,
+				7F303E132DAE93B4005B6F83 /* EverRead.entitlements */,
+				7F303E142DAE93B4005B6F83 /* Preview Content */,
+			);
+			path = EverRead;
+			sourceTree = "<group>";
+		};
+		7F303E142DAE93B4005B6F83 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				7F303E152DAE93B4005B6F83 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		7F303E1E2DAE93B5005B6F83 /* EverReadTests */ = {
+			isa = PBXGroup;
+			children = (
+				7F303E1F2DAE93B5005B6F83 /* EverReadTests.swift */,
+			);
+			path = EverReadTests;
+			sourceTree = "<group>";
+		};
+		7F303E282DAE93B5005B6F83 /* EverReadUITests */ = {
+			isa = PBXGroup;
+			children = (
+				7F303E292DAE93B5005B6F83 /* EverReadUITests.swift */,
+				7F303E2B2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift */,
+			);
+			path = EverReadUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7F303E092DAE93B3005B6F83 /* EverRead */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F303E2F2DAE93B5005B6F83 /* Build configuration list for PBXNativeTarget "EverRead" */;
+			buildPhases = (
+				7F303E062DAE93B3005B6F83 /* Sources */,
+				7F303E072DAE93B3005B6F83 /* Frameworks */,
+				7F303E082DAE93B3005B6F83 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EverRead;
+			productName = EverRead;
+			productReference = 7F303E0A2DAE93B3005B6F83 /* EverRead.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7F303E1A2DAE93B5005B6F83 /* EverReadTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F303E322DAE93B5005B6F83 /* Build configuration list for PBXNativeTarget "EverReadTests" */;
+			buildPhases = (
+				7F303E172DAE93B5005B6F83 /* Sources */,
+				7F303E182DAE93B5005B6F83 /* Frameworks */,
+				7F303E192DAE93B5005B6F83 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F303E1D2DAE93B5005B6F83 /* PBXTargetDependency */,
+			);
+			name = EverReadTests;
+			productName = EverReadTests;
+			productReference = 7F303E1B2DAE93B5005B6F83 /* EverReadTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7F303E242DAE93B5005B6F83 /* EverReadUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F303E352DAE93B5005B6F83 /* Build configuration list for PBXNativeTarget "EverReadUITests" */;
+			buildPhases = (
+				7F303E212DAE93B5005B6F83 /* Sources */,
+				7F303E222DAE93B5005B6F83 /* Frameworks */,
+				7F303E232DAE93B5005B6F83 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7F303E272DAE93B5005B6F83 /* PBXTargetDependency */,
+			);
+			name = EverReadUITests;
+			productName = EverReadUITests;
+			productReference = 7F303E252DAE93B5005B6F83 /* EverReadUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7F303E022DAE93B3005B6F83 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					7F303E092DAE93B3005B6F83 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					7F303E1A2DAE93B5005B6F83 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 7F303E092DAE93B3005B6F83;
+					};
+					7F303E242DAE93B5005B6F83 = {
+						CreatedOnToolsVersion = 15.4;
+						TestTargetID = 7F303E092DAE93B3005B6F83;
+					};
+				};
+			};
+			buildConfigurationList = 7F303E052DAE93B3005B6F83 /* Build configuration list for PBXProject "EverRead" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7F303E012DAE93B3005B6F83;
+			productRefGroup = 7F303E0B2DAE93B3005B6F83 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7F303E092DAE93B3005B6F83 /* EverRead */,
+				7F303E1A2DAE93B5005B6F83 /* EverReadTests */,
+				7F303E242DAE93B5005B6F83 /* EverReadUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7F303E082DAE93B3005B6F83 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F303E162DAE93B4005B6F83 /* Preview Assets.xcassets in Resources */,
+				7F303E122DAE93B4005B6F83 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F303E192DAE93B5005B6F83 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F303E232DAE93B5005B6F83 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7F303E062DAE93B3005B6F83 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F303E102DAE93B3005B6F83 /* ContentView.swift in Sources */,
+				7F303E0E2DAE93B3005B6F83 /* EverReadApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F303E172DAE93B5005B6F83 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F303E202DAE93B5005B6F83 /* EverReadTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7F303E212DAE93B5005B6F83 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F303E2C2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift in Sources */,
+				7F303E2A2DAE93B5005B6F83 /* EverReadUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7F303E1D2DAE93B5005B6F83 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F303E092DAE93B3005B6F83 /* EverRead */;
+			targetProxy = 7F303E1C2DAE93B5005B6F83 /* PBXContainerItemProxy */;
+		};
+		7F303E272DAE93B5005B6F83 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7F303E092DAE93B3005B6F83 /* EverRead */;
+			targetProxy = 7F303E262DAE93B5005B6F83 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		7F303E2D2DAE93B5005B6F83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7F303E2E2DAE93B5005B6F83 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		7F303E302DAE93B5005B6F83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EverRead/EverRead.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"EverRead/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = th.ac.ku.EverRead;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7F303E312DAE93B5005B6F83 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EverRead/EverRead.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"EverRead/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = th.ac.ku.EverRead;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7F303E332DAE93B5005B6F83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = th.ac.ku.EverReadTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EverRead.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EverRead";
+			};
+			name = Debug;
+		};
+		7F303E342DAE93B5005B6F83 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = th.ac.ku.EverReadTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EverRead.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EverRead";
+			};
+			name = Release;
+		};
+		7F303E362DAE93B5005B6F83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = th.ac.ku.EverReadUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = EverRead;
+			};
+			name = Debug;
+		};
+		7F303E372DAE93B5005B6F83 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = th.ac.ku.EverReadUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = EverRead;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7F303E052DAE93B3005B6F83 /* Build configuration list for PBXProject "EverRead" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F303E2D2DAE93B5005B6F83 /* Debug */,
+				7F303E2E2DAE93B5005B6F83 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F303E2F2DAE93B5005B6F83 /* Build configuration list for PBXNativeTarget "EverRead" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F303E302DAE93B5005B6F83 /* Debug */,
+				7F303E312DAE93B5005B6F83 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F303E322DAE93B5005B6F83 /* Build configuration list for PBXNativeTarget "EverReadTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F303E332DAE93B5005B6F83 /* Debug */,
+				7F303E342DAE93B5005B6F83 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F303E352DAE93B5005B6F83 /* Build configuration list for PBXNativeTarget "EverReadUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F303E362DAE93B5005B6F83 /* Debug */,
+				7F303E372DAE93B5005B6F83 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7F303E022DAE93B3005B6F83 /* Project object */;
+}
