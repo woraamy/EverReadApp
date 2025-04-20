@@ -1,0 +1,54 @@
+import SwiftUI
+
+struct ProfileCard: View {
+    var body: some View {
+        VStack(alignment: .leading){
+            // Profile
+            HStack{
+                Image(systemName: "person.crop.circle")
+                    .font(.system(size: 80))
+                VStack(alignment: .leading) {
+                    Text("Jane Reader").font(.title2)
+                    Text("@Janereader").font(.subheadline).padding(.bottom, 5)
+                        .foregroundColor(.pinkGray)
+                    HStack{
+                        Text("432 Followers")
+                        Text("87 Following")
+                    }
+                }
+            }.padding(.bottom,5)
+            //bio
+            Text("Book lover | Fantasy & Sci-Fi enthusiast | Always looking for new recommendations" ).font(.subheadline).padding(.bottom, 5)
+            //info card
+            HStack{
+                VStack{
+                    Image(systemName: "book")
+                        .font(.system(size: 20)).padding(.bottom,1)
+                    Text("Book Read").font(.subheadline)
+                    Text("42").fontWeight(.bold)
+                }.padding()
+                    .background(Color.redPink)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))
+                VStack{
+                    Image(systemName: "calendar")
+                        .font(.system(size: 20)).padding(.bottom,1)
+                    Text("  Reading  ").font(.subheadline)
+                    Text("3").fontWeight(.bold)
+                }.padding()
+                    .background(Color.redPink)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))
+                VStack{
+                    Image(systemName: "star.bubble")
+                        .font(.system(size: 20)).padding(.bottom,1)
+                    Text("   Review   ").font(.subheadline)
+                    Text("42").fontWeight(.bold)
+                }.padding()
+                    .background(Color.redPink)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))            }
+        }.padding()
+    }
+}
+
+#Preview {
+    ProfileCard()
+}

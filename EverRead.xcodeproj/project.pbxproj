@@ -7,11 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27312B0D2DB5276B000EC59C /* ReadGoalCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27312B0C2DB5276B000EC59C /* ReadGoalCard.swift */; };
+		27312B0F2DB5314C000EC59C /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27312B0E2DB5314C000EC59C /* SummaryCard.swift */; };
+		276079872DB4C8CE001F66C1 /* TabHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079862DB4C8CE001F66C1 /* TabHeader.swift */; };
+		2760798B2DB4D0F2001F66C1 /* EverReadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E1F2DAE93B5005B6F83 /* EverReadTests.swift */; };
+		2760798E2DB4D3C5001F66C1 /* ProfileCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2760798D2DB4D3C5001F66C1 /* ProfileCard.swift */; };
+		276079922DB4DAD7001F66C1 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079912DB4DAD7001F66C1 /* ColorExtension.swift */; };
+		276079942DB4F664001F66C1 /* ProfileTabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079932DB4F664001F66C1 /* ProfileTabButton.swift */; };
+		276079962DB50220001F66C1 /* ActivityCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079952DB50220001F66C1 /* ActivityCard.swift */; };
+		276079982DB50C61001F66C1 /* ReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079972DB50C61001F66C1 /* ReviewCard.swift */; };
+		27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A8A8D12DB403D2000F166B /* ProfileView.swift */; };
 		7F303E0E2DAE93B3005B6F83 /* EverReadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */; };
 		7F303E102DAE93B3005B6F83 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E0F2DAE93B3005B6F83 /* ContentView.swift */; };
 		7F303E122DAE93B4005B6F83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F303E112DAE93B4005B6F83 /* Assets.xcassets */; };
 		7F303E162DAE93B4005B6F83 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F303E152DAE93B4005B6F83 /* Preview Assets.xcassets */; };
-		7F303E202DAE93B5005B6F83 /* EverReadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E1F2DAE93B5005B6F83 /* EverReadTests.swift */; };
 		7F303E2A2DAE93B5005B6F83 /* EverReadUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E292DAE93B5005B6F83 /* EverReadUITests.swift */; };
 		7F303E2C2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E2B2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift */; };
 /* End PBXBuildFile section */
@@ -34,6 +43,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		27312B0C2DB5276B000EC59C /* ReadGoalCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadGoalCard.swift; sourceTree = "<group>"; };
+		27312B0E2DB5314C000EC59C /* SummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCard.swift; sourceTree = "<group>"; };
+		276079862DB4C8CE001F66C1 /* TabHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHeader.swift; sourceTree = "<group>"; };
+		2760798D2DB4D3C5001F66C1 /* ProfileCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCard.swift; sourceTree = "<group>"; };
+		276079912DB4DAD7001F66C1 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		276079932DB4F664001F66C1 /* ProfileTabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTabButton.swift; sourceTree = "<group>"; };
+		276079952DB50220001F66C1 /* ActivityCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCard.swift; sourceTree = "<group>"; };
+		276079972DB50C61001F66C1 /* ReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCard.swift; sourceTree = "<group>"; };
+		27A8A8D12DB403D2000F166B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		7F303E0A2DAE93B3005B6F83 /* EverRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EverRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverReadApp.swift; sourceTree = "<group>"; };
 		7F303E0F2DAE93B3005B6F83 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -72,6 +90,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2760798C2DB4D104001F66C1 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				276079862DB4C8CE001F66C1 /* TabHeader.swift */,
+				2760798D2DB4D3C5001F66C1 /* ProfileCard.swift */,
+				276079932DB4F664001F66C1 /* ProfileTabButton.swift */,
+				276079952DB50220001F66C1 /* ActivityCard.swift */,
+				276079972DB50C61001F66C1 /* ReviewCard.swift */,
+				27312B0C2DB5276B000EC59C /* ReadGoalCard.swift */,
+				27312B0E2DB5314C000EC59C /* SummaryCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		7F303E012DAE93B3005B6F83 = {
 			isa = PBXGroup;
 			children = (
@@ -95,11 +127,14 @@
 		7F303E0C2DAE93B3005B6F83 /* EverRead */ = {
 			isa = PBXGroup;
 			children = (
+				2760798C2DB4D104001F66C1 /* Components */,
 				7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */,
 				7F303E0F2DAE93B3005B6F83 /* ContentView.swift */,
+				27A8A8D12DB403D2000F166B /* ProfileView.swift */,
 				7F303E112DAE93B4005B6F83 /* Assets.xcassets */,
 				7F303E132DAE93B4005B6F83 /* EverRead.entitlements */,
 				7F303E142DAE93B4005B6F83 /* Preview Content */,
+				276079912DB4DAD7001F66C1 /* ColorExtension.swift */,
 			);
 			path = EverRead;
 			sourceTree = "<group>";
@@ -115,7 +150,6 @@
 		7F303E1E2DAE93B5005B6F83 /* EverReadTests */ = {
 			isa = PBXGroup;
 			children = (
-				7F303E1F2DAE93B5005B6F83 /* EverReadTests.swift */,
 			);
 			path = EverReadTests;
 			sourceTree = "<group>";
@@ -123,6 +157,7 @@
 		7F303E282DAE93B5005B6F83 /* EverReadUITests */ = {
 			isa = PBXGroup;
 			children = (
+				7F303E1F2DAE93B5005B6F83 /* EverReadTests.swift */,
 				7F303E292DAE93B5005B6F83 /* EverReadUITests.swift */,
 				7F303E2B2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift */,
 			);
@@ -259,7 +294,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27312B0D2DB5276B000EC59C /* ReadGoalCard.swift in Sources */,
+				2760798E2DB4D3C5001F66C1 /* ProfileCard.swift in Sources */,
 				7F303E102DAE93B3005B6F83 /* ContentView.swift in Sources */,
+				27312B0F2DB5314C000EC59C /* SummaryCard.swift in Sources */,
+				27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */,
+				276079982DB50C61001F66C1 /* ReviewCard.swift in Sources */,
+				276079922DB4DAD7001F66C1 /* ColorExtension.swift in Sources */,
+				276079962DB50220001F66C1 /* ActivityCard.swift in Sources */,
+				276079942DB4F664001F66C1 /* ProfileTabButton.swift in Sources */,
+				276079872DB4C8CE001F66C1 /* TabHeader.swift in Sources */,
 				7F303E0E2DAE93B3005B6F83 /* EverReadApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -268,7 +312,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7F303E202DAE93B5005B6F83 /* EverReadTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +319,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2760798B2DB4D0F2001F66C1 /* EverReadTests.swift in Sources */,
 				7F303E2C2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift in Sources */,
 				7F303E2A2DAE93B5005B6F83 /* EverReadUITests.swift in Sources */,
 			);
