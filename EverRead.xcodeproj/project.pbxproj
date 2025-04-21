@@ -150,6 +150,7 @@
 		7F303E1E2DAE93B5005B6F83 /* EverReadTests */ = {
 			isa = PBXGroup;
 			children = (
+				7F303E1F2DAE93B5005B6F83 /* EverReadTests.swift */,
 			);
 			path = EverReadTests;
 			sourceTree = "<group>";
@@ -157,7 +158,6 @@
 		7F303E282DAE93B5005B6F83 /* EverReadUITests */ = {
 			isa = PBXGroup;
 			children = (
-				7F303E1F2DAE93B5005B6F83 /* EverReadTests.swift */,
 				7F303E292DAE93B5005B6F83 /* EverReadUITests.swift */,
 				7F303E2B2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift */,
 			);
