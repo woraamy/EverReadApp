@@ -9,15 +9,15 @@ import Foundation
 // Define in a file like `BookDetailView.swift`
 import SwiftUI
 
-// Enum for the tabs within the Book Detail page
-enum BookDetailTab {
-    case details
-    case reviews
+//// Enum for the tabs within the Book Detail page
+enum DetailTab {
+    case Detail
+    case GoogleReview
 }
 
 struct BookDetailView: View {
     let book: Book
-    @State private var selectedTab: BookDetailTab = .details
+    @State private var selectedTab: DetailTab = .Detail
     
     // State for review input
     @State private var reviewText: String = ""
@@ -67,32 +67,33 @@ struct BookDetailView: View {
                         // --- Reading Status & Rating ---
                         Text("Currently Reading") // Placeholder status
                             .font(.caption)
-                            .foregroundColor(.green)
+                            .foregroundColor(.black)
                             .padding(.vertical, 2)
-                        
+                            .background(Color.redPink)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                         StarRatingView(rating: .constant(Int(book.averageRating?.rounded() ?? 0)), // Use book's rating
                                        maxRating: 5, interactive: false) // Non-interactive display
                         
                         
                         // --- Tab Buttons ---
                         HStack(spacing: 0) {
-                            DetailTabButton(label: "Details", tab: .details, selectedTab: $selectedTab)
-                            DetailTabButton(label: "Reviews", tab: .reviews, selectedTab: $selectedTab)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .background(Color.white) // White background for the tab bar itself
-                        .cornerRadius(10)
-                        .shadow(color: .gray.opacity(0.2), radius: 3, y: 2)
-                        .padding(.horizontal)
+                            DetailTabButton(label: "Details", detail_tab: .Detail, selectedTab: $selectedTab)
+                            DetailTabButton(label: "Review", detail_tab: .GoogleReview, selectedTab: $selectedTab)
+                        }.frame(width:350, height:40 )
+                            .background(Color.redPink)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .padding(.bottom, 10)
+                        
                         
                         
                         // --- Tab Content ---
                         Group {
                             switch selectedTab {
-                            case .details:
+                            case .Detail:
                                 BookDetailsTabView(description: book.description)
-                            case .reviews:
+                            case .GoogleReview:
                                 BookReviewsTabView(book: book, reviewText: $reviewText, reviewRating: $reviewRating)
+                            
                             }
                         }
                         .padding(.horizontal)
@@ -108,31 +109,29 @@ struct BookDetailView: View {
         }
     }}
 
-// --- Reusable Tab Button for Details/Reviews ---
-struct DetailTabButton: View {
-    let label: String
-    let tab: BookDetailTab
-    @Binding var selectedTab: BookDetailTab
+//struct DetailTabButton: View {
+//    let label: String
+//    let tab: Tab
+//    @Binding var selectedTab: Tab
+//
+//    var body: some View {
+//        Button {
+//            withAnimation(.easeInOut(duration: 0.2)) {
+//                 selectedTab = tab
+//            }
+//        } label: {
+//            Text(label)
+//                .fontWeight(selectedTab == tab ? .bold : .regular)
+//                .frame(maxWidth: .infinity)
+//                .padding(.vertical, 10)
+//                .background(selectedTab == tab ? Color.redPink.opacity(0.2) : Color.clear) // Subtle background for selected
+//                .foregroundColor(selectedTab == tab ? .redPink : .gray)
+//        }
+//        .buttonStyle(.plain) // Remove default button styling
+//    }
+//}
 
-    var body: some View {
-        Button {
-            withAnimation(.easeInOut(duration: 0.2)) {
-                 selectedTab = tab
-            }
-        } label: {
-            Text(label)
-                .fontWeight(selectedTab == tab ? .bold : .regular)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
-                .background(selectedTab == tab ? Color.redPink.opacity(0.2) : Color.clear) // Subtle background for selected
-                .foregroundColor(selectedTab == tab ? .redPink : .gray)
-        }
-        .buttonStyle(.plain) // Remove default button styling
-    }
-}
 
-
-// --- View for the Details Tab Content ---
 struct BookDetailsTabView: View {
     let description: String
 
