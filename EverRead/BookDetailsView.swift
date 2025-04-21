@@ -29,9 +29,6 @@ struct BookDetailView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                TabHeader(title: "Book Details") {
-                    print("Signing out...")
-                }
                 ScrollView {
                     VStack(spacing: 20) {
                         AsyncImage(url: URL(string: book.thumbnailUrl ?? "")) { phase in
@@ -90,7 +87,11 @@ struct BookDetailView: View {
                         Group {
                             switch selectedTab {
                             case .Detail:
-                                BookDetailsTabView(description: book.description)
+                                BookDetailsTabView(description: book.description,
+                                    pageCount: book.pageCount,
+                                    publisher: book.publisher,
+                                    publishedDate: book.publishedDate // <-- Pass publishedDate
+                                               )
                             case .GoogleReview:
                                 BookReviewsTabView(book: book, reviewText: $reviewText, reviewRating: $reviewRating)
                             
@@ -98,59 +99,72 @@ struct BookDetailView: View {
                         }
                         .padding(.horizontal)
                         
-                    } // End Main VStack
-                    .padding(.bottom, 30) // Add padding at the bottom
-                    
-                } // End ScrollView
+                    }
+                    .padding(.bottom, 30)
+                }
                 .background(Color.softWhitePink.ignoresSafeArea())
-                //        .navigationTitle("Book Details")
-                .foregroundColor(.darkPinkBrown) // Default text color for this view
+                .foregroundColor(.darkPinkBrown)
             }
         }
     }}
 
-//struct DetailTabButton: View {
-//    let label: String
-//    let tab: Tab
-//    @Binding var selectedTab: Tab
-//
-//    var body: some View {
-//        Button {
-//            withAnimation(.easeInOut(duration: 0.2)) {
-//                 selectedTab = tab
-//            }
-//        } label: {
-//            Text(label)
-//                .fontWeight(selectedTab == tab ? .bold : .regular)
-//                .frame(maxWidth: .infinity)
-//                .padding(.vertical, 10)
-//                .background(selectedTab == tab ? Color.redPink.opacity(0.2) : Color.clear) // Subtle background for selected
-//                .foregroundColor(selectedTab == tab ? .redPink : .gray)
-//        }
-//        .buttonStyle(.plain) // Remove default button styling
-//    }
-//}
-
 
 struct BookDetailsTabView: View {
     let description: String
+    let pageCount: Int?
+    let publisher: String?
+    let publishedDate: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
-            Text("Details") // Section Header (Optional)
+            Text("Book Description")
                 .font(.title3)
                 .fontWeight(.semibold)
+
+            VStack(alignment: .leading, spacing: 5) {
+                // Page Count
+                if let count = pageCount, count > 0 {
+                    HStack(spacing: 5) {
+                        Image(systemName: "book.pages")
+                            .foregroundColor(.gray)
+                            .frame(width: 20, alignment: .center)
+                        Text("\(count) pages")
+                    }
+                }
+
+                if let dateStr = publishedDate, !dateStr.isEmpty {
+                    HStack(spacing: 5) {
+                        Image(systemName: "calendar")
+                             .foregroundColor(.gray)
+                             .frame(width: 20, alignment: .center)
+                        Text("Published: \(dateStr)")
+                    }
+                }
+
+                // Publisher
+                if let pub = publisher, !pub.isEmpty {
+                    HStack(spacing: 5) {
+                        Image(systemName: "building.columns")
+                            .foregroundColor(.gray)
+                            .frame(width: 20, alignment: .center)
+                        Text("Publisher: \(pub)")
+                    }
+                }
+            }
+            .font(.subheadline)
+            .foregroundColor(.gray)
+            .padding(.bottom, 10)
+
 
             Text(description)
                 .lineSpacing(5)
 
-            Spacer() // Pushes button to bottom if space allows
+            Spacer()
 
             Button("Update Progress") {
                 print("Update Progress tapped")
-                // Add action here
             }
-            .buttonStyle(PrimaryButtonStyle()) // Use a custom button style
+            .buttonStyle(PrimaryButtonStyle())
 
         }
         .padding()
@@ -160,28 +174,23 @@ struct BookDetailsTabView: View {
     }
 }
 
-// --- View for the Reviews Tab Content ---
 struct BookReviewsTabView: View {
-    let book: Book // Pass the book if needed for context
+    let book: Book
     @Binding var reviewText: String
     @Binding var reviewRating: Int
 
     var body: some View {
          VStack(alignment: .leading, spacing: 15) {
-             // --- Display Existing Reviews (Placeholder) ---
-             Text("Reviews") // Section Header
+             Text("Reviews")
                  .font(.title3)
                  .fontWeight(.semibold)
                  .padding(.bottom, 5)
 
-             // Replace with actual review data later
              ForEach(0..<2) { i in
                  ReviewCard(name: "User \(i+1)", book: book.title, rating: 4, detail:"Placeholder review text goes here. It was a good read!")
                      .padding(.bottom, 5)
              }
-             // Divider() // Optional separator
-
-             // --- Write a Review Section ---
+            Divider()
              Text("Write A Review")
                  .font(.headline)
                  .padding(.top)
@@ -194,22 +203,19 @@ struct BookReviewsTabView: View {
                 .border(Color.gray.opacity(0.3))
                 .cornerRadius(5)
                 .overlay(
-                     // Placeholder text if TextEditor is empty
                      reviewText.isEmpty ? Text("Share your thoughts...")
                          .foregroundColor(.gray.opacity(0.6))
                          .padding(8)
-                         .allowsHitTesting(false) : nil // Prevents placeholder from blocking typing
+                         .allowsHitTesting(false) : nil
                      , alignment: .topLeading
                  )
 
 
              Button("Submit Review") {
                  print("Submit Review tapped. Rating: \(reviewRating), Text: \(reviewText)")
-                 // Add action here: Save the review, clear fields etc.
              }
              .buttonStyle(PrimaryButtonStyle())
-             .disabled(reviewRating == 0 || reviewText.isEmpty) // Disable if no rating or text
-
+             .disabled(reviewRating == 0 || reviewText.isEmpty)
          }
          .padding()
          .background(Color.white)
@@ -218,7 +224,6 @@ struct BookReviewsTabView: View {
     }
 }
 
-// --- Custom Button Style ---
 struct PrimaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -234,10 +239,8 @@ struct PrimaryButtonStyle: ButtonStyle {
 }
 
 
-// --- Star Rating Component ---
-// (You might already have this, or use this basic version)
 struct StarRatingView: View {
-    @Binding var rating: Int // Current selected rating
+    @Binding var rating: Int
     var maxRating: Int = 5
     var interactive: Bool = true
     var starSize: CGFloat = 25
@@ -262,33 +265,7 @@ struct StarRatingView: View {
     }
 }
 
-//// --- Placeholder Review Card (Adapt your existing one) ---
-//struct ReviewCard: View {
-//     let name: String
-//     let book: String // Included for context, might not be needed if always shown on book page
-//     let rating: Int
-//     let detail: String
-//
-//    var body: some View {
-//         VStack(alignment: .leading) {
-//             HStack {
-//                 Text(name).fontWeight(.bold)
-//                 Spacer()
-//                 StarRatingView(rating: .constant(rating), maxRating: 5, interactive: false, starSize: 15)
-//             }
-//             // Text("Reviewed: \(book)").font(.caption).foregroundColor(.gray) // Optional book title
-//             Text(detail)
-//                 .font(.body)
-//                 .lineLimit(3) // Limit lines displayed initially
-//         }
-//         .padding(10)
-//         .background(Color.softWhitePink.opacity(0.5)) // Slightly different background
-//         .cornerRadius(8)
-//    }
-//}
 
-
-// Preview for BookDetailView
 struct BookDetailView_Previews: PreviewProvider {
     static var previews: some View {
         // Wrap in NavigationView for preview context

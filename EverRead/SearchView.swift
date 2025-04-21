@@ -13,7 +13,7 @@ struct SearchView: View {
     @State private var searchText: String = ""
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 0) {
                 HStack {
                     Image(systemName: "magnifyingglass")
@@ -22,7 +22,7 @@ struct SearchView: View {
                         .onSubmit {
                             viewModel.searchBooks(query: searchText)
                         }
-                        .submitLabel(.search) // Sets the return key type
+                        .submitLabel(.search)
                 }
                 .padding(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
                 .background(Color.lightGrayBackground)
@@ -47,13 +47,14 @@ struct SearchView: View {
                          .listRowBackground(Color.softWhitePink)
                     }
                     .listStyle(.plain)
-//                    .navigationDestination(for: Book.self) { book in // Define destination
-//                        BookDetailView(book: book)
-//                    }
                 }
             }
-            .navigationTitle("Search")
             .background(Color.softWhitePink.ignoresSafeArea())
+            .navigationTitle("Search")
+            .navigationDestination(for: Book.self) { book in
+                BookDetailView(book: book)
+            }
+
         }
     }
 }
@@ -69,7 +70,7 @@ struct BookRow: View {
                     image.resizable()
                          .aspectRatio(contentMode: .fit)
                 } else if phase.error != nil {
-                    Image(systemName: "book.closed") // Placeholder on error
+                    Image(systemName: "book.closed") 
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.gray)
@@ -95,23 +96,6 @@ struct BookRow: View {
         .padding(.vertical, 5)
     }
 }
-
-
-//// Preview for SearchView
-//struct SearchView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        // Create a preview-specific ViewModel instance
-//        let previewViewModel = GoogleBooksViewModel()
-//
-//        // Load example data into the preview ViewModel
-//        previewViewModel.loadExampleData() // Prepare the data first
-//
-//        // *** Ensure this line is the LAST expression ***
-//        // It returns the View conforming type.
-//        return SearchView(viewModel: previewViewModel) // You might need to adjust SearchView's init if using @StateObject strictly internally, but this pattern is common for previews.
-//            .preferredColorScheme(.light) // Set preferred scheme for preview
-//    }
-//}
 
 #Preview {
     SearchView()

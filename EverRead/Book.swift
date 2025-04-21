@@ -24,6 +24,9 @@ struct Book: Identifiable, Decodable, Hashable {
     var thumbnailUrl: String? { volumeInfo.imageLinks?.thumbnail }
     var averageRating: Double? { volumeInfo.averageRating }
     var ratingsCount: Int? { volumeInfo.ratingsCount }
+    var pageCount: Int? { volumeInfo.pageCount }
+    var publishedDate: String? { volumeInfo.publishedDate }
+    var publisher: String? { volumeInfo.publisher }
 
     // Example Book for Previews
     static var example: Book {
@@ -35,7 +38,11 @@ struct Book: Identifiable, Decodable, Hashable {
 //                imageLinks: ImageLinks(smallThumbnail: <#String?#>, thumbnail: "https://books.google.com/books/content?id=_CpysyfU4gMC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"), // Replace with a valid URL if possible for preview
                 imageLinks: ImageLinks(smallThumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSptCNaQkVw3TeDewYix6nPWzLJv2YLv909Yw&s", thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSptCNaQkVw3TeDewYix6nPWzLJv2YLv909Yw&s"),
                 averageRating: 4.5,
-                ratingsCount: 1250
+                ratingsCount: 1250,
+                pageCount: 200,
+                publishedDate: "2004",
+                publisher: "None"
+            
              )
         )
     }
@@ -48,7 +55,9 @@ struct VolumeInfo: Decodable, Hashable {
     let imageLinks: ImageLinks?
     let averageRating: Double?
     let ratingsCount: Int?
-    // Add other fields you might need from Google Books API like publisher, publishedDate etc.
+    let pageCount: Int?
+    let publishedDate: String?
+    let publisher: String?
 }
 
 struct ImageLinks: Decodable, Hashable {

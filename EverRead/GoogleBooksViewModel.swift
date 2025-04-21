@@ -14,7 +14,6 @@ class GoogleBooksViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
 
-    private let apiKey = "AIzaSyBF3jFvIKnQSBeeNQ7QboTKzKHPDhoFqTw"
     private var searchCancellable: AnyCancellable?
 
     func searchBooks(query: String) {
@@ -43,7 +42,7 @@ class GoogleBooksViewModel: ObservableObject {
         searchCancellable = URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
             .decode(type: GoogleBooksResponse.self, decoder: JSONDecoder())
-            .receive(on: DispatchQueue.main) // Switch back to main thread for UI updates
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] completion in
                 self?.isLoading = false
                 switch completion {
@@ -52,7 +51,7 @@ class GoogleBooksViewModel: ObservableObject {
                 case .failure(let error):
                     print("Search failed: \(error)")
                     self?.errorMessage = "Failed to fetch books: \(error.localizedDescription)"
-                    self?.searchResults = [] // Clear results on failure
+                    self?.searchResults = []
                 }
             }, receiveValue: { [weak self] response in
                 self?.searchResults = response.items ?? []
@@ -63,6 +62,21 @@ class GoogleBooksViewModel: ObservableObject {
     }
 
     func loadExampleData() {
-         self.searchResults = [Book.example, Book(id: "preview_id_456", volumeInfo: VolumeInfo(title: "Another Book", authors: ["Author Two"], description: "Short description.", imageLinks: nil, averageRating: 3.0, ratingsCount: 50))]
+        let book1 = Book.example
+
+        let volumeInfo2 = VolumeInfo(
+            title: "Another Book for Preview",
+            authors: ["Author Two", "Another Author"],
+            description: "This is a short description for the second example book used in previews.",
+            imageLinks: nil, // Example with no image link
+            averageRating: 3.5,
+            ratingsCount: 45,
+            pageCount: 210,
+            publishedDate: "2023-05-20",
+            publisher: "Example Press"
+        )
+        let book2 = Book(id: "preview_id_456", volumeInfo: volumeInfo2)
+
+        self.searchResults = [book1, book2]
     }
 }
