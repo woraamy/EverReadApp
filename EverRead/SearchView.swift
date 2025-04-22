@@ -62,25 +62,61 @@ struct SearchView: View {
 // search results
 struct BookRow: View {
     let book: Book
-
+    
+    // Function to ensure URL uses HTTPS
+    private func secureImageUrl(_ urlString: String?) -> URL? {
+        guard let urlString = urlString, !urlString.isEmpty else { return nil }
+        
+        // Create a proper URL with https instead of http
+        let secureUrlString: String
+        if urlString.lowercased().hasPrefix("http://") {
+            secureUrlString = "https://" + urlString.dropFirst("http://".count)
+            print("Converting \(urlString) to \(secureUrlString)")
+        } else {
+            secureUrlString = urlString
+        }
+        
+        return URL(string: secureUrlString)
+    }
+    
     var body: some View {
         HStack(spacing: 15) {
-            AsyncImage(url: URL(string: book.thumbnailUrl ?? "")) { phase in
-                if let image = phase.image {
-                    image.resizable()
-                         .aspectRatio(contentMode: .fit)
-                } else if phase.error != nil {
-                    Image(systemName: "book.closed") 
+            // The image container with fixed dimensions
+            ZStack {
+                Color.gray.opacity(0.1)
+                
+                // The image content
+                if let secureUrl = secureImageUrl(book.thumbnailUrl) {
+                    AsyncImage(url: secureUrl) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        case .failure:
+                            Image(systemName: "book.closed")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(.gray)
+                        @unknown default:
+                            Image(systemName: "book.closed")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                } else {
+                    Image(systemName: "book.closed")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.gray)
-                } else {
-                    ProgressView()
                 }
             }
             .frame(width: 50, height: 75)
-            .background(Color.gray.opacity(0.1))
-
+            .cornerRadius(4)
+            
             VStack(alignment: .leading) {
                 Text(book.title)
                     .font(.headline)

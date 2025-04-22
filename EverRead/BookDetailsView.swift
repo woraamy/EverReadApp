@@ -21,7 +21,21 @@ struct BookDetailView: View {
     
     // State for review input
     @State private var reviewText: String = ""
-    @State private var reviewRating: Int = 0 // 0 means no rating selected
+    @State private var reviewRating: Int = 0
+    
+    // Function to ensure URL uses HTTPS
+    private func secureImageUrl(_ urlString: String?) -> URL? {
+        guard let urlString = urlString, !urlString.isEmpty else { return nil }
+        
+        let secureUrlString: String
+        if urlString.lowercased().hasPrefix("http://") {
+            secureUrlString = "https://" + urlString.dropFirst("http://".count)
+        } else {
+            secureUrlString = urlString
+        }
+        
+        return URL(string: secureUrlString)
+    }
     
     var body: some View {
         ZStack {
@@ -31,81 +45,83 @@ struct BookDetailView: View {
             VStack(spacing: 0) {
                 ScrollView {
                     VStack(spacing: 20) {
-                        AsyncImage(url: URL(string: book.thumbnailUrl ?? "")) { phase in
-                            if let image = phase.image {
-                                image.resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .shadow(radius: 5)
-                            } else if phase.error != nil {
-                                Image(systemName: "book.closed")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(.gray)
-                                    .frame(height: 200) // Maintain space
-                                    .background(Color.gray.opacity(0.1))
-                            } else {
-                                ProgressView()
-                                    .frame(height: 200) // Maintain space
+                        if let secureUrl = secureImageUrl(book.thumbnailUrl) {
+                            AsyncImage(url: secureUrl) { phase in
+                                if let image = phase.image {
+                                    image.resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .shadow(radius: 5)
+                                } else if phase.error != nil {
+                                    Image(systemName: "book.closed")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .foregroundColor(.gray)
+                                        .frame(height: 200) // Maintain space
+                                        .background(Color.gray.opacity(0.1))
+                                } else {
+                                    ProgressView()
+                                        .frame(height: 200) // Maintain space
+                                }
                             }
-                        }
-                        .frame(maxHeight: 250) // Limit cover height
-                        .padding(.top)
-                        
-                        // --- Title & Author ---
-                        Text(book.title)
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.darkPinkBrown)
-                        Text("by \(book.authors)")
-                            .font(.headline)
-                            .foregroundColor(.gray)
-                        
-                        // --- Reading Status & Rating ---
-                        Text("Currently Reading") // Placeholder status
-                            .font(.caption)
-                            .foregroundColor(.black)
-                            .padding(.vertical, 2)
-                            .background(Color.redPink)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                        StarRatingView(rating: .constant(Int(book.averageRating?.rounded() ?? 0)), // Use book's rating
-                                       maxRating: 5, interactive: false) // Non-interactive display
-                        
-                        
-                        // --- Tab Buttons ---
-                        HStack(spacing: 0) {
-                            DetailTabButton(label: "Details", detail_tab: .Detail, selectedTab: $selectedTab)
-                            DetailTabButton(label: "Review", detail_tab: .GoogleReview, selectedTab: $selectedTab)
-                        }.frame(width:350, height:40 )
-                            .background(Color.redPink)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .padding(.bottom, 10)
-                        
-                        
-                        
-                        // --- Tab Content ---
-                        Group {
-                            switch selectedTab {
-                            case .Detail:
-                                BookDetailsTabView(description: book.description,
-                                    pageCount: book.pageCount,
-                                    publisher: book.publisher,
-                                    publishedDate: book.publishedDate // <-- Pass publishedDate
-                                               )
-                            case .GoogleReview:
-                                BookReviewsTabView(book: book, reviewText: $reviewText, reviewRating: $reviewRating)
+                            .frame(maxHeight: 250) // Limit cover height
+                            .padding(.top)
                             
+                            // --- Title & Author ---
+                            Text(book.title)
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(.darkPinkBrown)
+                            Text("by \(book.authors)")
+                                .font(.headline)
+                                .foregroundColor(.gray)
+                            
+                            // --- Reading Status & Rating ---
+                            Text("Currently Reading") // Placeholder status
+                                .font(.caption)
+                                .foregroundColor(.black)
+                                .padding(.vertical, 2)
+                                .background(Color.redPink)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                            StarRatingView(rating: .constant(Int(book.averageRating?.rounded() ?? 0)), // Use book's rating
+                                           maxRating: 5, interactive: false) // Non-interactive display
+                            
+                            
+                            // --- Tab Buttons ---
+                            HStack(spacing: 0) {
+                                DetailTabButton(label: "Details", detail_tab: .Detail, selectedTab: $selectedTab)
+                                DetailTabButton(label: "Review", detail_tab: .GoogleReview, selectedTab: $selectedTab)
+                            }.frame(width:350, height:40 )
+                                .background(Color.redPink)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .padding(.bottom, 10)
+                            
+                            
+                            
+                            // --- Tab Content ---
+                            Group {
+                                switch selectedTab {
+                                case .Detail:
+                                    BookDetailsTabView(description: book.description,
+                                        pageCount: book.pageCount,
+                                        publisher: book.publisher,
+                                        publishedDate: book.publishedDate // <-- Pass publishedDate
+                                                   )
+                                case .GoogleReview:
+                                    BookReviewsTabView(book: book, reviewText: $reviewText, reviewRating: $reviewRating)
+                                
+                                }
                             }
+                            .padding(.horizontal)
+                            
                         }
-                        .padding(.horizontal)
-                        
                     }
-                    .padding(.bottom, 30)
+                    .background(Color.softWhitePink.ignoresSafeArea())
+                    .foregroundColor(.darkPinkBrown)
                 }
-                .background(Color.softWhitePink.ignoresSafeArea())
-                .foregroundColor(.darkPinkBrown)
             }
-        }
+                        }
+                        
     }}
 
 

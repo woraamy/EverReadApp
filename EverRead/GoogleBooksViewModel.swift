@@ -15,6 +15,15 @@ class GoogleBooksViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
 
     private var searchCancellable: AnyCancellable?
+    
+    struct APIConfig {
+        static let googleBooksKey: String = {
+            guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "GOOGLE_BOOK_API_KEY") as? String else {
+                fatalError("GOOGLE_BOOK_API_KEY not found in Info.plist")
+            }
+            return apiKey
+        }()
+    }
 
     func searchBooks(query: String) {
         guard !query.trimmingCharacters(in: .whitespaces).isEmpty else {
@@ -25,9 +34,11 @@ class GoogleBooksViewModel: ObservableObject {
             self.errorMessage = "Invalid search query"
             return
         }
-
-//         let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(urlEncodedQuery)&key=\(apiKey)&maxResults=20"
-         let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(urlEncodedQuery)&maxResults=20"
+        
+         let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(urlEncodedQuery)&key=\(APIConfig.googleBooksKey)&maxResults=20"
+//         let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(urlEncodedQuery)&maxResults=20"
+        
+        print(urlString)
 
         guard let url = URL(string: urlString) else {
             self.errorMessage = "Invalid URL"
@@ -56,6 +67,7 @@ class GoogleBooksViewModel: ObservableObject {
             }, receiveValue: { [weak self] response in
                 self?.searchResults = response.items ?? []
                 if self?.searchResults.isEmpty == true {
+                    
                     self?.errorMessage = "No books found for '\(query)'."
                 }
             })
