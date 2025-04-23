@@ -14,14 +14,14 @@ struct HomePage: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.softWhitePink // Assuming Color.softWhitePink is defined elsewhere
+                Color.softWhitePink
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
                     // MARK: - Header
                     HStack {
                         HStack(spacing: 5) {
-                            Image("logo") // Use the image from Assets
+                            Image("logo")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 60)
@@ -32,10 +32,10 @@ struct HomePage: View {
 
                         Spacer()
 
-                        NavigationLink(destination: ProfileView()) { // Assuming ProfileView exists
+                        NavigationLink(destination: ProfileView()) {
                             Image(systemName: "person.circle.fill")
                                 .font(.title)
-                                .foregroundColor(Color.black) // Consider using .primary or a theme color
+                                .foregroundColor(Color.black)
                         }
                     }
                     .padding(.horizontal)
@@ -43,7 +43,7 @@ struct HomePage: View {
 
                     // MARK: - Main Scrollable Content
                     ScrollView {
-                        VStack(alignment: .leading, spacing: 20) { // Added spacing
+                        VStack(alignment: .leading, spacing: 20) {
                             // MARK: - Reading Goals
                             VStack(alignment: .leading) {
                                 HStack(spacing: 15) {
@@ -75,7 +75,6 @@ struct HomePage: View {
 
                                     Spacer()
 
-                                    // Assuming you have an AllReviewsView or similar
                                     NavigationLink(destination: Text("All Reviews Placeholder")) {
                                         Text("View All")
                                             .font(.subheadline)
@@ -94,30 +93,25 @@ struct HomePage: View {
                                         .padding()
                                 } else {
                                     ForEach(viewModel.recentReviews) { review in
-                                        // *** CHANGE THIS PART ***
-                                        // Extract data from the 'review' object and pass it
-                                        // to the original ReviewCard initializer.
                                         ReviewCard(
-                                            name: review.username,        // Pass username to name
-                                            book: review.book.title,      // Pass book title string to book
-                                            rating: review.rating,        // Pass rating to rating
-                                            detail: review.content        // Pass review content to detail
+                                            name: review.username,
+                                            book: review.book.title,
+                                            rating: review.rating,
+                                            detail: review.content
                                         )
-                                        // *** END CHANGE ***
-                                            .padding(.horizontal) // Keep the horizontal padding for the card
-                                            .padding(.bottom, 8)  // Keep the bottom padding
+                                            .padding(.horizontal)
+                                            .padding(.bottom, 8)
                                     }
                                 }
 
                             } // End Recent Reviews VStack
-                            .padding(.bottom, 20) // Add padding at the end of the ScrollView content
-
+                            .padding(.bottom, 20)
                         } // End Main VStack in ScrollView
-                        .padding(.top, 15) // Add padding at the top of the ScrollView content
+                        .padding(.top, 15)
                     } // End ScrollView
                 } // End Main VStack
             } // End ZStack
-            .foregroundColor(.darkPinkBrown) // Assuming Color.darkPinkBrown defined
+            .foregroundColor(.darkPinkBrown)
             .onAppear {
                 // Trigger fetching mock data when the view appears
                 viewModel.fetchBooks()
@@ -127,7 +121,6 @@ struct HomePage: View {
     }
 }
 
-// Book Section Component
 struct BookSection: View {
     let title: String
     let books: [Book]
@@ -141,8 +134,7 @@ struct BookSection: View {
                     .fontWeight(.bold)
 
                 Spacer()
-
-                // Only show "View All" if there are books or it's not loading
+                
                 if !isLoading && !books.isEmpty {
                     // Assuming you have an AllBooksView or similar
                     NavigationLink(destination: Text("All \(title) Placeholder")) {
@@ -161,27 +153,25 @@ struct BookSection: View {
                     Spacer()
                 }
                 .padding()
-                .frame(height: 190) // Give loading state a consistent height
+                .frame(height: 190)
             } else if books.isEmpty {
                  Text("No books in this section yet.")
                     .font(.caption)
                     .foregroundColor(.gray)
                     .padding(.horizontal)
-                    .frame(height: 190, alignment: .center) // Consistent height
+                    .frame(height: 190, alignment: .center)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 15) {
                         ForEach(books) { book in
-                            // Assuming BookDetailView exists
                             NavigationLink(destination: BookDetailView(book: book)) {
                                 BookItem(book: book)
                             }
-                            // Make the whole item tappable, not just the text/image
                             .buttonStyle(PlainButtonStyle())
                         }
                     }
                     .padding(.horizontal)
-                    .padding(.vertical, 5) // Add slight vertical padding
+                    .padding(.vertical, 5)
                 }
             }
         }
@@ -222,18 +212,16 @@ struct BookItem: View {
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.2), lineWidth: 1) // Subtle border
+                    .stroke(Color.gray.opacity(0.2), lineWidth: 1) 
             )
 
 
-            // Book Title
             Text(book.title)
                 .font(.system(size: 14, weight: .medium))
                 .lineLimit(1)
                 .frame(width: 100, alignment: .leading)
 
-            // Author Name - **FIXED Author Display**
-            Text(book.authors) // Directly use the computed property
+            Text(book.authors)
                 .font(.system(size: 12))
                 .foregroundColor(.gray)
                 .lineLimit(1)
@@ -249,7 +237,6 @@ struct ReviewItem: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            // Book thumbnail - **FIXED AsyncImage URL Handling**
             AsyncImage(url: URL(string: review.book.thumbnailUrl ?? "")) { phase in
                  switch phase {
                  case .empty:
@@ -301,7 +288,7 @@ struct ReviewItem: View {
 
                 Text(review.content)
                     .font(.caption)
-                    .lineLimit(2) // Limit review content preview
+                    .lineLimit(10)
             }
 
             Spacer()
@@ -342,14 +329,12 @@ class HomeViewModel: ObservableObject {
         return min(1.0, max(0.0, Double(monthlyBookCount) / Double(monthlyBookGoal))) // Clamp between 0 and 1
     }
 
-    // --- MOCK DATA FETCHING ---
-    // Uses the correct Book initializer now
 
     func fetchBooks() {
-        // Fetch Currently Reading books
+        // fetch currently loading
         isLoadingCurrentlyReading = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            // **FIXED:** Create VolumeInfo first, then Book
+            
             let royalAssassinInfo = VolumeInfo(id: "1_vol", title: "Royal Assassin", authors: ["Robin Hobb"], description: "From the Farseer Trilogy", imageLinks: ImageLinks(smallThumbnail: "https://placeholder.com/book1_small", thumbnail: "https://placeholder.com/book1"), averageRating: 4.5, ratingsCount: 1000, pageCount: 675, publishedDate: "1996", publisher: "Voyager")
             let dawnshardInfo = VolumeInfo(id: "2_vol", title: "Dawnshard", authors: ["Brandon Sanderson"], description: "From the Stormlight Archive", imageLinks: ImageLinks(smallThumbnail: "https://placeholder.com/book2_small", thumbnail: "https://placeholder.com/book2"), averageRating: 4.7, ratingsCount: 800, pageCount: 171, publishedDate: "2020", publisher: "Dragonsteel Entertainment")
 
@@ -360,7 +345,7 @@ class HomeViewModel: ObservableObject {
             self.isLoadingCurrentlyReading = false
         }
 
-        // Fetch Want to Read books
+        // fetch want to read
         isLoadingWantToRead = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
              // **FIXED:** Create VolumeInfo first, then Book
@@ -380,7 +365,6 @@ class HomeViewModel: ObservableObject {
     func fetchReviews() {
         isLoadingReviews = true // Start loading indicator
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-             // **FIXED:** Create VolumeInfo and Book correctly for the reviews
              let babelInfo = VolumeInfo(id: "3_vol", title: "Babel", authors: ["R. F. Kuang"], description: "A fantasy novel about translation", imageLinks: ImageLinks(smallThumbnail: "https://placeholder.com/book3_small", thumbnail: "https://placeholder.com/book3"), averageRating: 4.2, ratingsCount: 1500, pageCount: 545, publishedDate: "2022", publisher: "Harper Voyager")
              let babelBook = Book(id: "3", volumeInfo: babelInfo)
 
@@ -451,13 +435,10 @@ class HomeViewModel: ObservableObject {
     }
 }
 
-// MARK: - Preview
-// Add other placeholder views if needed
 
 struct HomePage_Previews: PreviewProvider {
     static var previews: some View {
         HomePage()
-            // Optional: Add mock data directly to preview if needed for specific states
-            .environmentObject(HomeViewModel()) // Inject ViewModel if subviews need it directly
+            .environmentObject(HomeViewModel())
     }
 }
