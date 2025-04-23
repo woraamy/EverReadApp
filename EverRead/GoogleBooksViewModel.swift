@@ -35,9 +35,7 @@ class GoogleBooksViewModel: ObservableObject {
             return
         }
         
-         let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(urlEncodedQuery)&key=\(APIConfig.googleBooksKey)&maxResults=20"
-//         let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(urlEncodedQuery)&maxResults=20"
-        
+        let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(urlEncodedQuery)&key=\(APIConfig.googleBooksKey)&maxResults=10"
         print(urlString)
 
         guard let url = URL(string: urlString) else {
