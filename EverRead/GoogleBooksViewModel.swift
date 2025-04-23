@@ -77,6 +77,7 @@ class GoogleBooksViewModel: ObservableObject {
         let book1 = Book.example
 
         let volumeInfo2 = VolumeInfo(
+            id: "1234",
             title: "Another Book for Preview",
             authors: ["Author Two", "Another Author"],
             description: "This is a short description for the second example book used in previews.",

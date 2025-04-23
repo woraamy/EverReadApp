@@ -77,12 +77,15 @@ struct BookDetailView: View {
                                 .foregroundColor(.gray)
                             
                             // --- Reading Status & Rating ---
-                            Text("Currently Reading") // Placeholder status
+                            Text("Currently Reading")
                                 .font(.caption)
                                 .foregroundColor(.black)
-                                .padding(.vertical, 2)
-                                .background(Color.redPink)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 20)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.redPink)
+                                }
                             StarRatingView(rating: .constant(Int(book.averageRating?.rounded() ?? 0)), // Use book's rating
                                            maxRating: 5, interactive: false) // Non-interactive display
                             
