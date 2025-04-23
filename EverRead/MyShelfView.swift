@@ -28,16 +28,36 @@ struct MyShelfView: View{
                 Group {
                     switch selectedTab {
                     case .Current:
-                        ForEach(1..<5){ i in
-                            ActivityCard(name:"John Reader", action: "Started reading The hobbit", recentDay: 2).padding(1)
+                        ScrollView {
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 30), count: 3), spacing: 20) {
+                                ForEach(1..<8) { i in
+                                    BookCard(status: "current", img: "BookImg", name: "Babel \(i)", author: "R. F. Kuang", progress: 50)
+                                      
+                                }
+                            }
+                            .padding(.horizontal)
                         }
+
                     case .Want:
-                        ForEach(1..<5){ i in
-                            ReviewCard(name:"Jane Reader", book: "Babel", rating: 5, detail:"What a good book to read! i cried when reading this")
+                        ScrollView {
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 30), count: 3), spacing: 20) {
+                                ForEach(1..<8) { i in
+                                    BookCard(status: "want", img: "BookImg", name: "Babel \(i)", author: "R. F. Kuang", progress: 50)
+                                      
+                                }
+                            }
+                            .padding(.horizontal)
                         }
                     case .Finish:
-                        ReadGoalCard()
-                        SummaryCard()
+                        ScrollView {
+                            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 30), count: 3), spacing: 20) {
+                                ForEach(1..<8) { i in
+                                    BookCard(status: "finish", img: "BookImg", name: "Babel \(i)", author: "R. F. Kuang", progress: 50)
+                                      
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
                     }
                 }           
             }.padding(30).frame(maxWidth:.infinity,maxHeight: .infinity, alignment: .topLeading)
