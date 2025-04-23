@@ -32,6 +32,7 @@ struct Book: Identifiable, Decodable, Hashable {
     static var example: Book {
         Book(id: "preview_id_123",
              volumeInfo: VolumeInfo(
+                id: "1234",
                 title: "Royal Assassin",
                 authors: ["Robin Hobb"],
                 description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
@@ -49,6 +50,7 @@ struct Book: Identifiable, Decodable, Hashable {
 }
 
 struct VolumeInfo: Decodable, Hashable {
+    let id: String?
     let title: String?
     let authors: [String]?
     let description: String?
@@ -68,4 +70,13 @@ struct ImageLinks: Decodable, Hashable {
 // Model for the overall Google Books API response
 struct GoogleBooksResponse: Decodable {
     let items: [Book]?
+}
+
+// Review Model
+struct Review: Identifiable {
+    let id: String
+    let username: String
+    let book: Book
+    let rating: Int
+    let content: String
 }

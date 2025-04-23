@@ -5,7 +5,9 @@ struct ReadGoalCard: View {
     var monthGoalValue:Double = 0.5
     var body: some View {
         VStack(alignment: .leading){
-            Text("Reading Goals").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+            Text("Reading Goals")
+                .font(.title3)
+                .fontWeight(.bold)
             HStack{
                 // Yearly Goal
                 VStack(alignment: .leading){
