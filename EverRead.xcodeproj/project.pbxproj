@@ -13,9 +13,11 @@
 		2760798B2DB4D0F2001F66C1 /* EverReadTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E1F2DAE93B5005B6F83 /* EverReadTests.swift */; };
 		2760798E2DB4D3C5001F66C1 /* ProfileCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2760798D2DB4D3C5001F66C1 /* ProfileCard.swift */; };
 		276079922DB4DAD7001F66C1 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079912DB4DAD7001F66C1 /* ColorExtension.swift */; };
-		276079942DB4F664001F66C1 /* ProfileTabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079932DB4F664001F66C1 /* ProfileTabButton.swift */; };
+		276079942DB4F664001F66C1 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079932DB4F664001F66C1 /* TabButton.swift */; };
 		276079962DB50220001F66C1 /* ActivityCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079952DB50220001F66C1 /* ActivityCard.swift */; };
 		276079982DB50C61001F66C1 /* ReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079972DB50C61001F66C1 /* ReviewCard.swift */; };
+		2768920E2DB77EDC001CAA25 /* MyShelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2768920D2DB77EDC001CAA25 /* MyShelfView.swift */; };
+		276892102DB79005001CAA25 /* BookCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2768920F2DB79005001CAA25 /* BookCard.swift */; };
 		27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A8A8D12DB403D2000F166B /* ProfileView.swift */; };
 		27F209A42DB74FAE0023E484 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F209A32DB74FAE0023E484 /* SignUpView.swift */; };
 		27F27CE42DB69B2600C9D101 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F27CE32DB69B2600C9D101 /* SignInView.swift */; };
@@ -51,9 +53,11 @@
 		276079862DB4C8CE001F66C1 /* TabHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHeader.swift; sourceTree = "<group>"; };
 		2760798D2DB4D3C5001F66C1 /* ProfileCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCard.swift; sourceTree = "<group>"; };
 		276079912DB4DAD7001F66C1 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
-		276079932DB4F664001F66C1 /* ProfileTabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTabButton.swift; sourceTree = "<group>"; };
+		276079932DB4F664001F66C1 /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		276079952DB50220001F66C1 /* ActivityCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCard.swift; sourceTree = "<group>"; };
 		276079972DB50C61001F66C1 /* ReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCard.swift; sourceTree = "<group>"; };
+		2768920D2DB77EDC001CAA25 /* MyShelfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyShelfView.swift; sourceTree = "<group>"; };
+		2768920F2DB79005001CAA25 /* BookCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCard.swift; sourceTree = "<group>"; };
 		27A8A8D12DB403D2000F166B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		27F209A32DB74FAE0023E484 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		27F27CE32DB69B2600C9D101 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
@@ -101,12 +105,13 @@
 			children = (
 				276079862DB4C8CE001F66C1 /* TabHeader.swift */,
 				2760798D2DB4D3C5001F66C1 /* ProfileCard.swift */,
-				276079932DB4F664001F66C1 /* ProfileTabButton.swift */,
+				276079932DB4F664001F66C1 /* TabButton.swift */,
 				276079952DB50220001F66C1 /* ActivityCard.swift */,
 				276079972DB50C61001F66C1 /* ReviewCard.swift */,
 				27312B0C2DB5276B000EC59C /* ReadGoalCard.swift */,
 				27312B0E2DB5314C000EC59C /* SummaryCard.swift */,
 				27F27CE52DB69B9C00C9D101 /* GoogleSignInButton.swift */,
+				2768920F2DB79005001CAA25 /* BookCard.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -144,6 +149,7 @@
 				276079912DB4DAD7001F66C1 /* ColorExtension.swift */,
 				27F209A32DB74FAE0023E484 /* SignUpView.swift */,
 				27F27CE32DB69B2600C9D101 /* SignInView.swift */,
+				2768920D2DB77EDC001CAA25 /* MyShelfView.swift */,
 			);
 			path = EverRead;
 			sourceTree = "<group>";
@@ -306,16 +312,18 @@
 				27312B0D2DB5276B000EC59C /* ReadGoalCard.swift in Sources */,
 				2760798E2DB4D3C5001F66C1 /* ProfileCard.swift in Sources */,
 				7F303E102DAE93B3005B6F83 /* ContentView.swift in Sources */,
+				2768920E2DB77EDC001CAA25 /* MyShelfView.swift in Sources */,
 				27312B0F2DB5314C000EC59C /* SummaryCard.swift in Sources */,
 				27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */,
 				276079982DB50C61001F66C1 /* ReviewCard.swift in Sources */,
 				27F27CE42DB69B2600C9D101 /* SignInView.swift in Sources */,
 				276079922DB4DAD7001F66C1 /* ColorExtension.swift in Sources */,
 				276079962DB50220001F66C1 /* ActivityCard.swift in Sources */,
-				276079942DB4F664001F66C1 /* ProfileTabButton.swift in Sources */,
+				276079942DB4F664001F66C1 /* TabButton.swift in Sources */,
 				27F209A42DB74FAE0023E484 /* SignUpView.swift in Sources */,
 				27F27CE62DB69B9C00C9D101 /* GoogleSignInButton.swift in Sources */,
 				276079872DB4C8CE001F66C1 /* TabHeader.swift in Sources */,
+				276892102DB79005001CAA25 /* BookCard.swift in Sources */,
 				7F303E0E2DAE93B3005B6F83 /* EverReadApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

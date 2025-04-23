@@ -1,9 +1,9 @@
 import SwiftUI
 
-struct ProfileTabButton: View {
+struct TabButton<T: Hashable & Equatable>: View {
     let label: String
-    let tab: Tab
-    @Binding var selectedTab: Tab
+    let tab:T
+    @Binding var selectedTab:T
 
     var isSelected: Bool {
         selectedTab == tab

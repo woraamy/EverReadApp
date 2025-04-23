@@ -1,0 +1,10 @@
+//
+//  Config.xcconfig
+//  EverRead
+//
+//  Created by user269706 on 4/22/25.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+GOOGLE_BOOK_API_KEY=AIzaSyAJ74a1ajybAjISLfETn-Z1tqtYHyAZAcs
