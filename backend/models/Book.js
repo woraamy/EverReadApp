@@ -8,11 +8,15 @@ const bookSchema = new mongoose.Schema({
     required: true,
     index: true,
   },
-  user_id: { 
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'User ID is required'],
-    index: true,
+//   user_id: { 
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: 'User',
+//     required: [true, 'User ID is required'],
+//     index: true,
+//   },
+  user_id: {
+    type: String,
+    required: true
   },
   name: { 
     type: String,
