@@ -59,6 +59,7 @@
 		276079952DB50220001F66C1 /* ActivityCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCard.swift; sourceTree = "<group>"; };
 		276079972DB50C61001F66C1 /* ReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCard.swift; sourceTree = "<group>"; };
 		27A8A8D12DB403D2000F166B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		27AC53CA2DB9227600A8CA7F /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		7F303E0A2DAE93B3005B6F83 /* EverRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EverRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverReadApp.swift; sourceTree = "<group>"; };
 		7F303E0F2DAE93B3005B6F83 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -70,7 +71,6 @@
 		7F303E252DAE93B5005B6F83 /* EverReadUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EverReadUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F303E292DAE93B5005B6F83 /* EverReadUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverReadUITests.swift; sourceTree = "<group>"; };
 		7F303E2B2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverReadUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		7F60799B2DB73F6F00BC5DD2 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		7F60799C2DB7447C00BC5DD2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7F60799D2DB78CF800BC5DD2 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
 		7F6079A12DB8917300BC5DD2 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 		7F303E012DAE93B3005B6F83 = {
 			isa = PBXGroup;
 			children = (
-				7F60799B2DB73F6F00BC5DD2 /* Config.xcconfig */,
+				27AC53CA2DB9227600A8CA7F /* Config.xcconfig */,
 				7F303E0C2DAE93B3005B6F83 /* EverRead */,
 				7F303E1E2DAE93B5005B6F83 /* EverReadTests */,
 				7F303E282DAE93B5005B6F83 /* EverReadUITests */,
@@ -375,7 +375,7 @@
 /* Begin XCBuildConfiguration section */
 		7F303E2D2DAE93B5005B6F83 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7F60799B2DB73F6F00BC5DD2 /* Config.xcconfig */;
+			baseConfigurationReference = 27AC53CA2DB9227600A8CA7F /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -490,7 +490,7 @@
 		};
 		7F303E302DAE93B5005B6F83 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7F60799B2DB73F6F00BC5DD2 /* Config.xcconfig */;
+			baseConfigurationReference = 27AC53CA2DB9227600A8CA7F /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -565,7 +565,7 @@
 		};
 		7F303E332DAE93B5005B6F83 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7F60799B2DB73F6F00BC5DD2 /* Config.xcconfig */;
+			baseConfigurationReference = 27AC53CA2DB9227600A8CA7F /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -610,7 +610,7 @@
 		};
 		7F303E362DAE93B5005B6F83 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7F60799B2DB73F6F00BC5DD2 /* Config.xcconfig */;
+			baseConfigurationReference = 27AC53CA2DB9227600A8CA7F /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
