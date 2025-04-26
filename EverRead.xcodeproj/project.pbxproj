@@ -58,6 +58,7 @@
 		276079972DB50C61001F66C1 /* ReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCard.swift; sourceTree = "<group>"; };
 		2768920D2DB77EDC001CAA25 /* MyShelfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyShelfView.swift; sourceTree = "<group>"; };
 		2768920F2DB79005001CAA25 /* BookCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCard.swift; sourceTree = "<group>"; };
+		2798C1812DBCCFB500000EFF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		27A8A8D12DB403D2000F166B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		27F209A32DB74FAE0023E484 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		27F27CE32DB69B2600C9D101 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
@@ -119,6 +120,7 @@
 		7F303E012DAE93B3005B6F83 = {
 			isa = PBXGroup;
 			children = (
+				2798C1812DBCCFB500000EFF /* Config.xcconfig */,
 				7F303E0C2DAE93B3005B6F83 /* EverRead */,
 				7F303E1E2DAE93B5005B6F83 /* EverReadTests */,
 				7F303E282DAE93B5005B6F83 /* EverReadUITests */,
@@ -363,6 +365,7 @@
 /* Begin XCBuildConfiguration section */
 		7F303E2D2DAE93B5005B6F83 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2798C1812DBCCFB500000EFF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -477,6 +480,7 @@
 		};
 		7F303E302DAE93B5005B6F83 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2798C1812DBCCFB500000EFF /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -549,6 +553,7 @@
 		};
 		7F303E332DAE93B5005B6F83 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2798C1812DBCCFB500000EFF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -593,6 +598,7 @@
 		};
 		7F303E362DAE93B5005B6F83 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2798C1812DBCCFB500000EFF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
