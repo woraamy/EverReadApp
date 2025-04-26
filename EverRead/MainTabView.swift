@@ -27,7 +27,7 @@ struct MainTabView: View {
                 }
                 .tag(1)
             
-            ShelvesView()
+            MyShelfView()
                 .tabItem {
                     Label("Shelves", systemImage: "books.vertical")
                 }

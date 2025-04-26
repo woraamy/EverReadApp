@@ -4,7 +4,7 @@ enum Tab {
     case Activity
     case Review
     case Stats
-}
+   }
 
 struct ProfileView: View {
     @State private var selectedTab: Tab = .Activity
@@ -23,9 +23,9 @@ struct ProfileView: View {
                     }
                     // tab
                     HStack {
-                        ProfileTabButton(label: "Activity", tab: .Activity, selectedTab: $selectedTab)
-                        ProfileTabButton(label: "Review", tab: .Review, selectedTab: $selectedTab)
-                        ProfileTabButton(label: "Stats", tab: .Stats, selectedTab: $selectedTab)
+                        TabButton(label: "Activity", tab: .Activity, selectedTab: $selectedTab)
+                        TabButton(label: "Review", tab: .Review, selectedTab: $selectedTab)
+                        TabButton(label: "Stats", tab: .Stats, selectedTab: $selectedTab)
                     }.frame(width:350, height:40 )
                         .background(Color.redPink)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
