@@ -1,7 +1,7 @@
 const express = require('express');
 const User = require('../../models/User');
 const router = express.Router();
-const argon2 = require('argon2');
+
 // POST /api/auth/register - Add a new user
 router.post('/', async (req, res, next) => {
   try {
@@ -21,11 +21,10 @@ router.post('/', async (req, res, next) => {
       return res.status(409).json({ error: "Email already registered" });
     }
 
-    const hashedPassword = await argon2.hash(password);
     const newUser = new User({
         username,
         email,
-        password: hashedPassword,
+        password,
         yearly_goal: 0,
         month_goal: 0,
       });

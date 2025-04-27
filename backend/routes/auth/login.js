@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 const router = express.Router();
-const argon2 = require('argon2');
+const bcrypt = require('bcrypt')
 
 // Get JWT_SECRET from environment or use default
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -24,10 +24,10 @@ router.post('/', async (req, res) => {
         console.log('User found:', user.email);
         
         try {
-            const isMatch = await argon2.verify(user.password, password);
+            const isMatch = await bcrypt.compare(password, user.password);
             console.log('Password match:', isMatch);
             
-            // if (!isMatch) return res.status(400).json({ error: 'Invalid password' });
+            if (!isMatch) return res.status(400).json({ error: 'Invalid password' });
             
             const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '7d' });
 
