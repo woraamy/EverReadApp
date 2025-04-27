@@ -2,29 +2,62 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
 require('dotenv').config();
-
-const bookRoutes = require('./routes/book');
-// const taskRoutes = require('./routes/task');
-
+const jwt = require('jsonwebtoken');
 const app = express();
 
+// MongoDB Setup
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/EverRead';
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('MongoDB connected successfully.'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-app.use(cors()); 
+// Middlewares
+app.use(cors({
+  origin: "http://localhost:5050", // your frontend URL
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// JWT Secret
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+
+// Middleware to protect routes
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ error: 'Authorization header missing' });
+
+  const token = authHeader.split(' ')[1]; 
+  if (!token) return res.status(401).json({ error: 'Token missing' });
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: 'Invalid token' });
+    req.user = user; // attach user data to request
+    next();
+  });
+};
+
+// route
+const bookRoutes = require('./routes/book');
+const signUpRoutes = require('./routes/auth/register');
+const signInRoutes = require('./routes/auth/login');
+// const taskRoutes = require('./routes/task');
+
+app.use(express.urlencoded({ extended: true }));
+
+//public route
+app.use('/api/auth/register', signUpRoutes);
+app.use('/api/auth/login', signInRoutes);
 app.use('/api/book', bookRoutes);
 // app.use('/api/tasks', taskRoutes);
 
-app.get('/api/hello', (req, res) => {
-  res.json({ message: `Hello user ${req.auth.userId}` });
+// Protected Route (Requires Login)
+app.get('/api/hello', verifyToken , (req, res) => {
+  res.json({ message: `Hello user ${req.user.userId}` });
 });
+
+
 
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Resource not found' });
@@ -44,7 +77,6 @@ app.use((err, req, res, next) => {
   if (err.code === 11000) {
      return res.status(409).json({ error: `Duplicate key error: A record with this value already exists.` });
   }
-
 
   const statusCode = err.statusCode || err.status || 500;
   const message = err.message || 'Internal Server Error';
