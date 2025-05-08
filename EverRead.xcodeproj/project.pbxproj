@@ -23,6 +23,8 @@
 		27A83AAA2DBE315B00E4613A /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A83AA92DBE315B00E4613A /* AuthenticationService.swift */; };
 		27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A8A8D12DB403D2000F166B /* ProfileView.swift */; };
 		27B463652DCCD64600457055 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B463642DCCD64600457055 /* UserSession.swift */; };
+		27F4F5152DCD1A85004DF522 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F4F5142DCD1A85004DF522 /* DataManager.swift */; };
+		27F4F5172DCD1D97004DF522 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F4F5162DCD1D97004DF522 /* UserData.swift */; };
 		7F303E0E2DAE93B3005B6F83 /* EverReadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */; };
 		7F303E102DAE93B3005B6F83 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E0F2DAE93B3005B6F83 /* ContentView.swift */; };
 		7F303E122DAE93B4005B6F83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F303E112DAE93B4005B6F83 /* Assets.xcassets */; };
@@ -74,6 +76,8 @@
 		27A8A8D12DB403D2000F166B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		27AC53CA2DB9227600A8CA7F /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		27B463642DCCD64600457055 /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
+		27F4F5142DCD1A85004DF522 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		27F4F5162DCD1D97004DF522 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		7F303E0A2DAE93B3005B6F83 /* EverRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EverRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverReadApp.swift; sourceTree = "<group>"; };
 		7F303E0F2DAE93B3005B6F83 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -146,6 +150,15 @@
 			path = AuthenConnect;
 			sourceTree = "<group>";
 		};
+		27F4F5132DCD1A4C004DF522 /* FetchData */ = {
+			isa = PBXGroup;
+			children = (
+				27F4F5142DCD1A85004DF522 /* DataManager.swift */,
+				27F4F5162DCD1D97004DF522 /* UserData.swift */,
+			);
+			path = FetchData;
+			sourceTree = "<group>";
+		};
 		7F303E012DAE93B3005B6F83 = {
 			isa = PBXGroup;
 			children = (
@@ -170,6 +183,7 @@
 		7F303E0C2DAE93B3005B6F83 /* EverRead */ = {
 			isa = PBXGroup;
 			children = (
+				27F4F5132DCD1A4C004DF522 /* FetchData */,
 				27A83AA32DBE2FD200E4613A /* AuthenConnect */,
 				7F60799C2DB7447C00BC5DD2 /* Info.plist */,
 				2760798C2DB4D104001F66C1 /* Components */,
@@ -348,6 +362,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27F4F5152DCD1A85004DF522 /* DataManager.swift in Sources */,
 				27312B0D2DB5276B000EC59C /* ReadGoalCard.swift in Sources */,
 				2760798E2DB4D3C5001F66C1 /* ProfileCard.swift in Sources */,
 				7F303E102DAE93B3005B6F83 /* ContentView.swift in Sources */,
@@ -368,6 +383,7 @@
 				276079962DB50220001F66C1 /* ActivityCard.swift in Sources */,
 				2798C1882DBCD6B300000EFF /* SignInView.swift in Sources */,
 				7F7AAC092DB66F8400BCBB81 /* Book.swift in Sources */,
+				27F4F5172DCD1D97004DF522 /* UserData.swift in Sources */,
 				7F7AAC0D2DB6709000BCBB81 /* SearchView.swift in Sources */,
 				276079942DB4F664001F66C1 /* TabButton.swift in Sources */,
 				2798C18C2DBCD74000000EFF /* BookCard.swift in Sources */,

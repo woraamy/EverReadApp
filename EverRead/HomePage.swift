@@ -10,8 +10,9 @@ import SwiftUI
 
 struct HomePage: View {
     @StateObject private var viewModel = HomeViewModel()
-
+    @StateObject private var dataManager = DataManager()
     var body: some View {
+        let user = dataManager.user
         NavigationStack {
             ZStack {
                 Color.softWhitePink
@@ -47,7 +48,11 @@ struct HomePage: View {
                             // MARK: - Reading Goals
                             VStack(alignment: .leading) {
                                 HStack(spacing: 15) {
-                                    ReadGoalCard()
+                                    ReadGoalCard(
+                                        yearGoalValue: user?.yearly_book_read ?? 0,
+                                        monthGoalValue: user?.monthly_book_read ?? 0,
+                                        yearGoalTotal: user?.yearly_goal ?? 0,
+                                        monthGoalTotal: user?.month_goal ?? 0)
                                 }
                                 .padding(.horizontal)
                             }
@@ -116,6 +121,7 @@ struct HomePage: View {
                 // Trigger fetching mock data when the view appears
                 viewModel.fetchBooks()
                 viewModel.fetchReviews()
+                dataManager.fetchUser()
             }
         } // End NavigationStack
     }

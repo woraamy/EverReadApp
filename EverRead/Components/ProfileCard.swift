@@ -2,6 +2,11 @@ import SwiftUI
 
 struct ProfileCard: View {
     var name:String
+    var bookRead:String
+    var reading:String
+    var review:String
+    var follower:String
+    var following:String
     var body: some View {
         VStack(alignment: .leading){
             // Profile
@@ -13,8 +18,8 @@ struct ProfileCard: View {
                     Text("@\(name)").font(.subheadline).padding(.bottom, 5)
                         .foregroundColor(.pinkGray)
                     HStack{
-                        Text("432 Followers")
-                        Text("87 Following")
+                        Text("\(follower) Followers")
+                        Text("\(following) Following")
                     }
                 }
             }.padding(.bottom,5)
@@ -26,7 +31,7 @@ struct ProfileCard: View {
                     Image(systemName: "book")
                         .font(.system(size: 20)).padding(.bottom,1)
                     Text("Book Read").font(.subheadline)
-                    Text("42").fontWeight(.bold)
+                    Text(bookRead).fontWeight(.bold)
                 }.padding()
                     .background(Color.redPink)
                     .clipShape(RoundedRectangle(cornerRadius: 16, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))
@@ -34,7 +39,7 @@ struct ProfileCard: View {
                     Image(systemName: "calendar")
                         .font(.system(size: 20)).padding(.bottom,1)
                     Text("  Reading  ").font(.subheadline)
-                    Text("3").fontWeight(.bold)
+                    Text(reading).fontWeight(.bold)
                 }.padding()
                     .background(Color.redPink)
                     .clipShape(RoundedRectangle(cornerRadius: 16, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))
@@ -42,7 +47,7 @@ struct ProfileCard: View {
                     Image(systemName: "star.bubble")
                         .font(.system(size: 20)).padding(.bottom,1)
                     Text("   Review   ").font(.subheadline)
-                    Text("42").fontWeight(.bold)
+                    Text(review).fontWeight(.bold)
                 }.padding()
                     .background(Color.redPink)
                     .clipShape(RoundedRectangle(cornerRadius: 16, style: /*@START_MENU_TOKEN@*/.continuous/*@END_MENU_TOKEN@*/))            }
@@ -51,5 +56,5 @@ struct ProfileCard: View {
 }
 
 #Preview {
-    ProfileCard(name:"Jane Reader")
+    ProfileCard(name:"Jane Reader",bookRead: "42", reading: "3",review: "10", follower: "432", following: "87")
 }

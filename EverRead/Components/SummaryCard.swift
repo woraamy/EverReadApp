@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct SummaryCard: View {
+    var totalBook : String
+    var rating : String
+    var page : String
+    var streak : String
     var body: some View {
         VStack(alignment: .leading){
             Text("Reading Summary").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
@@ -16,22 +20,22 @@ struct SummaryCard: View {
                 HStack{
                     VStack(alignment: .leading){
                         Text("Total Books Read")
-                        Text("42").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding(2)
+                        Text("\(totalBook)").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding(2)
                     }.frame(maxWidth: .infinity, alignment: .leading)
                     
                     VStack(alignment: .leading){
                         Text("Page Read")
-                        Text("12,458").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding(2)
+                        Text("\(page)").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding(2)
                     }.frame(maxWidth: .infinity, alignment: .leading)
                 }
                     HStack{
                         VStack(alignment: .leading){
                             Text("Average Rating")
-                            Text("4.2").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding(2)
+                            Text("\(rating)").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding(2)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                         VStack(alignment: .leading){
                             Text("Reading Streak")
-                            Text("8 Days").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding(2)
+                            Text("\(streak) Days").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding(2)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                     }
             }.padding()
@@ -43,5 +47,5 @@ struct SummaryCard: View {
 }
 
 #Preview {
-    SummaryCard()
+    SummaryCard(totalBook:"42", rating: "4.2", page: "12,458", streak: "8")
 }

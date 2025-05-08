@@ -9,10 +9,12 @@ enum Tab {
 struct ProfileView: View {
     @State private var selectedTab: Tab = .Activity
     @EnvironmentObject var session: UserSession
+    @StateObject private var dataManager = DataManager()
     var body: some View {
         if !session.isLoggedIn{
             SignInView()
         } else {
+            let user = dataManager.user
             ZStack {
                 Color.softWhitePink
                     .ignoresSafeArea()
@@ -23,7 +25,13 @@ struct ProfileView: View {
                     }
                     ScrollView{
                         VStack{
-                            ProfileCard(name:session.currentUser?.username ?? "username")
+                            ProfileCard(
+                                name: user?.username ?? "username",
+                                bookRead: String(user?.book_read ?? 0),
+                                reading: String(user?.reading ?? 0),
+                                review: String(user?.review ?? 0),
+                                follower: "432",
+                                following: "87")
                         }
                         // tab
                         HStack {
@@ -39,20 +47,28 @@ struct ProfileView: View {
                             switch selectedTab {
                             case .Activity:
                                 ForEach(1..<5){ i in
-                                    ActivityCard(name:session.currentUser?.username ?? "username", action: "Started reading The hobbit", recentDay: 2).padding(1)
+                                    ActivityCard(name:user?.username ?? "username", action: "Started reading The hobbit", recentDay: 2).padding(1)
                                 }
                             case .Review:
                                 ForEach(1..<5){ i in
-                                    ReviewCard(name:session.currentUser?.username ?? "username", book: "Babel", rating: 5, detail:"What a good book to read! i cried when reading this")
+                                    ReviewCard(name:user?.username ?? "username", book: "Babel", rating: 5, detail:"What a good book to read! i cried when reading this")
                                 }
                             case .Stats:
-                                ReadGoalCard()
-                                SummaryCard()
+                                ReadGoalCard(
+                                    yearGoalValue: user?.yearly_book_read ?? 0,
+                                    monthGoalValue: user?.monthly_book_read ?? 0,
+                                    yearGoalTotal: user?.yearly_goal ?? 0,
+                                    monthGoalTotal: user?.month_goal ?? 0)
+                                SummaryCard(
+                                    totalBook: String(user?.book_read ?? 0),
+                                    rating: String(user?.review ?? 0),
+                                    page: String(user?.page_read ?? 0),
+                                    streak: String(user?.reading_streak ?? 0))
                             }
                         }
                     }
                 }
-            }.foregroundColor(.darkPinkBrown)
+            }.foregroundColor(.darkPinkBrown).onAppear{dataManager.fetchUser()}
         }
     }
 }
