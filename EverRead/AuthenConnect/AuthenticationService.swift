@@ -20,6 +20,7 @@ struct SignupRequestBody: Codable {
     let email: String
     let username: String
     let password: String
+    let correctpassword: String
 }
 
 
@@ -37,9 +38,11 @@ struct LoginResponse: Codable {
 }
 
 
-struct SignupResponse: Codable {
-    let token: String?
+struct SignupResponse:  Codable {
     let message: String?
+    let userId : String?
+    let username : String?
+    let email : String?
     let success: Bool?
 }
 
@@ -69,7 +72,7 @@ class AuthenticationService {
                     completion(.failure(.custom(errorMessage: "No data or network error")))
                     return
                 }
-                // Log raw response string (HTML, plain text, etc.)
+                // Log raw response string
                         if let rawResponse = String(data: data, encoding: .utf8) {
                             print("Raw response from server:\n\(rawResponse)")
                         }
@@ -97,32 +100,43 @@ class AuthenticationService {
             }.resume()
         }
     
-    func signup(email: String, username: String, password: String, completion: @escaping (Result<User, AuthenticationError>) -> Void) {
-        guard let url = URL(string: "https://everreadapp.onrender.com/api/auth/register") else {
-            completion(.failure(.custom(errorMessage: "URL is not correct")))
-            return
+    func signup(email: String, username: String, password: String, correctpassword: String, completion: @escaping (Result<SignupResponse, AuthenticationError>) -> Void) {
+            // Ensure password matches confirm password
+            guard password == correctpassword else {
+                completion(.failure(.custom(errorMessage: "Passwords do not match.")))
+                return
+            }
+            guard let url = URL(string: "https://everreadapp.onrender.com/api/auth/register") else {
+                completion(.failure(.custom(errorMessage: "URL is not correct")))
+                return
+            }
+
+            let body = SignupRequestBody(email: email, username: username, password: password, correctpassword: correctpassword)
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try? JSONEncoder().encode(body)
+            
+            URLSession.shared.dataTask(with: request) { (data, response, error) in
+                guard let data = data, error == nil else {
+                    completion(.failure(.custom(errorMessage: "No data")))
+                    return
+                }
+                // Log raw response string
+                if let rawResponse = String(data: data, encoding: .utf8) {
+                    print("Raw response from server:\n\(rawResponse)")
+                }
+                
+                do {
+                    let signupResponse = try JSONDecoder().decode(SignupResponse.self, from: data)
+                    print("Signup successful for user: \(signupResponse.username)")
+                    // Return the successful response with user details
+                    completion(.success(signupResponse))
+                } catch {
+                    print("Decoding error: \(error)")
+                    completion(.failure(.custom(errorMessage: "Failed to decode server response: \(error.localizedDescription)")))
+                }
+            }.resume()
         }
-
-        let body = SignupRequestBody(email: email, username: username, password: password)
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONEncoder().encode(body)
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data, error == nil else {
-                completion(.failure(.custom(errorMessage: "No data")))
-                return
-            }
-
-            guard let signupResponse = try? JSONDecoder().decode(SignupResponse.self, from: data),
-                  signupResponse.success == true else {
-                completion(.failure(.invalidCredentials))
-                return
-            }
-        }.resume()
     }
-
-    }
-
