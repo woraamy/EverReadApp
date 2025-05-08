@@ -29,14 +29,14 @@ router.post('/', async (req, res, next) => {
         month_goal: 0,
       });
 
-      const savedUser = await newUser.save();
-
-      res.status(201).json({
-        message: "User registered successfully",
-        userId: savedUser._id,
-        username: savedUser.username,
-        email: savedUser.email
-      });
+    const savedUser = await newUser.save();
+    
+    res.status(201).json({
+      message: "User registered successfully",
+      userId: savedUser._id,
+      username: savedUser.username,
+      email: savedUser.email
+    });
   } catch (err) {
     next(err); 
   }

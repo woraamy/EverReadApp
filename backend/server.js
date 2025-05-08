@@ -53,10 +53,12 @@ app.use('/api/book', bookRoutes);
 // app.use('/api/tasks', taskRoutes);
 
 // Protected Route (Requires Login)
+const userDataRoutes = require('./routes/fetchData/userData')
 app.get('/api/hello', verifyToken , (req, res) => {
   res.json({ message: `Hello user ${req.user.userId}` });
 });
 
+app.use('/api/fetchData/userData',verifyToken, userDataRoutes)
 
 
 app.use((req, res, next) => {
