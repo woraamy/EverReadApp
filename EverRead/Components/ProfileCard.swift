@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ProfileCard: View {
+    var name:String
     var body: some View {
         VStack(alignment: .leading){
             // Profile
@@ -8,8 +9,8 @@ struct ProfileCard: View {
                 Image(systemName: "person.crop.circle")
                     .font(.system(size: 80))
                 VStack(alignment: .leading) {
-                    Text("Jane Reader").font(.title2)
-                    Text("@Janereader").font(.subheadline).padding(.bottom, 5)
+                    Text(name).font(.title2)
+                    Text("@\(name)").font(.subheadline).padding(.bottom, 5)
                         .foregroundColor(.pinkGray)
                     HStack{
                         Text("432 Followers")
@@ -50,5 +51,5 @@ struct ProfileCard: View {
 }
 
 #Preview {
-    ProfileCard()
+    ProfileCard(name:"Jane Reader")
 }

@@ -8,10 +8,9 @@ enum Tab {
 
 struct ProfileView: View {
     @State private var selectedTab: Tab = .Activity
-    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
-    @AppStorage("userToken") private var userToken: String = ""
+    @EnvironmentObject var session: UserSession
     var body: some View {
-        if !isLoggedIn{
+        if !session.isLoggedIn{
             SignInView()
         } else {
             ZStack {
@@ -20,12 +19,11 @@ struct ProfileView: View {
                 
                 VStack(spacing: 0) {
                     TabHeader(title: "Profile") {
-                        self.userToken = ""
-                        self.isLoggedIn = false
+                        session.logout()
                     }
                     ScrollView{
                         VStack{
-                            ProfileCard()
+                            ProfileCard(name:session.currentUser?.username ?? "username")
                         }
                         // tab
                         HStack {
@@ -41,11 +39,11 @@ struct ProfileView: View {
                             switch selectedTab {
                             case .Activity:
                                 ForEach(1..<5){ i in
-                                    ActivityCard(name:"John Reader", action: "Started reading The hobbit", recentDay: 2).padding(1)
+                                    ActivityCard(name:session.currentUser?.username ?? "username", action: "Started reading The hobbit", recentDay: 2).padding(1)
                                 }
                             case .Review:
                                 ForEach(1..<5){ i in
-                                    ReviewCard(name:"Jane Reader", book: "Babel", rating: 5, detail:"What a good book to read! i cried when reading this")
+                                    ReviewCard(name:session.currentUser?.username ?? "username", book: "Babel", rating: 5, detail:"What a good book to read! i cried when reading this")
                                 }
                             case .Stats:
                                 ReadGoalCard()
@@ -60,5 +58,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    ProfileView().environmentObject(UserSession())
 }

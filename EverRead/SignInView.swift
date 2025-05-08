@@ -5,12 +5,11 @@ struct SignInView: View {
     @State private var password: String = ""
     @State private var isLoading: Bool = false
     @State private var errorMessage: String? = nil
-    @AppStorage("userToken") private var userToken: String = ""
-    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
+    @EnvironmentObject var session: UserSession
     private let authenticationService = AuthenticationService()
     
     var body: some View {
-        if isLoggedIn {
+        if session.isLoggedIn {
             MainTabView()
         } else {
         NavigationStack{
@@ -105,8 +104,7 @@ struct SignInView: View {
                 switch result {
                 case .success(let (user, token)):
                     print("Logged in as: \(user.username)")
-                    self.userToken = token
-                    self.isLoggedIn = true
+                    self.session.login(user: user, token: token) 
                 case .failure(let error):
                     switch error {
                     case .invalidCredentials:
@@ -122,5 +120,4 @@ struct SignInView: View {
 
 
 #Preview {
-    SignInView()
-}
+    SignInView().environmentObject(UserSession())}

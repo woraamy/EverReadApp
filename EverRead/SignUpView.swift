@@ -9,7 +9,7 @@ struct SignUpView: View {
     @State private var isLoading: Bool = false
     @State private var errorMessage: String? = nil
     private let authenticationService = AuthenticationService()
-    @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
+    @EnvironmentObject var session: UserSession
     @State private var navigateToLogin: Bool = false
     var body: some View {
         NavigationStack {

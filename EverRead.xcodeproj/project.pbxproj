@@ -22,6 +22,7 @@
 		2798C18C2DBCD74000000EFF /* BookCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798C18B2DBCD74000000EFF /* BookCard.swift */; };
 		27A83AAA2DBE315B00E4613A /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A83AA92DBE315B00E4613A /* AuthenticationService.swift */; };
 		27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A8A8D12DB403D2000F166B /* ProfileView.swift */; };
+		27B463652DCCD64600457055 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B463642DCCD64600457055 /* UserSession.swift */; };
 		7F303E0E2DAE93B3005B6F83 /* EverReadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */; };
 		7F303E102DAE93B3005B6F83 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E0F2DAE93B3005B6F83 /* ContentView.swift */; };
 		7F303E122DAE93B4005B6F83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F303E112DAE93B4005B6F83 /* Assets.xcassets */; };
@@ -72,6 +73,7 @@
 		27A83AA92DBE315B00E4613A /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		27A8A8D12DB403D2000F166B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		27AC53CA2DB9227600A8CA7F /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		27B463642DCCD64600457055 /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
 		7F303E0A2DAE93B3005B6F83 /* EverRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EverRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EverReadApp.swift; sourceTree = "<group>"; };
 		7F303E0F2DAE93B3005B6F83 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				27A83AA92DBE315B00E4613A /* AuthenticationService.swift */,
+				27B463642DCCD64600457055 /* UserSession.swift */,
 			);
 			path = AuthenConnect;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 				27312B0F2DB5314C000EC59C /* SummaryCard.swift in Sources */,
 				7F60799E2DB78CF800BC5DD2 /* HomePage.swift in Sources */,
 				27A83AAA2DBE315B00E4613A /* AuthenticationService.swift in Sources */,
+				27B463652DCCD64600457055 /* UserSession.swift in Sources */,
 				2798C1842DBCD63700000EFF /* SignUpView.swift in Sources */,
 				7F7AAC112DB67CC900BCBB81 /* BookDetailsView.swift in Sources */,
 				27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */,
