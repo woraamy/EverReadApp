@@ -1,13 +1,16 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @State private var firstname: String = ""
-    @State private var lastname: String = ""
+    @State private var username: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     @State private var showDialog:Bool = false
-    
+    @State private var isLoading: Bool = false
+    @State private var errorMessage: String? = nil
+    private let authenticationService = AuthenticationService()
+    @EnvironmentObject var session: UserSession
+    @State private var navigateToLogin: Bool = false
     var body: some View {
         NavigationStack {
             ZStack {
@@ -43,8 +46,8 @@ struct SignUpView: View {
                         
                         Group {
                             VStack(alignment: .leading) {
-                                Text("Firstname")
-                                TextField("Firstname", text: $firstname)
+                                Text("Username")
+                                TextField("Username", text: $username)
                                     .padding(6)
                                     .background(Color.darkPink)
                                     .padding(3)
@@ -52,15 +55,6 @@ struct SignUpView: View {
                             }
                             .padding(2)
                             
-                            VStack(alignment: .leading) {
-                                Text("Lastname")
-                                TextField("Lastname", text: $lastname)
-                                    .padding(6)
-                                    .background(Color.darkPink)
-                                    .padding(3)
-                                    .clipShape(RoundedRectangle(cornerRadius: 25))
-                            }
-                            .padding(2)
                             
                             VStack(alignment: .leading) {
                                 Text("Email Address")
@@ -90,10 +84,20 @@ struct SignUpView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 25))
                             }
                         }
+                        if isLoading {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                                .padding(.top, 20)
+                        }
                         
+                        // Show error message if there is one
+                        if let errorMessage = errorMessage {
+                            Text(errorMessage)
+                                .foregroundColor(.red)
+                                .padding(.top, 10)
+                        }
                         Button(action: {
-                            showDialog = true
-                            print("Sign up")
+                            sigupUser()
                         }) {
                             Text("Sign Up")
                                 .frame(maxWidth: .infinity)
@@ -123,8 +127,31 @@ struct SignUpView: View {
             DialogView()
         }
     }
+    private func sigupUser() {
+        errorMessage = nil
+        isLoading = true
+        
+        authenticationService.signup(email: email, username: username, password: password, correctpassword: confirmPassword) { result in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                
+                switch result {
+                case .success(let response):
+                    print("Signup successful!")
+                    self.showDialog = true
+                    
+                case .failure(let error):
+                    switch error {
+                    case .invalidCredentials:
+                        self.errorMessage = "Invalid credentials"
+                    case .custom(let message):
+                        self.errorMessage = message
+                    }
+                }
+            }
+        }
+    }
 }
-
 struct DialogView: View {
     var body: some View {
         NavigationStack{
@@ -142,7 +169,15 @@ struct DialogView: View {
                         Text("Sign Up Successful!")
                             .font(.title)
                             .bold()
-                        Text("Your account has been created Please wait a moment, we are preparing for you.")
+                        HStack {
+                            Text("Go to" )
+                                .font(.title3)
+                            
+                            NavigationLink(destination: SignInView()) {
+                                Text("SIGN IN")
+                                    .font(.title3)
+                            }
+                        }
                     }.padding()
                    
                 }

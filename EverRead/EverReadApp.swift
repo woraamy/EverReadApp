@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct EverReadApp: App {
+    @StateObject private var session = UserSession()
+
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            if (session.isLoggedIn){
+                MainTabView().environmentObject(UserSession())
+            }else{
+                SignInView().environmentObject(UserSession())            }
         }
     }
 }
+

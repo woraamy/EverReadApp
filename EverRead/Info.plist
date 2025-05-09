@@ -15,8 +15,7 @@
 			</dict>
 		</dict>
 	</dict>
-    <key>GOOGLE_BOOK_API_KEY</key>
-    <string>$(GOOGLE_BOOK_API_KEY)</string>
+	<key>GOOGLE_BOOK_API_KEY</key>
+	<string>$(GOOGLE_BOOK_API_KEY)</string>
 </dict>
-
 </plist>
