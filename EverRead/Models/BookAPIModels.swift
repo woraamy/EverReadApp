@@ -114,6 +114,8 @@ class BookAPIService {
         return try await performAPIGetRequest(request: request, decodingType: UserBookProgressResponse.self)
     }
     
+    
+    
     private func performAPIPostRequest<T: Decodable>(request: URLRequest, decodingType: T.Type) async throws -> T {
         do {
             print(decodingType)
@@ -144,4 +146,35 @@ class BookAPIService {
         catch let decodingError as DecodingError { print("Decoding error details: \(decodingError)"); throw APIError.decodingError(decodingError) }
         catch { throw APIError.requestFailed(error) }
     }
+    
+    private func fetchBooksFromShelf(shelfPath: String, userToken: String?) async throws -> [Book] {
+            guard let token = userToken, !token.isEmpty else {
+                throw APIError.noToken
+            }
+
+            // Construct the URL. Base URL should point to your server's /api/books/progress/
+            // e.g., http://localhost:5050/api/books/progress/shelf/currently-reading
+            let url = baseURL.appendingPathComponent("shelf/\(shelfPath)")
+            print("Fetching from URL: \(url.absoluteString)")
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+            // Using the generic GET request performer
+            return try await performAPIGetRequest(request: request, decodingType: [Book].self)
+        }
+
+        // Public method to fetch "Currently Reading" books
+        func fetchCurrentlyReadingBooks(userToken: String?) async throws -> [Book] {
+            // The path "currently-reading" must match the endpoint defined in your Node.js router
+            try await fetchBooksFromShelf(shelfPath: "currently-reading", userToken: userToken)
+        }
+
+        // Public method to fetch "Want to Read" books
+        func fetchWantToReadBooks(userToken: String?) async throws -> [Book] {
+            // The path "want-to-read" must match the endpoint defined in your Node.js router
+            try await fetchBooksFromShelf(shelfPath: "want-to-read", userToken: userToken)
+        }
 }

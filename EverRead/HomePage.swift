@@ -10,19 +10,22 @@ import SwiftUI
 
 struct HomePage: View {
     @StateObject private var viewModel = HomeViewModel()
-    @StateObject private var dataManager = DataManager()
+    @StateObject private var dataManager = DataManager() // Assuming this fetches user profile data
+    @EnvironmentObject var session: UserSession // Injected UserSession
+
     var body: some View {
-        let user = dataManager.user
+        let user = dataManager.user // For reading goals
+
         NavigationStack {
             ZStack {
-                Color.softWhitePink
+                Color.softWhitePink // Define this color in your assets or extensions
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
                     // MARK: - Header
                     HStack {
                         HStack(spacing: 5) {
-                            Image("logo")
+                            Image("logo") // Ensure "logo" is in your assets
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 60)
@@ -30,17 +33,16 @@ struct HomePage: View {
                                 .font(.system(size: 32))
                                 .fontWeight(.semibold)
                         }
-
                         Spacer()
-
-                        NavigationLink(destination: ProfileView()) {
+                        NavigationLink(destination: ProfileView()) { // Ensure ProfileView is defined
                             Image(systemName: "person.circle.fill")
                                 .font(.title)
-                                .foregroundColor(Color.black)
+                                .foregroundColor(Color.black) // Or your app's theme color
                         }
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 10)
+                    .background(Color.white.opacity(0.5).blur(radius: 10)) // Optional: subtle header background
 
                     // MARK: - Main Scrollable Content
                     ScrollView {
@@ -48,11 +50,12 @@ struct HomePage: View {
                             // MARK: - Reading Goals
                             VStack(alignment: .leading) {
                                 HStack(spacing: 15) {
-                                    ReadGoalCard(
+                                    ReadGoalCard( // Ensure ReadGoalCard is defined
                                         yearGoalValue: user?.yearly_book_read ?? 0,
                                         monthGoalValue: user?.monthly_book_read ?? 0,
                                         yearGoalTotal: user?.yearly_goal ?? 0,
-                                        monthGoalTotal: user?.month_goal ?? 0)
+                                        monthGoalTotal: user?.month_goal ?? 0
+                                    )
                                 }
                                 .padding(.horizontal)
                             }
@@ -77,55 +80,52 @@ struct HomePage: View {
                                     Text("Recent Reviews")
                                         .font(.title3)
                                         .fontWeight(.bold)
-
                                     Spacer()
-
                                     NavigationLink(destination: Text("All Reviews Placeholder")) {
                                         Text("View All")
                                             .font(.subheadline)
-                                            .foregroundColor(.redPink) // Assuming Color.redPink defined
+                                            .foregroundColor(.redPink) // Define Color.redPink
                                     }
                                 }
                                 .padding(.horizontal)
 
-                                if viewModel.recentReviews.isEmpty && !viewModel.isLoadingReviews {
+                                if viewModel.isLoadingReviews {
+                                    ProgressView().padding()
+                                } else if viewModel.recentReviews.isEmpty {
                                     Text("No recent reviews.")
                                         .font(.caption)
                                         .foregroundColor(.gray)
                                         .padding(.horizontal)
-                                } else if viewModel.isLoadingReviews {
-                                     ProgressView()
-                                        .padding()
                                 } else {
                                     ForEach(viewModel.recentReviews) { review in
+                                        // Ensure ReviewCard is defined and takes these parameters
                                         ReviewCard(
                                             name: review.username,
-                                            book: review.book.title,
+                                            book: review.book.title, // Access title via Book struct
                                             rating: review.rating,
                                             detail: review.content
                                         )
-                                            .padding(.horizontal)
-                                            .padding(.bottom, 8)
+                                        .padding(.horizontal)
+                                        .padding(.bottom, 8)
                                     }
                                 }
-
-                            } // End Recent Reviews VStack
+                            }
                             .padding(.bottom, 20)
-                        } // End Main VStack in ScrollView
+                        }
                         .padding(.top, 15)
                     } // End ScrollView
                 } // End Main VStack
             } // End ZStack
-            .foregroundColor(.darkPinkBrown)
+            .foregroundColor(.darkPinkBrown) // Define Color.darkPinkBrown
             .onAppear {
-                // Trigger fetching mock data when the view appears
-                viewModel.fetchBooks()
-                viewModel.fetchReviews()
-                dataManager.fetchUser()
+                // Trigger fetching data when the view appears, passing the token
+                viewModel.fetchHomePageData(token: session.token)
+                dataManager.fetchUser()     // Fetches user profile data for goals
             }
         } // End NavigationStack
     }
 }
+
 
 struct BookSection: View {
     let title: String
@@ -312,90 +312,104 @@ struct ReviewItem: View {
 class HomeViewModel: ObservableObject {
     @Published var currentlyReading: [Book] = []
     @Published var wantToRead: [Book] = []
-    @Published var recentReviews: [Review] = []
+    @Published var recentReviews: [Review] = [] // Assuming Review fetching is separate
 
     @Published var isLoadingCurrentlyReading = false
     @Published var isLoadingWantToRead = false
-    @Published var isLoadingReviews = false
+    @Published var isLoadingReviews = false // For reviews
 
-    // Reading goals tracking
+    // Reading goals - keeping existing logic
     @Published var yearlyBookCount = 7
     @Published var yearlyBookGoal = 24
     @Published var monthlyBookCount = 1
     @Published var monthlyBookGoal = 2
+    
+    // Removed @EnvironmentObject var session: UserSession from ViewModel
 
-    // Ensure division by zero doesn't happen if goal is 0
     var yearlyProgress: Double {
         guard yearlyBookGoal > 0 else { return 0 }
-        return min(1.0, max(0.0, Double(yearlyBookCount) / Double(yearlyBookGoal))) // Clamp between 0 and 1
+        return min(1.0, max(0.0, Double(yearlyBookCount) / Double(yearlyBookGoal)))
     }
 
     var monthlyProgress: Double {
         guard monthlyBookGoal > 0 else { return 0 }
-        return min(1.0, max(0.0, Double(monthlyBookCount) / Double(monthlyBookGoal))) // Clamp between 0 and 1
+        return min(1.0, max(0.0, Double(monthlyBookCount) / Double(monthlyBookGoal)))
     }
 
+    private let apiService = BookAPIService.shared
+    // Removed the internal userToken computed property
 
-    func fetchBooks() {
-        // fetch currently loading
+    // Main function to fetch all necessary data for the home page
+    @MainActor // Ensure UI updates are on the main thread
+    func fetchHomePageData(token: String?) { // Accept token as a parameter
+        fetchCurrentlyReading(token: token)
+        fetchWantToRead(token: token)
+        fetchReviews(token: token) // Assuming this also might need a token eventually
+    }
+
+    @MainActor
+    func fetchCurrentlyReading(token: String?) { // Accept token
         isLoadingCurrentlyReading = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            
-            let royalAssassinInfo = VolumeInfo(id: "1_vol", title: "Royal Assassin", authors: ["Robin Hobb"], description: "From the Farseer Trilogy", imageLinks: ImageLinks(smallThumbnail: "https://placeholder.com/book1_small", thumbnail: "https://placeholder.com/book1"), averageRating: 4.5, ratingsCount: 1000, pageCount: 675, publishedDate: "1996", publisher: "Voyager")
-            let dawnshardInfo = VolumeInfo(id: "2_vol", title: "Dawnshard", authors: ["Brandon Sanderson"], description: "From the Stormlight Archive", imageLinks: ImageLinks(smallThumbnail: "https://placeholder.com/book2_small", thumbnail: "https://placeholder.com/book2"), averageRating: 4.7, ratingsCount: 800, pageCount: 171, publishedDate: "2020", publisher: "Dragonsteel Entertainment")
-
-            self.currentlyReading = [
-                Book(id: "1", volumeInfo: royalAssassinInfo),
-                Book(id: "2", volumeInfo: dawnshardInfo)
-            ]
-            self.isLoadingCurrentlyReading = false
-        }
-
-        // fetch want to read
-        isLoadingWantToRead = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-             // **FIXED:** Create VolumeInfo first, then Book
-            let babelInfo = VolumeInfo(id: "3_vol", title: "Babel", authors: ["R. F. Kuang"], description: "A fantasy novel about translation", imageLinks: ImageLinks(smallThumbnail: "https://placeholder.com/book3_small", thumbnail: "https://placeholder.com/book3"), averageRating: 4.2, ratingsCount: 1500, pageCount: 545, publishedDate: "2022", publisher: "Harper Voyager")
-            let hobbitInfo = VolumeInfo(id: "4_vol", title: "The Hobbit", authors: ["J.R.R. Tolkien"], description: "A classic fantasy adventure", imageLinks: ImageLinks(smallThumbnail: "https://placeholder.com/book4_small", thumbnail: "https://placeholder.com/book4"), averageRating: 4.8, ratingsCount: 5000, pageCount: 310, publishedDate: "1937", publisher: "George Allen & Unwin")
-            let circeInfo = VolumeInfo(id: "5_vol", title: "Circe", authors: ["Madeline Miller"], description: "A retelling of the story of Circe", imageLinks: ImageLinks(smallThumbnail: "https://placeholder.com/book5_small", thumbnail: "https://placeholder.com/book5"), averageRating: 4.3, ratingsCount: 2500, pageCount: 393, publishedDate: "2018", publisher: "Little, Brown and Company")
-
-            self.wantToRead = [
-                Book(id: "3", volumeInfo: babelInfo),
-                Book(id: "4", volumeInfo: hobbitInfo),
-                Book(id: "5", volumeInfo: circeInfo)
-            ]
-            self.isLoadingWantToRead = false
+        Task {
+            defer { isLoadingCurrentlyReading = false } // Ensure loading state is reset
+            do {
+                // Use the passed-in token
+                guard let validToken = token, !validToken.isEmpty else {
+                    print("User token not available for fetching currently reading books.")
+                    self.currentlyReading = [] // Clear existing data or show error state
+                    return
+                }
+                self.currentlyReading = try await apiService.fetchCurrentlyReadingBooks(userToken: validToken)
+                print("Fetched \(self.currentlyReading.count) currently reading books.")
+            } catch {
+                self.currentlyReading = [] // Clear on error or keep stale data, up to you
+                print("Error fetching currently reading books: \(error.localizedDescription)")
+                // Optionally, publish an error message to the UI
+            }
         }
     }
 
-    func fetchReviews() {
-        isLoadingReviews = true // Start loading indicator
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-             let babelInfo = VolumeInfo(id: "3_vol", title: "Babel", authors: ["R. F. Kuang"], description: "A fantasy novel about translation", imageLinks: ImageLinks(smallThumbnail: "https://placeholder.com/book3_small", thumbnail: "https://placeholder.com/book3"), averageRating: 4.2, ratingsCount: 1500, pageCount: 545, publishedDate: "2022", publisher: "Harper Voyager")
-             let babelBook = Book(id: "3", volumeInfo: babelInfo)
+    @MainActor
+    func fetchWantToRead(token: String?) { // Accept token
+        isLoadingWantToRead = true
+        Task {
+            defer { isLoadingWantToRead = false }
+            do {
+                guard let validToken = token, !validToken.isEmpty else {
+                    print("User token not available for fetching want to read books.")
+                    self.wantToRead = []
+                    return
+                }
+                self.wantToRead = try await apiService.fetchWantToReadBooks(userToken: validToken)
+                print("Fetched \(self.wantToRead.count) want to read books.")
+            } catch {
+                self.wantToRead = []
+                print("Error fetching want to read books: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    // Mock review fetching (adapt if it needs a token)
+    @MainActor
+    func fetchReviews(token: String?) { // Accept token, even if not used by mock
+        isLoadingReviews = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Simulate network delay
+            // If reviews API call needs a token, use it here.
+            // For now, using your existing mock reviews logic
+            let babelInfo = VolumeInfo(id: "3_vol", title: "Babel", authors: ["R. F. Kuang"], description: "A fantasy novel about translation", imageLinks: ImageLinks(smallThumbnail: "https://placeholder.com/book3_small", thumbnail: "https://placeholder.com/book3"), averageRating: 4.2, ratingsCount: 1500, pageCount: 545, publishedDate: "2022", publisher: "Harper Voyager")
+            let babelBook = Book(id: "3_vol", volumeInfo: babelInfo)
 
             self.recentReviews = [
-                Review(
-                    id: "rev1",
-                    username: "BookLover123",
-                    book: babelBook, // Use the correctly created book
-                    rating: 5,
-                    content: "Absolutely phenomenal! Kuang weaves language and history into a gripping, heartbreaking story. A must-read."
-                ),
-                Review(
-                    id: "rev2",
-                    username: "ReaderX",
-                    book: babelBook,
-                    rating: 4,
-                    content: "Very dense and academic at times, but ultimately rewarding. The world-building is incredible."
-                )
-                
+                Review(id: "rev1", username: "BookLover123", book: babelBook, rating: 5, content: "Absolutely phenomenal! Kuang weaves language and history into a gripping, heartbreaking story. A must-read."),
+                Review(id: "rev2", username: "ReaderX", book: babelBook, rating: 4, content: "Very dense and academic at times, but ultimately rewarding. The world-building is incredible.")
             ]
             self.isLoadingReviews = false
         }
     }
 
-    // Api fetching
+
+    // This function is for searching Google Books API, keep it as is if used for search functionality.
+    // This typically does not require user authentication token.
     func fetchBooksFromApi(query: String, completion: @escaping ([Book]) -> Void) {
         guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
               let url = URL(string: "https://www.googleapis.com/books/v1/volumes?q=\(encodedQuery)") else {
@@ -417,19 +431,14 @@ class HomeViewModel: ObservableObject {
                 return
             }
 
-            // print(String(data: data, encoding: .utf8) ?? "Could not print data")
-
             do {
                 let result = try JSONDecoder().decode(GoogleBooksResponse.self, from: data)
-                // **FIXED:** No extra mapping needed here if GoogleBooksResponse defines items as [Book]?
-                let books = result.items ?? [] // Use nil-coalescing for safety
-
+                let books = result.items ?? []
                 DispatchQueue.main.async {
                     completion(books)
                 }
             } catch {
-                // Print detailed decoding errors
-                print("Decoding error: \(error)")
+                print("Decoding error from Google Books API: \(error)")
                 if let decodingError = error as? DecodingError {
                     print("Decoding Error Details: \(decodingError)")
                 }
@@ -446,5 +455,6 @@ struct HomePage_Previews: PreviewProvider {
     static var previews: some View {
         HomePage()
             .environmentObject(HomeViewModel())
+            .environmentObject(UserSession())
     }
 }

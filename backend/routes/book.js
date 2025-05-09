@@ -12,6 +12,54 @@ const HistoryActionMap = {
   "finished": "add finished"
 };
 
+const mapToSwiftBookFormat = (userBookDoc) => {
+  // Assuming userBookDoc is a Mongoose document.
+  // And userBookDoc directly contains fields like api_id, title, authors, thumbnailUrl, etc.
+  // OR userBookDoc has an embedded volumeInfo.
+  if (userBookDoc.volumeInfo && userBookDoc.api_id) { // Ideal case: schema matches Swift expectation
+      return {
+          id: userBookDoc.api_id, // Or userBookDoc.id if that's how api_id is stored as primary key for this item
+          volumeInfo: {
+              title: userBookDoc.volumeInfo.title,
+              authors: userBookDoc.volumeInfo.authors, // Assuming authors is an array
+              imageLinks: {
+                  thumbnail: userBookDoc.volumeInfo.imageLinks?.thumbnail, // Optional chaining for safety
+                  smallThumbnail: userBookDoc.volumeInfo.imageLinks?.smallThumbnail
+              },
+              description: userBookDoc.volumeInfo.description,
+              pageCount: userBookDoc.volumeInfo.pageCount,
+              publishedDate: userBookDoc.volumeInfo.publishedDate,
+              publisher: userBookDoc.volumeInfo.publisher,
+              averageRating: userBookDoc.volumeInfo.averageRating,
+              ratingsCount: userBookDoc.volumeInfo.ratingsCount
+              // Add any other fields your Swift VolumeInfo expects
+          }
+          // You could also include user-specific progress here if needed by the client for these views
+          // userProgress: {
+          //   currentPage: userBookDoc.current_page,
+          //   status: userBookDoc.status
+          // }
+      };
+  }
+  // Fallback: if UserBook schema is flatter and needs mapping to {id, volumeInfo}
+  // This part needs to be adjusted based on your ACTUAL UserBook schema.
+  // This is a common scenario if you denormalized Google Books data.
+  return {
+      id: userBookDoc.api_id, // Or however you store the Google Books ID
+      volumeInfo: {
+          title: userBookDoc.title,
+          authors: userBookDoc.authors || [], // Ensure it's an array
+          imageLinks: {
+              thumbnail: userBookDoc.thumbnailUrl || userBookDoc.imageLinks?.thumbnail, // Prioritize specific thumbnailUrl if available
+              smallThumbnail: userBookDoc.smallThumbnailUrl || userBookDoc.imageLinks?.smallThumbnail
+          },
+          description: userBookDoc.description,
+          pageCount: userBookDoc.pageCount,
+          // Add other VolumeInfo fields if they are stored directly on UserBook
+      }
+  };
+};
+
 // POST /api/books/progress/status - Update or add a book's status
 router.post(
   '/status',
@@ -237,4 +285,57 @@ router.get(
   }
 );
 
+// GET /api/books/progress/shelf/currently-reading - Get all books the user is currently reading
+router.get('/shelf/currently-reading', async (req, res) => {
+  try {
+      if (!req.user || !req.user.userId) {
+          return res.status(401).json({ msg: 'User not authenticated.' });
+      }
+
+      const books = await Book.find({
+          user_id: req.user.userId,
+          status: 'currently reading' // Matches BookReadingStatus.rawValue
+      }).sort({ added_date: -1 }); // Optional: sort by most recently added
+
+      if (!books) {
+          return res.json([]); // Return empty array if no books found, not an error
+      }
+
+      // Map to the format expected by Swift client (id + volumeInfo)
+      const formattedBooks = books.map(mapToSwiftBookFormat);
+      res.json(formattedBooks);
+
+  } catch (err) {
+      console.error('Error in GET /shelf/currently-reading:', err.message);
+      res.status(500).send('Server Error');
+  }
+});
+
+// GET want-to-read books
+router.get('/shelf/want-to-read', async (req, res) => {
+  try {
+      if (!req.user || !req.user.userId) {
+          return res.status(401).json({ msg: 'User not authenticated.' });
+      }
+
+      const books = await Book.find({
+          user_id: req.user.userId,
+          status: 'want to read' // Matches BookReadingStatus.rawValue
+      }).sort({ added_date: -1 }); // Optional: sort
+
+      if (!books) {
+          return res.json([]);
+      }
+      
+      const formattedBooks = books.map(mapToSwiftBookFormat);
+      res.json(formattedBooks);
+
+  } catch (err) {
+      console.error('Error in GET /shelf/want-to-read:', err.message);
+      res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;
+
+
