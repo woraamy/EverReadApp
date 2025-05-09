@@ -16,333 +16,244 @@ enum DetailTab {
 }
 
 struct BookDetailView: View {
-    let book: Book
+    let book: Book // Your Google Book model
+    
     @State private var selectedTab: DetailTab = .Detail
     @State private var reviewText: String = ""
     @State private var reviewRating: Int = 0
     @State private var showingUpdateProgressSheet = false
     
-    // These would be fetched from your backend for the current user and this book
+    // User's progress for this specific book
     @State private var currentUserBookStatus: BookReadingStatus = .wantToRead
     @State private var currentUserBookPage: Int? = nil
-    @State private var isLoadingUserProgress: Bool = false
+    @State private var isLoadingUserProgress: Bool = true
+    @State private var fetchErrorMessage: String? = nil
+    
+    @EnvironmentObject var session: UserSession // Ensure UserSession is correctly defined and provides 'token'
 
-    @EnvironmentObject var session: UserSession
-
-    // (secureImageUrl function as before)
-     private func secureImageUrl(_ urlString: String?) -> URL? {
+    // Helper to make image URLs secure
+    private func secureImageUrl(_ urlString: String?) -> URL? {
         guard let urlString = urlString, !urlString.isEmpty else { return nil }
-        let secureUrlString: String
+        var secureUrlString = urlString
         if urlString.lowercased().hasPrefix("http://") {
             secureUrlString = "https://" + urlString.dropFirst("http://".count)
-        } else {
-            secureUrlString = urlString
         }
         return URL(string: secureUrlString)
     }
 
+    // Main body of the view
     var body: some View {
-        ZStack {
-            // (Background color as before)
-            Color.softWhitePink.ignoresSafeArea()
+        // Check if user is logged in
+        if !session.isLoggedIn { // Assuming UserSession has an isLoggedIn property
+            SignInView() // Ensure SignInView is defined
+        } else {
+            content // Extracted main content to a computed property
+        }
+    }
 
+    // Extracted main content view
+    private var content: some View {
+        ZStack {
+            Color.softWhitePink.ignoresSafeArea() // Ensure Color.softWhitePink is defined
+            
             VStack(spacing: 0) {
                 ScrollView {
-                    VStack(spacing: 15) { // Adjusted spacing
-                        // (AsyncImage for book cover as before)
-                        if let secureUrl = secureImageUrl(book.thumbnailUrl) {
-                            AsyncImage(url: secureUrl) { phase in
-                                if let image = phase.image { image.resizable().aspectRatio(contentMode: .fit).shadow(radius: 5) }
-                                else if phase.error != nil { Image(systemName: "book.closed").resizable().aspectRatio(contentMode: .fit).foregroundColor(.gray).frame(height: 200).background(Color.gray.opacity(0.1)) }
-                                else { ProgressView().frame(height: 200) }
-                            }.frame(maxHeight: 250).padding(.top)
-                        } else {
-                             Image(systemName: "book.closed").resizable().aspectRatio(contentMode: .fit).foregroundColor(.gray).frame(height: 200).background(Color.gray.opacity(0.1)).padding(.top)
-                        }
-
-
-                        Text(book.title).font(.title2).fontWeight(.bold).multilineTextAlignment(.center).foregroundColor(.darkPinkBrown)
-                        Text("by \(book.authors)").font(.headline).foregroundColor(.gray)
-                        
-                        // Display current user's status and progress
-                        VStack {
-                            if isLoadingUserProgress {
-                                ProgressView()
-                            } else {
-                                Text("Status: \(currentUserBookStatus.displayName)")
-                                if currentUserBookStatus == .currentlyReading, let page = currentUserBookPage, let total = book.pageCount, total > 0 {
-                                    Text("Page: \(page) of \(total)")
-                                } else if currentUserBookStatus == .currentlyReading, let page = currentUserBookPage {
-                                     Text("Page: \(page)")
-                                }
-                            }
-                        }
-                        .font(.caption).foregroundColor(.black)
-                        .padding(.vertical, 5).padding(.horizontal, 15)
-                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.redPink.opacity(0.8)))
-
-
-                        StarRatingView(rating: .constant(Int(book.averageRating?.rounded() ?? 0)), maxRating: 5, interactive: false)
-                            .padding(.bottom, 5)
-                        
-                        Button("Update My Reading Progress") {
-                            self.showingUpdateProgressSheet = true
-                        }
-                        .buttonStyle(PrimaryButtonStyle())
-                        .padding(.horizontal)
-
-                        // (Tab Buttons and Tab Content as before)
-                        HStack(spacing: 0) {
-                            DetailTabButton(label: "Details", detail_tab: .Detail, selectedTab: $selectedTab)
-                            DetailTabButton(label: "Google Review", detail_tab: .GoogleReview, selectedTab: $selectedTab)
-                        }
-                        .frame(width:350, height:40 )
-                        .background(Color.redPink)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .padding(.vertical, 10)
-
-                        Group {
-                            switch selectedTab {
-                            case .Detail:
-                                BookDetailsTabView(book: book) // Pass the book
-                            case .GoogleReview:
-                                BookReviewsTabView(book: book, reviewText: $reviewText, reviewRating: $reviewRating)
-                            }
-                        }
-                        .padding(.horizontal)
+                    VStack(spacing: 15) { // Main content VStack
+                        bookHeaderSection // Extracted book image, title, author
+                        userProgressSection // Extracted user progress display
+                        starRatingAndUpdateButton // Extracted star rating and update button
+                        tabSelectionSection // Extracted tab buttons
+                        tabContentSection // Extracted tab content (Details or Reviews)
                     }
+                    .padding(.bottom) // Add some padding at the bottom of the scroll content
                 }
             }
         }
         .sheet(isPresented: $showingUpdateProgressSheet) {
+            // Sheet content is now directly defined here
             BookStatusUpdateView(
                 book: book,
-                currentStatus: currentUserBookStatus, // Pass fetched status
-                currentPage: currentUserBookPage,     // Pass fetched page
+                currentStatus: currentUserBookStatus,
+                currentPage: currentUserBookPage,
                 onUpdateComplete: {
-                    print("BookDetailView: Progress update sheet closed. Refreshing user progress.")
-                    fetchUserBookProgress() // Refresh after update
+                    fetchUserBookProgress() // Refresh progress after update
                 }
             )
-            .environmentObject(session)
+            .environmentObject(session) // Pass UserSession to the sheet
         }
         .onAppear {
-            fetchUserBookProgress() // Fetch initial progress when view appears
+            fetchUserBookProgress() // Fetch initial progress when the view appears
         }
         .navigationTitle(book.title)
-        .navigationBarTitleDisplayMode(.inline)
     }
+
+    // MARK: - Extracted View Components
+
+    // Displays the book cover image
+    private var bookCoverImage: some View {
+        Group { // Use Group to handle conditional logic cleanly
+            if let secureUrl = secureImageUrl(book.thumbnailUrl) {
+                AsyncImage(url: secureUrl) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image.resizable().aspectRatio(contentMode: .fit).shadow(radius: 5)
+                    case .failure:
+                        Image(systemName: "book.closed").resizable().aspectRatio(contentMode: .fit).foregroundColor(.gray).frame(height: 200).background(Color.gray.opacity(0.1))
+                    case .empty:
+                        ProgressView().frame(height: 200)
+                    @unknown default:
+                        EmptyView().frame(height: 200)
+                    }
+                }
+            } else {
+                Image(systemName: "book.closed").resizable().aspectRatio(contentMode: .fit).foregroundColor(.gray).frame(height: 200).background(Color.gray.opacity(0.1))
+            }
+        }
+        .frame(maxHeight: 250)
+        .padding(.top)
+    }
+
+    // Displays book title and authors
+    private var bookTitleAndAuthor: some View {
+        VStack {
+            Text(book.title)
+                .font(.title2).fontWeight(.bold)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.darkPinkBrown) // Ensure Color.darkPinkBrown is defined
+            Text("by \(book.authors)") // Using the safe computed property
+                .font(.headline)
+                .foregroundColor(.gray)
+        }
+    }
+    
+    // Section for book image, title, and author
+    private var bookHeaderSection: some View {
+        VStack(spacing: 10) { // Add spacing if needed
+            bookCoverImage
+            bookTitleAndAuthor
+        }
+    }
+
+    // Displays the current user's progress for this book
+    private var userProgressSection: some View {
+        VStack {
+            if isLoadingUserProgress {
+                ProgressView()
+            } else if let errorMsg = fetchErrorMessage {
+                Text(errorMsg)
+                    .font(.caption)
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+            } else {
+                Text("Status: \(currentUserBookStatus.displayName)")
+                if currentUserBookStatus == .currentlyReading, let page = currentUserBookPage {
+                    if let total = book.pageCount, total > 0 {
+                        Text("Page: \(page) of \(total)")
+                    } else {
+                        Text("Page: \(page)")
+                    }
+                }
+            }
+        }
+        .font(.caption).foregroundColor(.black)
+        .padding(.vertical, 8).padding(.horizontal, 15)
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.redPink.opacity(0.8))) // Ensure Color.redPink
+        .onTapGesture {
+            if fetchErrorMessage != nil { // Allow retry if there was an error
+                fetchUserBookProgress()
+            }
+        }
+    }
+
+    // Displays the book's average star rating and the "Update Progress" button
+    private var starRatingAndUpdateButton: some View {
+        VStack(spacing: 15) {
+            StarRatingView(rating: .constant(Int(book.averageRating?.rounded() ?? 0)), maxRating: 5, interactive: false) // Ensure StarRatingView is defined
+                .padding(.bottom, 5)
+            
+            Button("Update My Reading Progress") {
+                self.showingUpdateProgressSheet = true
+            }
+            .buttonStyle(PrimaryButtonStyle()) // Ensure PrimaryButtonStyle is defined
+            .padding(.horizontal)
+        }
+    }
+
+    // Displays the tab selection buttons (Details, Google Review)
+    private var tabSelectionSection: some View {
+        HStack(spacing: 0) {
+            DetailTabButton(label: "Details", detail_tab: .Detail, selectedTab: $selectedTab) // Ensure DetailTabButton is defined
+            DetailTabButton(label: "Google Review", detail_tab: .GoogleReview, selectedTab: $selectedTab)
+        }
+        .frame(width: 350, height: 40) // Consider using geometry reader or adaptive width
+        .background(Color.redPink)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .padding(.vertical, 10)
+    }
+
+    // Displays the content based on the selected tab
+    @ViewBuilder // Use @ViewBuilder for properties returning different view types in a switch
+    private var tabContentSection: some View {
+        Group { // Group is fine here, or can be removed if @ViewBuilder is on the computed var
+            switch selectedTab {
+            case .Detail:
+                // Corrected: BookDetailsTabView should take the whole 'book' object
+                BookDetailsTabView(description: book.description, pageCount: book.pageCount, publisher: book.publisher, publishedDate: book.publishedDate) // Ensure BookDetailsTabView is defined to take `book: Book`
+            case .GoogleReview:
+                BookReviewsTabView(book: book, reviewText: $reviewText, reviewRating: $reviewRating) // Ensure BookReviewsTabView is defined
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    // MARK: - Data Fetching
 
     // Function to fetch user's current progress for THIS book from your backend
     func fetchUserBookProgress() {
-        // This is a placeholder. You need to implement an API call to your backend.
-        // Example: GET /api/books/progress/{api_id} or similar
-        // This endpoint would return the user's Book document from your MongoDB.
         isLoadingUserProgress = true
-        print("Fetching user progress for book ID: \(book.id)...")
-        Task {
-            // Simulate API call
-            // Replace this with actual API call to your backend
-            // The backend should return the user's specific entry for this book (api_id)
-            // which includes their 'status' and 'current_page'.
-            
-            // --- Placeholder for API call ---
-            // For example:
-            // let userBookData = try await UserSpecificBookAPIService.shared.fetchProgress(apiId: book.id, userToken: session.token)
-            // self.currentUserBookStatus = BookReadingStatus(rawValue: userBookData.status) ?? .wantToRead
-            // self.currentUserBookPage = userBookData.currentPage
-            // --- End Placeholder ---
-            
-            // Simulating fetched data for now:
-            // In a real app, you'd get this from your backend.
-            // If book not on shelf, backend might return 404 or specific response.
-            // For this example, we'll just keep the default .wantToRead / nil page.
-            // If you have a way to query your `Book` model in Swift that holds user-specific data, use that.
-            // For now, we assume `currentUserBookStatus` and `currentUserBookPage` are updated by this "fetch"
-            
-            // Example: If you had a local cache or another service
-            // For demo, let's assume it's not on shelf initially unless you implement the fetch
-            // self.currentUserBookStatus = .wantToRead
-            // self.currentUserBookPage = 0
-            
-            // This function needs to be properly implemented to call your backend
-            // to get the current user's saved status and page for `book.id`.
-            // Upon success, update `currentUserBookStatus` and `currentUserBookPage`.
-            
-            try? await Task.sleep(nanoseconds: 1_000_000_000) // Simulate network delay
-            isLoadingUserProgress = false
-            print("Finished (simulated) fetching user progress.")
-        }
-    }
-}
-
-
-struct BookStatusUpdateView: View {
-    @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var session: UserSession
-
-    let book: Book
-    let initialStatus: BookReadingStatus // Status when the sheet was opened
-    let initialCurrentPage: Int?      // Current page when the sheet was opened
-    
-    @State private var selectedStatus: BookReadingStatus
-    @State private var currentPageInput: String = ""
-    
-    @State private var isLoading: Bool = false
-    @State private var alertMessage: String? = nil
-    @State private var showAlert: Bool = false
-    
-    var onUpdateComplete: (() -> Void)?
-
-    init(book: Book, currentStatus: BookReadingStatus, currentPage: Int?, onUpdateComplete: (() -> Void)? = nil) {
-        self.book = book
-        self.initialStatus = currentStatus
-        self.initialCurrentPage = currentPage
-        self._selectedStatus = State(initialValue: currentStatus)
-        
-        if let page = currentPage, page > 0 {
-            self._currentPageInput = State(initialValue: "\(page)")
-        } else if currentStatus == .finished, let totalPages = book.pageCount, totalPages > 0 {
-            self._currentPageInput = State(initialValue: "\(totalPages)")
-        } else {
-            self._currentPageInput = State(initialValue: "0") // Default for want to read or new currently reading
-        }
-        self.onUpdateComplete = onUpdateComplete
-    }
-
-    var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Update: \(book.title)")) {
-                    Picker("Reading Status", selection: $selectedStatus) {
-                        ForEach(BookReadingStatus.allCases) { status in
-                            Text(status.displayName).tag(status)
-                        }
-                    }
-                    .onChange(of: selectedStatus) { newStatus in
-                        if newStatus == .finished, let totalPages = book.pageCount, totalPages > 0 {
-                            currentPageInput = "\(totalPages)"
-                        } else if newStatus == .wantToRead {
-                            currentPageInput = "0"
-                        }
-                        // If changing to 'currently reading' and current page is 0 or empty, keep it that way or let user input
-                    }
-
-                    if selectedStatus == .currentlyReading || (selectedStatus == .finished && book.pageCount == nil) {
-                        VStack(alignment: .leading) {
-                            Text(selectedStatus == .finished ? "Pages Read (optional if total unknown)" : "Current Page:")
-                            TextField("Enter page number", text: $currentPageInput)
-                                .keyboardType(.numberPad)
-                            if let pageCount = book.pageCount, pageCount > 0 {
-                                Text("Total Pages: \(pageCount)")
-                                    .font(.caption).foregroundColor(.gray)
-                            }
-                        }
-                    }
-                }
-
-                Section {
-                    Button(action: handleSaveProgress) {
-                        HStack {
-                            Spacer()
-                            if isLoading { ProgressView().tint(.white) } else { Text("Save Changes") }
-                            Spacer()
-                        }
-                    }
-                    .disabled(isLoading)
-                    .buttonStyle(PrimaryButtonStyle())
-                }
-            }
-            .navigationTitle("Update Progress")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) { Button("Cancel") { dismiss() } }
-            }
-            .alert("Update Status", isPresented: $showAlert, presenting: alertMessage) { _ in
-                Button("OK") { if alertMessage == "Progress updated successfully!" { dismiss() } } // Dismiss on success
-            } message: { messageText in Text(messageText) }
-        }
-    }
-
-    private func handleSaveProgress() {
-        isLoading = true
-        alertMessage = nil
-
-        let newStatus = selectedStatus
-        var newCurrentPageInt: Int? = nil
-        if !currentPageInput.isEmpty {
-            guard let page = Int(currentPageInput), page >= 0 else {
-                finalizeUpdate(success: false, message: "Invalid page number.")
-                return
-            }
-            newCurrentPageInt = page
-        }
-
-        // Validate page number if book has a page count
-        if let totalPages = book.pageCount, totalPages > 0, let current = newCurrentPageInt {
-            if current > totalPages {
-                finalizeUpdate(success: false, message: "Current page (\(current)) cannot exceed total pages (\(totalPages)).")
-                return
-            }
-        }
-        
-        // If status is 'finished' and page_count is known, current_page should be page_count
-        if newStatus == .finished, let totalPages = book.pageCount, totalPages > 0 {
-            newCurrentPageInt = totalPages // Override input if status is finished
-        } else if newStatus == .wantToRead {
-            newCurrentPageInt = 0 // Override for want to read
-        }
-
-
+        fetchErrorMessage = nil // Clear previous error
+        // print("Fetching user progress for book ID: \(book.id)...")
         Task {
             do {
-                guard let token = session.token else { throw BookAPIService.APIError.noToken }
-
-                // Step 1: Update overall status if it changed or if it's the initial add.
-                // The backend /status endpoint handles setting default current_page based on status.
-                if newStatus != initialStatus || initialStatus == .wantToRead && newCurrentPageInt ?? 0 > 0 { // Heuristic: if status changed, or was 'want to read' and now has progress
-                    try await BookAPIService.shared.updateBookOverallStatus(
-                        book: book,
-                        newStatus: newStatus,
-                        userToken: token
-                    )
+                guard let token = session.token else {
+                    await MainActor.run {
+                        self.isLoadingUserProgress = false
+                        self.fetchErrorMessage = "Not logged in. Please log in to see your progress."
+                    }
+                    return
                 }
-
-                // Step 2: If status is 'currently reading' and a specific page is set (and potentially changed),
-                // or if status is 'finished' and current page needs to be set to total (handled by /status, but explicit update is fine),
-                // then update the page.
-                if let pageToSet = newCurrentPageInt,
-                   (newStatus == .currentlyReading && pageToSet != ((initialStatus == .currentlyReading ? initialCurrentPage : 0)!)) || // Page changed for currently reading
-                   (newStatus == .finished && book.pageCount != nil && pageToSet == book.pageCount) // Explicitly setting finished page
-                {
-                     // Only call if page is different from what /status might have set for 'currently reading' (0) or if it's a meaningful update
-                    if newStatus == .currentlyReading && (pageToSet != initialCurrentPage || initialStatus != .currentlyReading) {
-                         try await BookAPIService.shared.updateBookCurrentPage(
-                            apiId: book.id,
-                            newPage: pageToSet,
-                            userToken: token
-                        )
+                // Assuming BookAPIService.shared.fetchUserBookProgress is correctly implemented
+                let userBookData = try await BookAPIService.shared.fetchUserBookProgress(apiId: book.id, userToken: token)
+                
+                await MainActor.run {
+                    self.currentUserBookStatus = userBookData.status
+                    self.currentUserBookPage = userBookData.current_page
+                    self.isLoadingUserProgress = false
+                    // print("Successfully fetched user progress: Status - \(userBookData.status.displayName), Page - \(userBookData.current_page ?? -1)")
+                }
+            }catch let error { // Catching the error more generically first
+                await MainActor.run {
+                    self.isLoadingUserProgress = false
+                    // Now, check the type of error
+                    if let apiError = error as? BookAPIService.APIError {
+                        switch apiError {
+                        case .resourceNotFound: // Check for specific error type using a switch
+                            self.currentUserBookStatus = .wantToRead // Default if not on shelf
+                            self.currentUserBookPage = 0 // Or nil, depending on preference
+                            self.fetchErrorMessage = "Not yet on your shelf. Add it via 'Update Progress'."
+                            // print("Book not found on user's shelf. Defaulting status.")
+                        default:
+                            self.fetchErrorMessage = apiError.localizedDescription
+                            // print("Error fetching user book progress (APIError): \(apiError.localizedDescription)")
+                        }
+                    } else { // Catch any other errors
+                        self.fetchErrorMessage = error.localizedDescription // Generic error message
+                        // print("Error fetching user book progress (Unknown): \(error.localizedDescription)")
                     }
                 }
-                
-                finalizeUpdate(success: true, message: "Progress updated successfully!")
-                onUpdateComplete?()
-
-            } catch {
-                if let apiError = error as? BookAPIService.APIError {
-                    finalizeUpdate(success: false, message: apiError.localizedDescription)
-                } else {
-                    finalizeUpdate(success: false, message: "An unexpected error occurred: \(error.localizedDescription)")
-                }
-                print("Error saving progress: \(error)")
             }
         }
-    }
-    
-    private func finalizeUpdate(success: Bool, message: String) {
-        isLoading = false
-        alertMessage = message
-        showAlert = true
     }
 }
 
@@ -398,12 +309,6 @@ struct BookDetailsTabView: View {
                 .lineSpacing(5)
 
             Spacer()
-
-            Button("Update Progress") {
-                print("Update Progress tapped")
-            }
-            .buttonStyle(PrimaryButtonStyle())
-
         }
         .padding()
         .background(Color.white)
@@ -508,8 +413,8 @@ struct BookDetailView_Previews: PreviewProvider {
     static var previews: some View {
         // Wrap in NavigationView for preview context
         NavigationView {
-            BookDetailView(book: Book.example)
+            BookDetailView(book: Book.example).environmentObject(UserSession())
         }
-         .preferredColorScheme(.light)
+        .preferredColorScheme(.light)
     }
 }

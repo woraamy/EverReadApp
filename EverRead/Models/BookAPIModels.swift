@@ -1,14 +1,9 @@
-//
-//  BookAPIModels.swift
-//  EverRead
-//
-//  Created by Worawalan Chatlatanagulchai on 9/5/2568 BE.
-//
-
+// File: Models/BookAPIModels.swift (Ensure this is consistent with previous versions)
 import Foundation
 
 // Represents the status options for the API and Picker
-enum BookReadingStatus: String, CaseIterable, Identifiable {
+enum BookReadingStatus: String, CaseIterable, Identifiable, Codable {
+    case defaultStatus = "pick a status"
     case wantToRead = "want to read"
     case currentlyReading = "currently reading"
     case finished = "finished"
@@ -17,6 +12,7 @@ enum BookReadingStatus: String, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
+        case .defaultStatus: return "Pick a Status"
         case .wantToRead: return "Want to Read"
         case .currentlyReading: return "Currently Reading"
         case .finished: return "Finished"
@@ -39,46 +35,42 @@ struct UpdateBookCurrentPageRequest: Codable {
     let current_page: Int
 }
 
-// Your existing Book struct (from Google Books API) - ensure it's defined as before
-/*
-struct Book: Identifiable, Decodable, Hashable {
-    let id: String // Google Books API ID
-    let title: String
-    let authors: [String]
-    let pageCount: Int?
-    // ... other properties ...
-    var authorsConcatenated: String { authors.join(separator: ", ") }
-    static var example = Book(...) // Your example book
+// Response structure for fetching user's specific book progress from your backend
+struct UserBookProgressResponse: Codable, Identifiable {
+    let id: String // MongoDB _id
+    let api_id: String
+    let user_id: String
+    let name: String
+    let author: String
+    let page_count: Int?
+    let current_page: Int?
+    let status: BookReadingStatus
+
+    enum CodingKeys: String, CodingKey {
+        case id = "_id"
+        case api_id, user_id, name, author, page_count, current_page, status
+    }
 }
-*/
-
-// Your UserSession class - ensure it has a 'token' property
-/*
-class UserSession: ObservableObject {
-    @Published var isLoggedIn: Bool = false
-    @Published var token: String? = nil
-    // ... other properties and methods ...
-}
-*/
 
 
-// MARK: - API Service (Updated)
+// MARK: - API Service (Corrected)
 
 class BookAPIService {
-    private let baseURL = URL(string: "http://localhost:5050/api/books/progress")! // Base for progress routes
+    private let baseURL = URL(string: "http://localhost:5050/api/books/progress")!
 
-    // APIError enum (as defined previously)
     enum APIError: Error, LocalizedError {
-        case invalidURL, requestFailed(Error), invalidResponse, statusCode(Int, String?), decodingError(Error), encodingError(Error), noToken
+        
+        case invalidURL, requestFailed(Error), invalidResponse, statusCode(Int, String?), decodingError(Error), encodingError(Error), noToken, resourceNotFound
         var errorDescription: String? {
             switch self {
             case .invalidURL: return "Invalid server URL."
             case .requestFailed(let error): return "Request failed: \(error.localizedDescription)."
             case .invalidResponse: return "Invalid response from server."
             case .statusCode(let code, let msg): return "Server error \(code)." + (msg.map { " \($0)" } ?? "")
-            case .decodingError: return "Failed to decode response."
-            case .encodingError: return "Failed to encode request."
+            case .decodingError(let error): return "Failed to decode response: \(error.localizedDescription)."
+            case .encodingError(let error): return "Failed to encode request: \(error.localizedDescription)."
             case .noToken: return "Authentication token missing."
+            case .resourceNotFound: return "Book not found on your shelf."
             }
         }
     }
@@ -86,96 +78,70 @@ class BookAPIService {
     static let shared = BookAPIService()
     private init() {}
 
-    // Method to update the book's overall status
-    func updateBookOverallStatus(
-        book: Book,
-        newStatus: BookReadingStatus,
-        userToken: String?
-    ) async throws /* -> BackendBookModel? */ {
+    func updateBookOverallStatus(book: Book, newStatus: BookReadingStatus, userToken: String?) async throws -> UserBookProgressResponse {
         guard let token = userToken, !token.isEmpty else { throw APIError.noToken }
-
-        let url = baseURL.appendingPathComponent("status") // POST /api/books/progress/status
+        let url = baseURL.appendingPathComponent("status")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-        let requestBody = UpdateBookOverallStatusRequest(
-            api_id: book.id,
-            name: book.title,
-            author: book.authors,
-            page_count: book.pageCount,
-            status: newStatus.rawValue
-        )
-        
-        // print("BookAPIService: Updating status for \(book.id) to \(newStatus.rawValue)")
-
-        do {
-            request.httpBody = try JSONEncoder().encode(requestBody)
-        } catch {
-            throw APIError.encodingError(error)
-        }
-
-        try await performAPIPostRequest(request: request)
+        let requestBody = UpdateBookOverallStatusRequest(api_id: book.id, name: book.title, author: book.authors, page_count: book.pageCount, status: newStatus.rawValue)
+        do { request.httpBody = try JSONEncoder().encode(requestBody) } catch { throw APIError.encodingError(error) }
+        return try await performAPIPostRequest(request: request, decodingType: UserBookProgressResponse.self)
     }
 
-    // Method to update the book's current page
-    func updateBookCurrentPage(
-        apiId: String,
-        newPage: Int,
-        userToken: String?
-    ) async throws /* -> BackendBookModel? */ {
+    func updateBookCurrentPage(apiId: String, newPage: Int, userToken: String?) async throws -> UserBookProgressResponse {
         guard let token = userToken, !token.isEmpty else { throw APIError.noToken }
-
-        let url = baseURL.appendingPathComponent("page") // POST /api/books/progress/page
+        let url = baseURL.appendingPathComponent("page") // This calls the /page route
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
         let requestBody = UpdateBookCurrentPageRequest(api_id: apiId, current_page: newPage)
-        
-        // print("BookAPIService: Updating page for \(apiId) to \(newPage)")
-
-        do {
-            request.httpBody = try JSONEncoder().encode(requestBody)
-        } catch {
-            throw APIError.encodingError(error)
-        }
-        
-        try await performAPIPostRequest(request: request)
+        do { request.httpBody = try JSONEncoder().encode(requestBody) } catch { throw APIError.encodingError(error) }
+        return try await performAPIPostRequest(request: request, decodingType: UserBookProgressResponse.self)
     }
     
-    // Helper for actual request execution and basic response handling
-    private func performAPIPostRequest(request: URLRequest) async throws /* -> BackendBookModel? */ {
+    func fetchUserBookProgress(apiId: String, userToken: String?) async throws -> UserBookProgressResponse {
+        guard let token = userToken, !token.isEmpty else {
+            throw APIError.noToken
+        }
+        let url = baseURL.appendingPathComponent(apiId) // GET /api/books/progress/{api_id}
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        return try await performAPIGetRequest(request: request, decodingType: UserBookProgressResponse.self)
+    }
+    
+    private func performAPIPostRequest<T: Decodable>(request: URLRequest, decodingType: T.Type) async throws -> T {
+        do {
+            print(decodingType)
+            print(request)
+            let (data, response) = try await URLSession.shared.data(for: request)
+            print(response)
+            print(data)
+            guard let httpResponse = response as? HTTPURLResponse else { throw APIError.invalidResponse }
+            if !(200...299).contains(httpResponse.statusCode) {
+                var errMsg: String? = nil; if let json = try? JSONSerialization.jsonObject(with: data) as? [String:Any] { if let m = json["msg"] as? String {errMsg=m} else if let e = json["error"] as? String {errMsg=e} }; throw APIError.statusCode(httpResponse.statusCode, errMsg)
+            }
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch let error as APIError { throw error }
+        catch let decodingError as DecodingError { print("Decoding error details: \(decodingError)"); throw APIError.decodingError(decodingError) }
+        catch { throw APIError.requestFailed(error) }
+    }
+
+    private func performAPIGetRequest<T: Decodable>(request: URLRequest, decodingType: T.Type) async throws -> T {
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
-            guard let httpResponse = response as? HTTPURLResponse else {
-                throw APIError.invalidResponse
-            }
-
-            // print("BookAPIService: Status Code: \(httpResponse.statusCode)")
-            // if let responseDataString = String(data: data, encoding: .utf8) {
-            //     print("BookAPIService: Response Data: \(responseDataString)")
-            // }
-
+            guard let httpResponse = response as? HTTPURLResponse else { throw APIError.invalidResponse }
+            if httpResponse.statusCode == 404 { throw APIError.resourceNotFound }
             if !(200...299).contains(httpResponse.statusCode) {
-                var errorMessageFromServer: String? = nil
-                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                     if let msg = json["msg"] as? String { errorMessageFromServer = msg }
-                     else if let errorMsg = json["error"] as? String { errorMessageFromServer = errorMsg }
-                     else if let errorsArray = json["errors"] as? [[String: String]], let firstError = errorsArray.first?["msg"] { errorMessageFromServer = firstError }
-                     else if let errorsArray = json["errors"] as? [String], let firstError = errorsArray.first { errorMessageFromServer = firstError }
-                }
-                throw APIError.statusCode(httpResponse.statusCode, errorMessageFromServer)
+                var errMsg: String? = nil; if let json = try? JSONSerialization.jsonObject(with: data) as? [String:Any] { if let m = json["msg"] as? String {errMsg=m} else if let e = json["error"] as? String {errMsg=e} }; throw APIError.statusCode(httpResponse.statusCode, errMsg)
             }
-            // Optionally decode and return backend response if needed
-            // let backendBook = try JSONDecoder().decode(BackendBookModel.self, from: data)
-            // return backendBook
-        } catch let specificError as APIError {
-            throw specificError
-        } catch {
-            throw APIError.requestFailed(error)
-        }
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch let error as APIError { throw error }
+        catch let decodingError as DecodingError { print("Decoding error details: \(decodingError)"); throw APIError.decodingError(decodingError) }
+        catch { throw APIError.requestFailed(error) }
     }
 }

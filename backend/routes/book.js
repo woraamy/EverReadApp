@@ -1,7 +1,7 @@
 // File: routes/bookProgressRoutes.js
 const express = require('express');
 const router = express.Router();
-const { body, validationResult } = require('express-validator');
+const { body, param, validationResult } = require('express-validator');
 const Book = require('../models/Book'); // Adjust path if necessary
 const History = require('../models/History'); // Adjust path if necessary
 
@@ -33,6 +33,7 @@ router.post(
         return res.status(401).json({ error: 'User not authenticated or userId missing from token.' });
     }
     const userIdFromToken = req.user.userId;
+    console.log('req.body', req.body)
 
     const {
       api_id,
@@ -116,72 +117,69 @@ router.post(
 router.post(
   '/page',
   [
-    authMiddleware, // Your authentication middleware
     body('api_id', 'Book API ID (api_id) is required').not().isEmpty().trim(),
     body('current_page', 'Current page is required and must be a non-negative number').isInt({ min: 0 })
   ],
   async (req, res) => {
+    console.log("route hit")
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+    console.log('req.body', req.body)
 
-    const user_id = req.user.id; // From authMiddleware
+    if (!req.user || !req.user.userId) {
+        return res.status(401).json({ error: 'User not authenticated or userId missing from token.' });
+    }
+    const userIdFromToken = req.user.userId;
 
     const { api_id, current_page } = req.body;
     const newCurrentPage = parseInt(current_page, 10);
 
     try {
-      const book = await Book.findOne({ user_id: user_id, api_id: api_id });
+      const book = await Book.findOne({ user_id: userIdFromToken, api_id: api_id });
 
       if (!book) {
-        return res.status(404).json({ msg: 'Book not found in your collection. Add it first using the status endpoint.' });
+        return res.status(404).json({ msg: 'Book not found in your collection. Add or set its status first.' });
       }
+      
+      let originalStatus = book.status; // Keep track of original status
 
-      // Optionally, enforce that only 'currently reading' books can have page progress updated
-      // if (book.status !== 'currently reading') {
-      //   return res.status(400).json({ msg: 'Book is not marked as "currently reading". Update status first.' });
-      // }
+      if (book.status === 'want to read' && newCurrentPage > 0) {
+          book.status = 'currently reading'; 
+      }
 
       if (book.page_count !== null && newCurrentPage > book.page_count) {
         return res.status(400).json({ errors: [{ msg: `Current page (${newCurrentPage}) cannot exceed total page count (${book.page_count}).` }] });
       }
 
       book.current_page = newCurrentPage;
-      let statusChangedToFinished = false;
+      let statusChangedToFinishedDueToPageUpdate = false;
 
-      // If page update means the book is now finished
       if (book.page_count !== null && newCurrentPage >= book.page_count) {
-        if (book.status !== 'finished') {
+        if (book.status !== 'finished') { 
             book.status = 'finished';
-            statusChangedToFinished = true;
+            statusChangedToFinishedDueToPageUpdate = true;
         }
-      } else {
-        // If user updates page but it's less than total, ensure status is 'currently reading'
-        // (unless it was 'finished' and they are "un-finishing" it, which is a complex case not handled here)
-        if (book.status === 'want to read' || book.status === 'finished') { // If it was 'want to read' or 'finished' and now pages are updated
-            book.status = 'currently reading'; // Implicitly move to currently reading
-            // Consider if a history event is needed for this implicit status change from 'want to read'
-        }
+      } else if (book.status === 'finished' && book.page_count !== null && newCurrentPage < book.page_count) {
+        book.status = 'currently reading';
       }
       
-      await book.save(); // This will run validators
+      await book.save();
 
-      // If status changed to 'finished' due to page update, log history
-      if (statusChangedToFinished) {
-        const historyActionString = HistoryActionMap['finished'];
-        if (historyActionString) {
-          const newHistoryEntry = new History({
-            action: historyActionString,
-            user_id: user_id,
-            book_id: book._id,
-            api_id: api_id,
-          });
-          await newHistoryEntry.save();
-        }
+      // Log history if status changed implicitly or explicitly due to page update
+      if (book.status !== originalStatus) {
+          const historyActionString = HistoryActionMap[book.status];
+          if(historyActionString) {
+            // Avoid duplicate "currently reading" if it was already set or if it's a minor page update within "currently reading"
+            // This logic might need refinement based on exact desired history logging behavior
+            if(!(originalStatus === 'currently reading' && book.status === 'currently reading' && !statusChangedToFinishedDueToPageUpdate)) {
+                 const newHistoryEntry = new History({ action: historyActionString, user_id: userIdFromToken, book_id: book._id, api_id: api_id });
+                 await newHistoryEntry.save();
+            }
+          }
       }
-      // Note: We are not creating history entries for every single page update,
-      // only if it results in the book being marked as 'finished'.
+
 
       res.json(book);
 
@@ -196,5 +194,47 @@ router.post(
   }
 );
 
+// GET /api/books/progress/:api_id - Get the progress of a specific book
+router.get(
+  '/:api_id', // Route parameter for the Google Books API ID
+  [
+    param('api_id', 'Book API ID in path is required').not().isEmpty().trim()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    if (!req.user || !req.user.userId) {
+        return res.status(401).json({ error: 'User not authenticated or userId missing from token.' });
+    }
+    const userIdFromToken = req.user.userId;
+    const { api_id } = req.params;
+
+    try {
+      const bookProgress = await Book.findOne({ 
+        user_id: userIdFromToken, 
+        api_id: api_id 
+      });
+
+      if (!bookProgress) {
+        // If the book is not found in the user's collection,
+        // it means they haven't added it to any shelf yet.
+        // Return 404 or a specific response indicating this.
+        return res.status(404).json({ msg: 'Book not found on your shelf.' });
+      }
+
+      res.json(bookProgress); // Send the found book document
+
+    } catch (err) {
+      console.error(`Error in GET /api/books/progress/${api_id}:`, err.message);
+      if (err.name === 'CastError' && err.path === '_id') { // Example of specific error handling
+          return res.status(400).json({ error: 'Invalid API ID format.' });
+      }
+      res.status(500).send('Server Error');
+    }
+  }
+);
 
 module.exports = router;

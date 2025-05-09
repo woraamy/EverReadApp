@@ -27,7 +27,6 @@ struct Book: Identifiable, Decodable, Hashable {
     var pageCount: Int? { volumeInfo.pageCount }
     var publishedDate: String? { volumeInfo.publishedDate }
     var publisher: String? { volumeInfo.publisher }
-//    var authorsConcatenated: String { authors.joined(separator: ", ")
 
     // Example Book for Previews
     static var example: Book {
@@ -48,6 +47,7 @@ struct Book: Identifiable, Decodable, Hashable {
              )
         )
     }
+    
 }
 
 struct VolumeInfo: Decodable, Hashable {

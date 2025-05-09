@@ -40,6 +40,7 @@
 		7F7AAC112DB67CC900BCBB81 /* BookDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7AAC102DB67CC900BCBB81 /* BookDetailsView.swift */; };
 		7F7AAC132DB6823600BCBB81 /* DetailTabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7AAC122DB6823600BCBB81 /* DetailTabButton.swift */; };
 		7FCDD38A2DCDFBB60038A7A1 /* BookAPIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCDD3892DCDFBB60038A7A1 /* BookAPIModels.swift */; };
+		7FCDD38E2DCE47160038A7A1 /* BookStatusUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCDD38D2DCE47160038A7A1 /* BookStatusUpdateView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,7 @@
 		7F7AAC102DB67CC900BCBB81 /* BookDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsView.swift; sourceTree = "<group>"; };
 		7F7AAC122DB6823600BCBB81 /* DetailTabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTabButton.swift; sourceTree = "<group>"; };
 		7FCDD3892DCDFBB60038A7A1 /* BookAPIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookAPIModels.swift; sourceTree = "<group>"; };
+		7FCDD38D2DCE47160038A7A1 /* BookStatusUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStatusUpdateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +207,7 @@
 				2798C1832DBCD63700000EFF /* SignUpView.swift */,
 				2798C1872DBCD6B300000EFF /* SignInView.swift */,
 				2798C1892DBCD6DC00000EFF /* MyShelfView.swift */,
+				7FCDD38D2DCE47160038A7A1 /* BookStatusUpdateView.swift */,
 			);
 			path = EverRead;
 			sourceTree = "<group>";
@@ -391,6 +394,7 @@
 				276079922DB4DAD7001F66C1 /* ColorExtension.swift in Sources */,
 				2798C1862DBCD66700000EFF /* GoogleSignInButton.swift in Sources */,
 				7F6079A22DB8917300BC5DD2 /* MainTabView.swift in Sources */,
+				7FCDD38E2DCE47160038A7A1 /* BookStatusUpdateView.swift in Sources */,
 				276079962DB50220001F66C1 /* ActivityCard.swift in Sources */,
 				2798C1882DBCD6B300000EFF /* SignInView.swift in Sources */,
 				7F7AAC092DB66F8400BCBB81 /* Book.swift in Sources */,
