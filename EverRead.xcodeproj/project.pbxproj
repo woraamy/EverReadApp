@@ -39,6 +39,7 @@
 		7F7AAC0D2DB6709000BCBB81 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7AAC0C2DB6709000BCBB81 /* SearchView.swift */; };
 		7F7AAC112DB67CC900BCBB81 /* BookDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7AAC102DB67CC900BCBB81 /* BookDetailsView.swift */; };
 		7F7AAC132DB6823600BCBB81 /* DetailTabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7AAC122DB6823600BCBB81 /* DetailTabButton.swift */; };
+		7FCDD38A2DCDFBB60038A7A1 /* BookAPIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCDD3892DCDFBB60038A7A1 /* BookAPIModels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +98,7 @@
 		7F7AAC0C2DB6709000BCBB81 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		7F7AAC102DB67CC900BCBB81 /* BookDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsView.swift; sourceTree = "<group>"; };
 		7F7AAC122DB6823600BCBB81 /* DetailTabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTabButton.swift; sourceTree = "<group>"; };
+		7FCDD3892DCDFBB60038A7A1 /* BookAPIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookAPIModels.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +185,7 @@
 		7F303E0C2DAE93B3005B6F83 /* EverRead */ = {
 			isa = PBXGroup;
 			children = (
+				7FCDD3882DCDFB9C0038A7A1 /* Models */,
 				27F4F5132DCD1A4C004DF522 /* FetchData */,
 				27A83AA32DBE2FD200E4613A /* AuthenConnect */,
 				7F60799C2DB7447C00BC5DD2 /* Info.plist */,
@@ -195,7 +198,6 @@
 				7F303E142DAE93B4005B6F83 /* Preview Content */,
 				276079912DB4DAD7001F66C1 /* ColorExtension.swift */,
 				7F7AAC082DB66F8400BCBB81 /* Book.swift */,
-				7F7AAC0A2DB66FD600BCBB81 /* GoogleBooksViewModel.swift */,
 				7F7AAC0C2DB6709000BCBB81 /* SearchView.swift */,
 				7F7AAC102DB67CC900BCBB81 /* BookDetailsView.swift */,
 				7F60799D2DB78CF800BC5DD2 /* HomePage.swift */,
@@ -230,6 +232,15 @@
 				7F303E2B2DAE93B5005B6F83 /* EverReadUITestsLaunchTests.swift */,
 			);
 			path = EverReadUITests;
+			sourceTree = "<group>";
+		};
+		7FCDD3882DCDFB9C0038A7A1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				7F7AAC0A2DB66FD600BCBB81 /* GoogleBooksViewModel.swift */,
+				7FCDD3892DCDFBB60038A7A1 /* BookAPIModels.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -389,6 +400,7 @@
 				2798C18C2DBCD74000000EFF /* BookCard.swift in Sources */,
 				276079872DB4C8CE001F66C1 /* TabHeader.swift in Sources */,
 				7F303E0E2DAE93B3005B6F83 /* EverReadApp.swift in Sources */,
+				7FCDD38A2DCDFBB60038A7A1 /* BookAPIModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
