@@ -124,6 +124,19 @@ struct HomePage: View {
     }
 }
 
+private func mapShelfTitleToTab(_ title: String) -> ShelfTab {
+    switch title.lowercased() { // Use lowercased for case-insensitive matching
+    case "currently reading":
+        return .Current
+    case "want to read": // Ensure this string matches the title prop of your "Want To Read" BookSection
+        return .Want
+    case "finished reading": // If you have a "Finished Reading" section on HomePage
+        return .Finish
+    default:
+        print("Warning: Unmapped BookSection title '\(title)' for ShelfTab. Defaulting to .Current.")
+        return .Current // Default to a sensible tab, or make it return ShelfTab? and handle nil
+    }
+}
 
 struct BookSection: View {
     let title: String
@@ -140,11 +153,10 @@ struct BookSection: View {
                 Spacer()
                 
                 if !isLoading && !books.isEmpty {
-                    // Assuming you have an AllBooksView or similar
-                    NavigationLink(destination: Text("All \(title) Placeholder")) {
+                    NavigationLink(destination: MyShelfView(initialTab: mapShelfTitleToTab(title))) {
                         Text("View All")
                             .font(.subheadline)
-                            .foregroundColor(.redPink) // Assuming defined
+                            .foregroundColor(Color.redPink) 
                     }
                 }
             }
@@ -188,7 +200,6 @@ struct BookItem: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
-            // Book Cover
             AsyncImage(url: secureImageUrl(book.thumbnailUrl)) { phase in
                 switch phase {
                 case .empty:
@@ -234,7 +245,6 @@ struct BookItem: View {
     }
 }
 
-// Review Item Component
 struct ReviewItem: View {
     let review: Review
 
@@ -252,12 +262,12 @@ struct ReviewItem: View {
                          .frame(width: 60, height: 80)
                          .clipped()
                  case .failure:
-                     Image(systemName: "book.closed") // Placeholder on failure
+                     Image(systemName: "book.closed")
                          .resizable()
                          .scaledToFit()
                          .frame(width: 30, height: 30)
                          .foregroundColor(.gray)
-                         .frame(width: 60, height: 80) // Ensure placeholder fills space
+                         .frame(width: 60, height: 80)
                          .background(Color.gray.opacity(0.1))
                  @unknown default:
                      EmptyView()
@@ -267,7 +277,7 @@ struct ReviewItem: View {
             .cornerRadius(5)
              .overlay(
                  RoundedRectangle(cornerRadius: 5)
-                     .stroke(Color.gray.opacity(0.2), lineWidth: 1) // Subtle border
+                     .stroke(Color.gray.opacity(0.2), lineWidth: 1)
              )
 
             VStack(alignment: .leading, spacing: 5) {
@@ -278,13 +288,12 @@ struct ReviewItem: View {
                 Text("Reviewed \(review.book.title)")
                     .font(.caption)
                     .foregroundColor(.gray)
-                    .lineLimit(1) // Ensure title doesn't wrap oddly
-
-                // Rating stars
+                    .lineLimit(1)
+                
                 HStack(spacing: 3) {
                     ForEach(1...5, id: \.self) { star in
                         Image(systemName: star <= review.rating ? "star.fill" : "star")
-                            .foregroundColor(star <= review.rating ? .yellow : .gray.opacity(0.5)) // Make empty stars fainter
+                            .foregroundColor(star <= review.rating ? .yellow : .gray.opacity(0.5))
                             .font(.system(size: 12))
                     }
                 }
@@ -341,28 +350,27 @@ class HomeViewModel: ObservableObject {
     }
 
     @MainActor
-    func fetchCurrentlyReading(token: String?) { // Accept token
+    func fetchCurrentlyReading(token: String?) {
         isLoadingCurrentlyReading = true
         Task {
-            defer { isLoadingCurrentlyReading = false } // Ensure loading state is reset
+            defer { isLoadingCurrentlyReading = false }
             do {
-                // Use the passed-in token
                 guard let validToken = token, !validToken.isEmpty else {
                     print("User token not available for fetching currently reading books.")
-                    self.currentlyReading = [] // Clear existing data or show error state
+                    self.currentlyReading = []
                     return
                 }
                 self.currentlyReading = try await apiService.fetchCurrentlyReadingBooks(userToken: validToken)
                 print("Fetched \(self.currentlyReading.count) currently reading books.")
             } catch {
-                self.currentlyReading = [] // Clear on error or keep stale data, up to you
+                self.currentlyReading = []
                 print("Error fetching currently reading books: \(error.localizedDescription)")
             }
         }
     }
 
     @MainActor
-    func fetchWantToRead(token: String?) { // Accept token
+    func fetchWantToRead(token: String?) {
         isLoadingWantToRead = true
         Task {
             defer { isLoadingWantToRead = false }

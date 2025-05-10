@@ -1,63 +1,15 @@
-// File: routes/bookProgressRoutes.js
+
 const express = require('express');
 const router = express.Router();
 const { body, param, validationResult } = require('express-validator');
-const Book = require('../models/Book'); // Adjust path if necessary
-const History = require('../models/History'); // Adjust path if necessary
+const Book = require('../models/Book'); 
+const History = require('../models/History'); 
 
 const BookStatusValues = ["want to read", "currently reading", "finished"];
 const HistoryActionMap = {
   "want to read": "add want to read",
   "currently reading": "add currently reading",
   "finished": "add finished"
-};
-
-const mapToSwiftBookFormat = (userBookDoc) => {
-  // Assuming userBookDoc is a Mongoose document.
-  // And userBookDoc directly contains fields like api_id, title, authors, thumbnailUrl, etc.
-  // OR userBookDoc has an embedded volumeInfo.
-  if (userBookDoc.volumeInfo && userBookDoc.api_id) { // Ideal case: schema matches Swift expectation
-      return {
-          id: userBookDoc.api_id, // Or userBookDoc.id if that's how api_id is stored as primary key for this item
-          volumeInfo: {
-              title: userBookDoc.volumeInfo.title,
-              authors: userBookDoc.volumeInfo.authors, // Assuming authors is an array
-              imageLinks: {
-                  thumbnail: userBookDoc.volumeInfo.imageLinks?.thumbnail, // Optional chaining for safety
-                  smallThumbnail: userBookDoc.volumeInfo.imageLinks?.smallThumbnail
-              },
-              description: userBookDoc.volumeInfo.description,
-              pageCount: userBookDoc.volumeInfo.pageCount,
-              publishedDate: userBookDoc.volumeInfo.publishedDate,
-              publisher: userBookDoc.volumeInfo.publisher,
-              averageRating: userBookDoc.volumeInfo.averageRating,
-              ratingsCount: userBookDoc.volumeInfo.ratingsCount
-              // Add any other fields your Swift VolumeInfo expects
-          }
-          // You could also include user-specific progress here if needed by the client for these views
-          // userProgress: {
-          //   currentPage: userBookDoc.current_page,
-          //   status: userBookDoc.status
-          // }
-      };
-  }
-  // Fallback: if UserBook schema is flatter and needs mapping to {id, volumeInfo}
-  // This part needs to be adjusted based on your ACTUAL UserBook schema.
-  // This is a common scenario if you denormalized Google Books data.
-  return {
-      id: userBookDoc.api_id, // Or however you store the Google Books ID
-      volumeInfo: {
-          title: userBookDoc.title,
-          authors: userBookDoc.authors || [], // Ensure it's an array
-          imageLinks: {
-              thumbnail: userBookDoc.thumbnailUrl || userBookDoc.imageLinks?.thumbnail, // Prioritize specific thumbnailUrl if available
-              smallThumbnail: userBookDoc.smallThumbnailUrl || userBookDoc.imageLinks?.smallThumbnail
-          },
-          description: userBookDoc.description,
-          pageCount: userBookDoc.pageCount,
-          // Add other VolumeInfo fields if they are stored directly on UserBook
-      }
-  };
 };
 
 // POST /api/books/progress/status - Update or add a book's status
@@ -87,8 +39,8 @@ router.post(
       api_id,
       name,
       author,
-      page_count, // Total pages for the book (from Google Books API or other source)
-      status      // The new target status: "want to read", "currently reading", "finished"
+      page_count,
+      status     
     } = req.body;
 
     try {
@@ -100,34 +52,25 @@ router.post(
         status: status,
       };
 
-      // Set page_count if provided
       if (page_count !== undefined && page_count !== null && !isNaN(parseInt(page_count))) {
         bookUpdatePayload.page_count = parseInt(page_count, 10);
       } else {
-        // If not provided, try to preserve existing page_count if book exists, or set to null
         const existingBook = await Book.findOne({ user_id: userIdFromToken, api_id: api_id });
         bookUpdatePayload.page_count = existingBook ? existingBook.page_count : null;
       }
 
-      // Determine current_page based on the new status
       if (status === 'want to read') {
         bookUpdatePayload.current_page = 0;
       } else if (status === 'currently reading') {
-        // When setting to 'currently reading', typically start at page 0
-        // unless a specific starting page is intended (which would be part of a more complex initial add)
         bookUpdatePayload.current_page = 0; 
       } else if (status === 'finished') {
         if (bookUpdatePayload.page_count !== null && bookUpdatePayload.page_count > 0) {
-          bookUpdatePayload.current_page = bookUpdatePayload.page_count; // Mark as fully read
+          bookUpdatePayload.current_page = bookUpdatePayload.page_count; 
         } else {
-          // If finished but page_count is unknown, current_page might be set to 0 or kept as is if book existed.
-          // For a new entry without page_count, it's ambiguous. Let's default to 0.
           bookUpdatePayload.current_page = 0; 
         }
       }
 
-      // Upsert logic: Find a book by user_id and api_id.
-      // If found, update it. If not, create a new one.
       const updatedOrNewBook = await Book.findOneAndUpdate(
         { user_id: userIdFromToken, api_id: api_id },
         { $set: bookUpdatePayload },
@@ -215,12 +158,9 @@ router.post(
       
       await book.save();
 
-      // Log history if status changed implicitly or explicitly due to page update
       if (book.status !== originalStatus) {
           const historyActionString = HistoryActionMap[book.status];
           if(historyActionString) {
-            // Avoid duplicate "currently reading" if it was already set or if it's a minor page update within "currently reading"
-            // This logic might need refinement based on exact desired history logging behavior
             if(!(originalStatus === 'currently reading' && book.status === 'currently reading' && !statusChangedToFinishedDueToPageUpdate)) {
                  const newHistoryEntry = new History({ action: historyActionString, user_id: userIdFromToken, book_id: book._id, api_id: api_id });
                  await newHistoryEntry.save();
@@ -244,7 +184,7 @@ router.post(
 
 // GET /api/books/progress/:api_id - Get the progress of a specific book
 router.get(
-  '/:api_id', // Route parameter for the Google Books API ID
+  '/:api_id', 
   [
     param('api_id', 'Book API ID in path is required').not().isEmpty().trim()
   ],
@@ -267,17 +207,14 @@ router.get(
       });
 
       if (!bookProgress) {
-        // If the book is not found in the user's collection,
-        // it means they haven't added it to any shelf yet.
-        // Return 404 or a specific response indicating this.
         return res.status(404).json({ msg: 'Book not found on your shelf.' });
       }
 
-      res.json(bookProgress); // Send the found book document
+      res.json(bookProgress); 
 
     } catch (err) {
       console.error(`Error in GET /api/books/progress/${api_id}:`, err.message);
-      if (err.name === 'CastError' && err.path === '_id') { // Example of specific error handling
+      if (err.name === 'CastError' && err.path === '_id') { 
           return res.status(400).json({ error: 'Invalid API ID format.' });
       }
       res.status(500).send('Server Error');
@@ -294,15 +231,13 @@ router.get('/shelf/currently-reading', async (req, res) => {
 
       const books = await Book.find({
           user_id: req.user.userId,
-          status: 'currently reading' // Matches BookReadingStatus.rawValue
-      }).sort({ added_date: -1 }); // Optional: sort by most recently added
+          status: 'currently reading' 
+      }).sort({ added_date: -1 });
 
       if (!books) {
-          return res.json([]); // Return empty array if no books found, not an error
+          return res.json([]); 
       }
 
-      // // Map to the format expected by Swift client (id + volumeInfo)
-      // const formattedBooks = books.map(mapToSwiftBookFormat);
       res.json(books);
 
   } catch (err) {
@@ -313,10 +248,6 @@ router.get('/shelf/currently-reading', async (req, res) => {
 
 // GET want-to-read books
 router.get('/shelf/want-to-read', async (req, res) => {
-  // console.log("route hit???")
-  // console.log('req.user', req.user)
-  // console.log('req.user.userId', req.user.userId)
-  // console.log('req.body', req.body)
   try {
       if (!req.user || !req.user.userId) {
           return res.status(401).json({ msg: 'User not authenticated.' });
@@ -324,14 +255,37 @@ router.get('/shelf/want-to-read', async (req, res) => {
 
       const books = await Book.find({
           user_id: req.user.userId,
-          status: 'want to read' // Matches BookReadingStatus.rawValue
+          status: 'want to read' 
       }).sort({ added_date: -1 }); // Optional: sort
 
       if (!books) {
           return res.json([]);
       }
-      console.log('books', books)
-      // const formattedBooks = books.map(mapToSwiftBookFormat);
+      res.json(books);
+
+  } catch (err) {
+      console.error('Error in GET /shelf/want-to-read:', err.message);
+      res.status(500).send('Server Error');
+  }
+  
+});
+
+
+// GET finished books
+router.get('/shelf/finished', async (req, res) => {
+  try {
+      if (!req.user || !req.user.userId) {
+          return res.status(401).json({ msg: 'User not authenticated.' });
+      }
+
+      const books = await Book.find({
+          user_id: req.user.userId,
+          status: 'finished' 
+      }).sort({ added_date: -1 }); // sort by most recently added
+
+      if (!books) {
+          return res.json([]);
+      }
       res.json(books);
 
   } catch (err) {

@@ -1,9 +1,7 @@
-// File: Models/BookAPIModels.swift (Ensure this is consistent with previous versions)
+
 import Foundation
 
-// Represents the status options for the API and Picker
 enum BookReadingStatus: String, CaseIterable, Identifiable, Codable {
-    case defaultStatus = "pick a status"
     case wantToRead = "want to read"
     case currentlyReading = "currently reading"
     case finished = "finished"
@@ -12,7 +10,6 @@ enum BookReadingStatus: String, CaseIterable, Identifiable, Codable {
 
     var displayName: String {
         switch self {
-        case .defaultStatus: return "Pick a Status"
         case .wantToRead: return "Want to Read"
         case .currentlyReading: return "Currently Reading"
         case .finished: return "Finished"
@@ -26,7 +23,7 @@ struct UpdateBookOverallStatusRequest: Codable {
     let name: String
     let author: String
     let page_count: Int?
-    let status: String // Raw value from BookReadingStatus
+    let status: String
 }
 
 // Request structure for updating book's CURRENT PAGE
@@ -54,11 +51,11 @@ struct UserBookProgressResponse: Codable, Identifiable {
 
 // Represents an entry from your backend's shelf listing
 struct UserBookEntry: Codable, Identifiable {
-    let id: String          // MongoDB _id, mapped from "_id"
-    let api_id: String      // Google Books Volume ID
+    let id: String
+    let api_id: String
     let user_id: String
-    let name: String        // Book title from your backend
-    let author: String      // Book author from your backend (single string as per your JSON)
+    let name: String
+    let author: String
     let page_count: Int?
     let current_page: Int?
     let status: String
@@ -167,15 +164,12 @@ class BookAPIService {
             if !(200...299).contains(httpResponse.statusCode) {
                 var errMsg: String? = nil; if let json = try? JSONSerialization.jsonObject(with: data) as? [String:Any] { if let m = json["msg"] as? String {errMsg=m} else if let e = json["error"] as? String {errMsg=e} }; throw APIError.statusCode(httpResponse.statusCode, errMsg)
             }
-            print(data)
-            print(response)
             return try JSONDecoder().decode(T.self, from: data)
         } catch let error as APIError { throw error }
         catch let decodingError as DecodingError { print("Decoding error details: \(decodingError)"); throw APIError.decodingError(decodingError) }
         catch { throw APIError.requestFailed(error) }
     }
     
-    // --- New methods for fetching shelf books with details from Google Books ---
 
     /**
      Fetches detailed book information for a single book from Google Books API using its volume ID.
@@ -185,7 +179,6 @@ class BookAPIService {
      */
     private func fetchGoogleBookDetailsBy(googleBookId: String) async throws -> Book {
 
-        // Construct the URL for Google Books API (fetching a specific volume)
         guard var components = URLComponents(string: "https://www.googleapis.com/books/v1/volumes/\(googleBookId)") else {
             throw APIError.invalidURL
         }
@@ -198,16 +191,14 @@ class BookAPIService {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
 
-        // Perform the network request
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse else {
             throw APIError.invalidResponse
         }
 
-        // Handle Google Books API specific status codes
         if httpResponse.statusCode == 404 {
             print("Book with ID \(googleBookId) not found on Google Books.")
-            throw APIError.resourceNotFound // Or a more specific "googleBookNotFound"
+            throw APIError.resourceNotFound
         }
         if !(200...299).contains(httpResponse.statusCode) {
             var errMsg: String?
@@ -220,8 +211,6 @@ class BookAPIService {
             throw APIError.statusCode(httpResponse.statusCode, "Google Books API: \(errMsg ?? "Unknown error")")
         }
 
-        // Decode the response directly into a Book object
-        // The Google Books API for /volumes/{id} returns a single item that matches your Book structure.
         do {
             let book = try JSONDecoder().decode(Book.self, from: data)
             return book
@@ -230,7 +219,7 @@ class BookAPIService {
             throw APIError.decodingError(decodingError)
         } catch {
             print("Unknown error decoding Google Book ID \(googleBookId): \(error)")
-            throw APIError.requestFailed(error) // Or a more specific decoding error
+            throw APIError.requestFailed(error)
         }
     }
 
@@ -247,9 +236,9 @@ class BookAPIService {
             throw APIError.noToken
         }
 
-        // 1. Fetch UserBookEntry list from your backend
         // The URL should be like: http://localhost:5050/api/books/progress/shelf/currently-reading
         let entriesUrl = baseURL.appendingPathComponent("shelf/\(shelfPath)")
+        print(entriesUrl)
         var entriesRequest = URLRequest(url: entriesUrl)
         entriesRequest.httpMethod = "GET"
         entriesRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -258,45 +247,37 @@ class BookAPIService {
         let userBookEntries: [UserBookEntry] = try await performAPIGetRequest(request: entriesRequest, decodingType: [UserBookEntry].self)
 
         if userBookEntries.isEmpty {
-            return [] // No books on this shelf in your backend
+            return [] 
         }
 
-        // 2. Fetch full Book details from Google Books for each entry concurrently
         var detailedBooks: [Book] = []
         
-        // Using a TaskGroup for concurrent fetching from Google Books
         try await withThrowingTaskGroup(of: Book?.self) { group in
             for entry in userBookEntries {
                 group.addTask {
                     do {
-                        // Fetch full book details using the api_id from the entry
                         let detailedBook = try await self.fetchGoogleBookDetailsBy(googleBookId: entry.api_id)
                         return detailedBook
                     } catch {
-                        // Log error for individual book fetch but don't fail the whole group.
-                        // Instead, create a fallback Book object using data from UserBookEntry.
-                        // This makes the UI more resilient if one Google Books API call fails.
                         print("Failed to fetch details for book ID \(entry.api_id) from Google Books: \(error.localizedDescription). Using fallback data from backend.")
                         
                         let fallbackVolumeInfo = VolumeInfo(
-                            id: entry.id, // Title from your backend
-                            title: entry.name, // Author from your backend (assuming it's a single string)
-                            authors: [], // Not available in UserBookEntry
-                            description: nil, // Not available in UserBookEntry
+                            id: entry.id,
+                            title: entry.name,
+                            authors: [],
+                            description: nil,
                             imageLinks: ImageLinks(smallThumbnail: "", thumbnail: ""),
                             averageRating: 0.0,
-                            ratingsCount: nil, // Not available
-                            pageCount: nil, // Not available
+                            ratingsCount: nil,
+                            pageCount: nil,
                             publishedDate: nil,
                             publisher: nil
                         )
-                        // The 'id' of the Book struct should be the Google Books ID (entry.api_id)
                         return Book(id: entry.api_id, volumeInfo: fallbackVolumeInfo)
                     }
                 }
             }
             
-            // Collect results from the group
             for try await bookResult in group {
                 if let book = bookResult {
                     detailedBooks.append(book)
@@ -304,9 +285,6 @@ class BookAPIService {
             }
         }
         
-        // Note: TaskGroup does not guarantee order. If order from your backend is important,
-        // you might need to re-sort `detailedBooks` based on the original `userBookEntries` order,
-        // or fetch sequentially (which would be slower).
         return detailedBooks
     }
     
@@ -325,7 +303,6 @@ class BookAPIService {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-            // Using the generic GET request performer
             return try await performAPIGetRequest(request: request, decodingType: [Book].self)
         }
 
@@ -340,7 +317,7 @@ class BookAPIService {
         }
     
         // Public method to fetch "Finished" books
-        func fetchWantToReadBooks(userToken: String?) async throws -> [Book] {
+        func fetchFinishedBooks(userToken: String?) async throws -> [Book] {
             try await fetchShelfBooksWithDetails(shelfPath: "finished", userToken: userToken)
         }
 }

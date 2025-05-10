@@ -38,7 +38,6 @@ class GoogleBooksViewModel: ObservableObject {
         }
         
         let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(urlEncodedQuery)&key=\(APIConfig.googleBooksKey)&maxResults=10"
-        print(urlString)
 
         guard let url = URL(string: urlString) else {
             self.errorMessage = "Invalid URL"
