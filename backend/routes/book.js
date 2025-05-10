@@ -301,9 +301,9 @@ router.get('/shelf/currently-reading', async (req, res) => {
           return res.json([]); // Return empty array if no books found, not an error
       }
 
-      // Map to the format expected by Swift client (id + volumeInfo)
-      const formattedBooks = books.map(mapToSwiftBookFormat);
-      res.json(formattedBooks);
+      // // Map to the format expected by Swift client (id + volumeInfo)
+      // const formattedBooks = books.map(mapToSwiftBookFormat);
+      res.json(books);
 
   } catch (err) {
       console.error('Error in GET /shelf/currently-reading:', err.message);
@@ -313,6 +313,10 @@ router.get('/shelf/currently-reading', async (req, res) => {
 
 // GET want-to-read books
 router.get('/shelf/want-to-read', async (req, res) => {
+  // console.log("route hit???")
+  // console.log('req.user', req.user)
+  // console.log('req.user.userId', req.user.userId)
+  // console.log('req.body', req.body)
   try {
       if (!req.user || !req.user.userId) {
           return res.status(401).json({ msg: 'User not authenticated.' });
@@ -326,14 +330,15 @@ router.get('/shelf/want-to-read', async (req, res) => {
       if (!books) {
           return res.json([]);
       }
-      
-      const formattedBooks = books.map(mapToSwiftBookFormat);
-      res.json(formattedBooks);
+      console.log('books', books)
+      // const formattedBooks = books.map(mapToSwiftBookFormat);
+      res.json(books);
 
   } catch (err) {
       console.error('Error in GET /shelf/want-to-read:', err.message);
       res.status(500).send('Server Error');
   }
+  
 });
 
 module.exports = router;
