@@ -42,6 +42,7 @@ router.post('/post',
             action : "write a review",
             api_id,
             user_id,
+            book_name
         })
 
         const savedHistory = await newHistory.save();

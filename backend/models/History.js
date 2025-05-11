@@ -32,6 +32,12 @@ const historySchema = new mongoose.Schema({
     type: String,
     index: false,
   },
+   book_name: { 
+    type: String,
+    ref: 'Book',
+    required: false,
+    index: true,
+  },
   created_at: {
     type: Date,
     default: Date.now,
