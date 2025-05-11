@@ -11,8 +11,9 @@ import SwiftUI
 struct HomePage: View {
     @StateObject private var viewModel = HomeViewModel()
     @StateObject private var dataManager = DataManager()
-    @EnvironmentObject var session: UserSession 
-
+    @EnvironmentObject var session: UserSession
+    @AppStorage("authToken") var token = ""
+    @State private var reviews: [ReviewsItem] = []
     var body: some View {
         let user = dataManager.user // For reading goals
 
@@ -91,18 +92,18 @@ struct HomePage: View {
 
                                 if viewModel.isLoadingReviews {
                                     ProgressView().padding()
-                                } else if viewModel.recentReviews.isEmpty {
+                                } else if reviews.isEmpty {
                                     Text("No recent reviews.")
                                         .font(.caption)
                                         .foregroundColor(.gray)
                                         .padding(.horizontal)
                                 } else {
-                                    ForEach(viewModel.recentReviews) { review in
+                                    ForEach(reviews) { review in
                                         ReviewCard(
                                             name: review.username,
-                                            book: review.book.title,
+                                            book: "sad",
                                             rating: review.rating,
-                                            detail: review.content,
+                                            detail: review.description,
                                             book_id: ""
                                         )
                                         .padding(.horizontal)
@@ -118,10 +119,23 @@ struct HomePage: View {
             } // End ZStack
             .foregroundColor(.darkPinkBrown)
             .onAppear {
+                fetchReviews(token:token)
                 viewModel.fetchHomePageData(token: session.token)
                 dataManager.fetchUser()
             }
         } // End NavigationStack
+    }
+    func fetchReviews(token: String) {
+        ReviewAPIService().GetUserReview(token: token) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let fetchedReviews):
+                    self.reviews = fetchedReviews
+                case .failure(let error):
+                    print("Error fetching reviews: \(error.localizedDescription)")
+                }
+            }
+        }
     }
 }
 

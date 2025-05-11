@@ -14,9 +14,10 @@ struct PostReviewRequest:Codable{
     let description:String
 }
 
-struct ReviewsItem: Codable {
+struct ReviewsItem: Codable, Identifiable {
     let id: String
     let userId: String
+    let username: String
     let apiId: String
     let rating: Int
     let description: String
@@ -26,6 +27,7 @@ struct ReviewsItem: Codable {
     enum CodingKeys: String, CodingKey {
         case id = "_id"
         case userId = "user_id"
+        case username
         case apiId = "api_id"
         case rating
         case description
@@ -140,5 +142,36 @@ class ReviewAPIService {
                 }
             }.resume()
         }
+    func GetUserReview(token:String ,completion: @escaping (Result<[ReviewsItem], APIError>) -> Void){
+        guard let url = URL(string: "\(baseURL)/getUserReview") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(.failure(.resourceNotFound))
+                return
+            }
+            // Log raw response string
+            if let rawResponse = String(data: data, encoding: .utf8) {
+                print("Raw response from server:\n\(rawResponse)")
+            }
+            
+            do {
+                let response = try JSONDecoder().decode([ReviewsItem].self, from: data)
+                print("Get review successful")
+                // Return the successful response with user details
+                completion(.success(response))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(.decodingError(error)))
+            }
+        }.resume()
+    }
 }
 
