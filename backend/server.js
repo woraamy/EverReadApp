@@ -43,7 +43,8 @@ const bookRoutes = require('./routes/book');
 const signUpRoutes = require('./routes/auth/register');
 const signInRoutes = require('./routes/auth/login');
 const bookProgressRoutes = require('./routes/book'); 
-
+const reviewRoutes = require('./routes/review'); 
+const userDataRoutes = require('./routes/fetchData/userData')
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -52,13 +53,9 @@ app.use('/api/auth/register', signUpRoutes);
 app.use('/api/auth/login', signInRoutes);
 
 // Protected Route (Requires Login)
-const userDataRoutes = require('./routes/fetchData/userData')
-app.get('/api/hello', verifyToken , (req, res) => {
-  res.json({ message: `Hello user ${req.user.userId}` });
-});
-
-app.use('/api/fetchData/userData',verifyToken, userDataRoutes)
+app.use('/api/fetchData/userData',verifyToken, userDataRoutes);
 app.use('/api/books/progress', verifyToken, bookProgressRoutes);
+app.use('/api/review', verifyToken, reviewRoutes);
 
 
 app.use((req, res, next) => {
