@@ -45,6 +45,7 @@ const signInRoutes = require('./routes/auth/login');
 const bookProgressRoutes = require('./routes/book'); 
 const reviewRoutes = require('./routes/review'); 
 const userDataRoutes = require('./routes/fetchData/userData')
+const followerRoutes = require('./routes/follower')
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -56,6 +57,7 @@ app.use('/api/auth/login', signInRoutes);
 app.use('/api/fetchData/userData',verifyToken, userDataRoutes);
 app.use('/api/books/progress', verifyToken, bookProgressRoutes);
 app.use('/api/review', verifyToken, reviewRoutes);
+app.use('/api/follower', verifyToken, followerRoutes);
 
 
 app.use((req, res, next) => {
