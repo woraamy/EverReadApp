@@ -12,6 +12,7 @@ router.post('/post',
     body('api_id', 'Book API ID (api_id) is required').not().isEmpty().trim(),
     body('rating', 'Rating is required').not().isEmpty().trim().isInt({ min: 0, max: 5 }),
     body('description', 'Review description is required').not().isEmpty().trim(),
+    body('book_name', 'Book name is required').not().isEmpty().trim(),
   ], 
   async (req, res, next) => {
     try {
@@ -24,14 +25,15 @@ router.post('/post',
             return res.status(401).json({ error: 'User not authenticated or userId missing from token.' });
         }
         
-        const { api_id, rating, description} = req.body;
+        const { api_id, rating, description, book_name} = req.body;
         const user_id = req.user.userId
         console.log(user_id)
         const newReview = new Review({
             user_id,
             api_id,
             rating,
-            description
+            description,
+            book_name
         });
 
         const savedReview = await newReview.save();
@@ -50,7 +52,8 @@ router.post('/post',
             ReviewId: savedReview._id,
             Reviewer: savedReview.user_id,
             rating: savedReview.rating,
-            description: savedReview.description
+            description: savedReview.description,
+            bookName: savedReview.book_name
         });
     } catch (err) {
         next(err); 
