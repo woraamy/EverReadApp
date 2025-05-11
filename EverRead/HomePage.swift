@@ -102,7 +102,8 @@ struct HomePage: View {
                                             name: review.username,
                                             book: review.book.title,
                                             rating: review.rating,
-                                            detail: review.content
+                                            detail: review.content,
+                                            book_id: ""
                                         )
                                         .padding(.horizontal)
                                         .padding(.bottom, 8)

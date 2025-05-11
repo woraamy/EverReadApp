@@ -192,6 +192,7 @@
 		7F303E0C2DAE93B3005B6F83 /* EverRead */ = {
 			isa = PBXGroup;
 			children = (
+				276079912DB4DAD7001F66C1 /* ColorExtension.swift */,
 				7FCDD3882DCDFB9C0038A7A1 /* Models */,
 				27F4F5132DCD1A4C004DF522 /* FetchData */,
 				27A83AA32DBE2FD200E4613A /* AuthenConnect */,
@@ -203,7 +204,6 @@
 				7F303E112DAE93B4005B6F83 /* Assets.xcassets */,
 				7F303E132DAE93B4005B6F83 /* EverRead.entitlements */,
 				7F303E142DAE93B4005B6F83 /* Preview Content */,
-				276079912DB4DAD7001F66C1 /* ColorExtension.swift */,
 				7F7AAC082DB66F8400BCBB81 /* Book.swift */,
 				7F7AAC0C2DB6709000BCBB81 /* SearchView.swift */,
 				7F7AAC102DB67CC900BCBB81 /* BookDetailsView.swift */,

@@ -51,7 +51,7 @@ struct ProfileView: View {
                                 }
                             case .Review:
                                 ForEach(1..<5){ i in
-                                    ReviewCard(name:user?.username ?? "username", book: "Babel", rating: 5, detail:"What a good book to read! i cried when reading this")
+                                    ReviewCard(name:user?.username ?? "username", book: "Babel", rating: 5, detail:"What a good book to read! i cried when reading this",book_id: "")
                                 }
                             case .Stats:
                                 ReadGoalCard(

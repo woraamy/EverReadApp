@@ -10,7 +10,7 @@ struct PostReviewRespond:Codable{
 }
 struct PostReviewRequest:Codable{
     let api_id:String
-    let rating:String
+    let rating:Int
     let description:String
 }
 
@@ -86,7 +86,59 @@ class ReviewAPIService {
             }
         }.resume()
     }
-    
-       
+    func PostReview(api_id: String, rating: Int, description: String, token: String, completion: @escaping (Result<PostReviewRespond, APIError>) -> Void) {
+            guard let url = URL(string: "\(baseURL)/post") else {
+                completion(.failure(.invalidURL))
+                return
+            }
+
+            let body = PostReviewRequest(api_id: api_id, rating: rating, description: description)
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+            do {
+                request.httpBody = try JSONEncoder().encode(body)
+            } catch {
+                completion(.failure(.encodingError(error)))
+                return
+            }
+
+            URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if let error = error {
+                    completion(.failure(.requestFailed(error)))
+                    return
+                }
+
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(.failure(.invalidResponse))
+                    return
+                }
+
+                guard let data = data else {
+                    completion(.failure(.invalidResponse))
+                    return
+                }
+
+                // Debug: Print raw response
+                if let raw = String(data: data, encoding: .utf8) {
+                    print("Server response:\n\(raw)")
+                }
+
+                if (200...299).contains(httpResponse.statusCode) {
+                    do {
+                        let response = try JSONDecoder().decode(PostReviewRespond.self, from: data)
+                        completion(.success(response))
+                    } catch {
+                        completion(.failure(.decodingError(error)))
+                    }
+                } else {
+                    let message = String(data: data, encoding: .utf8)
+                    completion(.failure(.statusCode(httpResponse.statusCode, message)))
+                }
+            }.resume()
+        }
 }
 

@@ -12,7 +12,7 @@ import SwiftUI
 //// Enum for the tabs within the Book Detail page
 enum DetailTab {
     case Detail
-    case GoogleReview
+    case Review
 }
 
 struct BookDetailView: View {
@@ -184,7 +184,7 @@ struct BookDetailView: View {
     private var tabSelectionSection: some View {
         HStack(spacing: 0) {
             DetailTabButton(label: "Details", detail_tab: .Detail, selectedTab: $selectedTab) // Ensure DetailTabButton is defined
-            DetailTabButton(label: "Google Review", detail_tab: .GoogleReview, selectedTab: $selectedTab)
+            DetailTabButton(label: "Review", detail_tab: .Review, selectedTab: $selectedTab)
         }
         .frame(width: 350, height: 40) // Consider using geometry reader or adaptive width
         .background(Color.redPink)
@@ -200,7 +200,7 @@ struct BookDetailView: View {
             case .Detail:
                 // Corrected: BookDetailsTabView should take the whole 'book' object
                 BookDetailsTabView(description: book.description, pageCount: book.pageCount, publisher: book.publisher, publishedDate: book.publishedDate) // Ensure BookDetailsTabView is defined to take `book: Book`
-            case .GoogleReview:
+            case .Review:
                 BookReviewsTabView(book: book, reviewText: $reviewText, reviewRating: $reviewRating) // Ensure BookReviewsTabView is defined
             }
         }
@@ -323,6 +323,10 @@ struct BookReviewsTabView: View {
     @Binding var reviewText: String
     @Binding var reviewRating: Int
     @State private var reviews: [ReviewsItem] = []
+    // Alert state variables
+    @State private var showAlert = false
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
     var body: some View {
         VStack(alignment: .leading, spacing: 15) {
             Text("Reviews")
@@ -331,7 +335,7 @@ struct BookReviewsTabView: View {
                 .padding(.bottom, 5)
             
             ForEach(reviews, id: \.id) { i in
-                ReviewCard(name: "User", book: book.title, rating: i.rating , detail:i.description)
+                ReviewCard(name: "User", book: book.title, rating: i.rating , detail:i.description, book_id:book.id)
                     .padding(.bottom, 5)
             }
             Divider()
@@ -356,6 +360,7 @@ struct BookReviewsTabView: View {
             
             
             Button("Submit Review") {
+                writeReviews(book:book.id, rating:reviewRating, detail:reviewText, token:token)
                 print("Submit Review tapped. Rating: \(reviewRating), Text: \(reviewText)")
             }
             .buttonStyle(PrimaryButtonStyle())
@@ -367,10 +372,12 @@ struct BookReviewsTabView: View {
         .shadow(color: .gray.opacity(0.1), radius: 3, y: 1)
         .onAppear {
             fetchReviews(book:book.id, token:token)
-        }
-    }
-    func fetchReviews(book:String,token:String) {
-        // Replace with actual token handling
+        }.alert(alertTitle, isPresented: $showAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(alertMessage)
+        }    }
+    func fetchReviews(book:String, token:String) {
         ReviewAPIService().GetReview(api_id: book, token: token) { result in
             DispatchQueue.main.async {
                 switch result {
@@ -381,7 +388,28 @@ struct BookReviewsTabView: View {
                 }
             }
         }
-    }}
+    }
+    func writeReviews(book:String, rating:Int, detail:String, token:String){
+            ReviewAPIService().PostReview(api_id: book, rating: rating, description: detail, token: token){ result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        alertTitle = "Success"
+                        alertMessage = "Your review has been submitted."
+                        showAlert = true
+                        reviewText = ""
+                        reviewRating = 0
+                        fetchReviews(book: book, token: token)
+                    case .failure(let error):
+                        alertTitle = "Error"
+                        alertMessage = "Failed to submit review: \(error.localizedDescription)"
+                        showAlert = true
+                    }
+                }
+            }
+        }
+    }
+
 
 
 
