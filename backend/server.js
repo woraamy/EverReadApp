@@ -46,6 +46,7 @@ const bookProgressRoutes = require('./routes/book');
 const reviewRoutes = require('./routes/review'); 
 const userDataRoutes = require('./routes/fetchData/userData')
 const followerRoutes = require('./routes/follower')
+const historyRoutes = require('./routes/history')
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -58,7 +59,7 @@ app.use('/api/fetchData/userData',verifyToken, userDataRoutes);
 app.use('/api/books/progress', verifyToken, bookProgressRoutes);
 app.use('/api/review', verifyToken, reviewRoutes);
 app.use('/api/follower', verifyToken, followerRoutes);
-
+app.use('/api/history', verifyToken, historyRoutes);
 
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Resource not found' });

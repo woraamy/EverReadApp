@@ -15,6 +15,7 @@
 		276079942DB4F664001F66C1 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079932DB4F664001F66C1 /* TabButton.swift */; };
 		276079962DB50220001F66C1 /* ActivityCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079952DB50220001F66C1 /* ActivityCard.swift */; };
 		276079982DB50C61001F66C1 /* ReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079972DB50C61001F66C1 /* ReviewCard.swift */; };
+		276F97E32DD12B4600C86FEE /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276F97E22DD12B4600C86FEE /* EditProfileView.swift */; };
 		2798C1842DBCD63700000EFF /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798C1832DBCD63700000EFF /* SignUpView.swift */; };
 		2798C1862DBCD66700000EFF /* GoogleSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798C1852DBCD66700000EFF /* GoogleSignInButton.swift */; };
 		2798C1882DBCD6B300000EFF /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798C1872DBCD6B300000EFF /* SignInView.swift */; };
@@ -24,6 +25,8 @@
 		27A83AAA2DBE315B00E4613A /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A83AA92DBE315B00E4613A /* AuthenticationService.swift */; };
 		27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A8A8D12DB403D2000F166B /* ProfileView.swift */; };
 		27B463652DCCD64600457055 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B463642DCCD64600457055 /* UserSession.swift */; };
+		27BEAD662DD1359A008DC5B3 /* OtherProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEAD652DD1359A008DC5B3 /* OtherProfileView.swift */; };
+		27BEAD682DD1374C008DC5B3 /* OtherProfileHeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEAD672DD1374C008DC5B3 /* OtherProfileHeder.swift */; };
 		27F4F5152DCD1A85004DF522 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F4F5142DCD1A85004DF522 /* DataManager.swift */; };
 		27F4F5172DCD1D97004DF522 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F4F5162DCD1D97004DF522 /* UserData.swift */; };
 		7F303E0E2DAE93B3005B6F83 /* EverReadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */; };
@@ -71,6 +74,7 @@
 		276079932DB4F664001F66C1 /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		276079952DB50220001F66C1 /* ActivityCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCard.swift; sourceTree = "<group>"; };
 		276079972DB50C61001F66C1 /* ReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCard.swift; sourceTree = "<group>"; };
+		276F97E22DD12B4600C86FEE /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		2798C1832DBCD63700000EFF /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		2798C1852DBCD66700000EFF /* GoogleSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInButton.swift; sourceTree = "<group>"; };
 		2798C1872DBCD6B300000EFF /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
@@ -81,6 +85,8 @@
 		27A8A8D12DB403D2000F166B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		27AC53CA2DB9227600A8CA7F /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		27B463642DCCD64600457055 /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
+		27BEAD652DD1359A008DC5B3 /* OtherProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileView.swift; sourceTree = "<group>"; };
+		27BEAD672DD1374C008DC5B3 /* OtherProfileHeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileHeder.swift; sourceTree = "<group>"; };
 		27F4F5142DCD1A85004DF522 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		27F4F5162DCD1D97004DF522 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		7F303E0A2DAE93B3005B6F83 /* EverRead.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EverRead.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,6 +151,7 @@
 				7F7AAC122DB6823600BCBB81 /* DetailTabButton.swift */,
 				2798C1852DBCD66700000EFF /* GoogleSignInButton.swift */,
 				2798C18B2DBCD74000000EFF /* BookCard.swift */,
+				27BEAD672DD1374C008DC5B3 /* OtherProfileHeder.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -192,6 +199,7 @@
 		7F303E0C2DAE93B3005B6F83 /* EverRead */ = {
 			isa = PBXGroup;
 			children = (
+				27BEAD652DD1359A008DC5B3 /* OtherProfileView.swift */,
 				276079912DB4DAD7001F66C1 /* ColorExtension.swift */,
 				7FCDD3882DCDFB9C0038A7A1 /* Models */,
 				27F4F5132DCD1A4C004DF522 /* FetchData */,
@@ -200,6 +208,7 @@
 				2760798C2DB4D104001F66C1 /* Components */,
 				7F303E0D2DAE93B3005B6F83 /* EverReadApp.swift */,
 				7F303E0F2DAE93B3005B6F83 /* ContentView.swift */,
+				276F97E22DD12B4600C86FEE /* EditProfileView.swift */,
 				27A8A8D12DB403D2000F166B /* ProfileView.swift */,
 				7F303E112DAE93B4005B6F83 /* Assets.xcassets */,
 				7F303E132DAE93B4005B6F83 /* EverRead.entitlements */,
@@ -384,6 +393,8 @@
 			files = (
 				27F4F5152DCD1A85004DF522 /* DataManager.swift in Sources */,
 				27312B0D2DB5276B000EC59C /* ReadGoalCard.swift in Sources */,
+				276F97E32DD12B4600C86FEE /* EditProfileView.swift in Sources */,
+				27BEAD682DD1374C008DC5B3 /* OtherProfileHeder.swift in Sources */,
 				2760798E2DB4D3C5001F66C1 /* ProfileCard.swift in Sources */,
 				7F303E102DAE93B3005B6F83 /* ContentView.swift in Sources */,
 				27312B0F2DB5314C000EC59C /* SummaryCard.swift in Sources */,
@@ -407,6 +418,7 @@
 				2798C1882DBCD6B300000EFF /* SignInView.swift in Sources */,
 				7F7AAC092DB66F8400BCBB81 /* Book.swift in Sources */,
 				27F4F5172DCD1D97004DF522 /* UserData.swift in Sources */,
+				27BEAD662DD1359A008DC5B3 /* OtherProfileView.swift in Sources */,
 				7F7AAC0D2DB6709000BCBB81 /* SearchView.swift in Sources */,
 				276079942DB4F664001F66C1 /* TabButton.swift in Sources */,
 				2798C18C2DBCD74000000EFF /* BookCard.swift in Sources */,
