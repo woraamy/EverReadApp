@@ -360,7 +360,7 @@ struct BookReviewsTabView: View {
             
             
             Button("Submit Review") {
-                writeReviews(book:book.id, rating:reviewRating, detail:reviewText, token:token)
+                writeReviews(book:book, rating:reviewRating, detail:reviewText, token:token)
                 print("Submit Review tapped. Rating: \(reviewRating), Text: \(reviewText)")
             }
             .buttonStyle(PrimaryButtonStyle())
@@ -389,8 +389,8 @@ struct BookReviewsTabView: View {
             }
         }
     }
-    func writeReviews(book:String, rating:Int, detail:String, token:String){
-            ReviewAPIService().PostReview(api_id: book, rating: rating, description: detail, token: token){ result in
+    func writeReviews(book:Book, rating:Int, detail:String, token:String){
+        ReviewAPIService().PostReview(api_id: book.id, rating: rating, description: detail , book_name:book.title, token: token){ result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success:
@@ -399,7 +399,7 @@ struct BookReviewsTabView: View {
                         showAlert = true
                         reviewText = ""
                         reviewRating = 0
-                        fetchReviews(book: book, token: token)
+                        fetchReviews(book: book.id, token: token)
                     case .failure(let error):
                         alertTitle = "Error"
                         alertMessage = "Failed to submit review: \(error.localizedDescription)"

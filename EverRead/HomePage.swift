@@ -101,10 +101,10 @@ struct HomePage: View {
                                     ForEach(reviews) { review in
                                         ReviewCard(
                                             name: review.username,
-                                            book: "sad",
+                                            book: review.bookName,
                                             rating: review.rating,
                                             detail: review.description,
-                                            book_id: ""
+                                            book_id: review.apiId
                                         )
                                         .padding(.horizontal)
                                         .padding(.bottom, 8)

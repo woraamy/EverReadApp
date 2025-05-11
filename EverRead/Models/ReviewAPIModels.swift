@@ -7,11 +7,13 @@ struct PostReviewRespond:Codable{
     let Reviewer:String
     let rating:Int
     let description:String
+    let bookName:String
 }
 struct PostReviewRequest:Codable{
     let api_id:String
     let rating:Int
     let description:String
+    let book_name:String
 }
 
 struct ReviewsItem: Codable, Identifiable {
@@ -23,6 +25,7 @@ struct ReviewsItem: Codable, Identifiable {
     let description: String
     let createdAt: String
     let v: Int
+    let bookName:String
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"
@@ -33,6 +36,7 @@ struct ReviewsItem: Codable, Identifiable {
         case description
         case createdAt = "created_at"
         case v = "__v"
+        case bookName = "book_name"
     }
 }
 
@@ -88,13 +92,13 @@ class ReviewAPIService {
             }
         }.resume()
     }
-    func PostReview(api_id: String, rating: Int, description: String, token: String, completion: @escaping (Result<PostReviewRespond, APIError>) -> Void) {
+    func PostReview(api_id: String, rating: Int, description: String, book_name:String, token: String, completion: @escaping (Result<PostReviewRespond, APIError>) -> Void) {
             guard let url = URL(string: "\(baseURL)/post") else {
                 completion(.failure(.invalidURL))
                 return
             }
 
-            let body = PostReviewRequest(api_id: api_id, rating: rating, description: description)
+        let body = PostReviewRequest(api_id: api_id, rating: rating, description: description,book_name: book_name)
 
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
