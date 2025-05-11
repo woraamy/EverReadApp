@@ -70,7 +70,7 @@ struct UserBookEntry: Codable, Identifiable {
 // MARK: - API Service (Corrected)
 
 class BookAPIService {
-    private let baseURL = URL(string: "http://localhost:5050/api/books/progress")!
+    private let baseURL = URL(string: "https://everreadapp.onrender.com/api/books/progress")!
     
     struct APIConfig {
         static let googleBooksKey: String = {

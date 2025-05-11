@@ -319,53 +319,71 @@ struct BookDetailsTabView: View {
 
 struct BookReviewsTabView: View {
     let book: Book
+    @AppStorage("authToken") var token = ""
     @Binding var reviewText: String
     @Binding var reviewRating: Int
-
+    @State private var reviews: [ReviewsItem] = []
     var body: some View {
-         VStack(alignment: .leading, spacing: 15) {
-             Text("Reviews")
-                 .font(.title3)
-                 .fontWeight(.semibold)
-                 .padding(.bottom, 5)
-
-             ForEach(0..<2) { i in
-                 ReviewCard(name: "User \(i+1)", book: book.title, rating: 4, detail:"Placeholder review text goes here. It was a good read!")
-                     .padding(.bottom, 5)
-             }
+        VStack(alignment: .leading, spacing: 15) {
+            Text("Reviews")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .padding(.bottom, 5)
+            
+            ForEach(reviews, id: \.id) { i in
+                ReviewCard(name: "User", book: book.title, rating: i.rating , detail:i.description)
+                    .padding(.bottom, 5)
+            }
             Divider()
-             Text("Write A Review")
-                 .font(.headline)
-                 .padding(.top)
-
-             StarRatingView(rating: $reviewRating, maxRating: 5, interactive: true)
-                 .padding(.bottom, 5)
-
-             TextEditor(text: $reviewText)
+            Text("Write A Review")
+                .font(.headline)
+                .padding(.top)
+            
+            StarRatingView(rating: $reviewRating, maxRating: 5, interactive: true)
+                .padding(.bottom, 5)
+            
+            TextEditor(text: $reviewText)
                 .frame(height: 100)
                 .border(Color.gray.opacity(0.3))
                 .cornerRadius(5)
                 .overlay(
-                     reviewText.isEmpty ? Text("Share your thoughts...")
-                         .foregroundColor(.gray.opacity(0.6))
-                         .padding(8)
-                         .allowsHitTesting(false) : nil
-                     , alignment: .topLeading
-                 )
-
-
-             Button("Submit Review") {
-                 print("Submit Review tapped. Rating: \(reviewRating), Text: \(reviewText)")
-             }
-             .buttonStyle(PrimaryButtonStyle())
-             .disabled(reviewRating == 0 || reviewText.isEmpty)
-         }
-         .padding()
-         .background(Color.white)
-         .cornerRadius(10)
-         .shadow(color: .gray.opacity(0.1), radius: 3, y: 1)
+                    reviewText.isEmpty ? Text("Share your thoughts...")
+                        .foregroundColor(.gray.opacity(0.6))
+                        .padding(8)
+                        .allowsHitTesting(false) : nil
+                    , alignment: .topLeading
+                )
+            
+            
+            Button("Submit Review") {
+                print("Submit Review tapped. Rating: \(reviewRating), Text: \(reviewText)")
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            .disabled(reviewRating == 0 || reviewText.isEmpty)
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(color: .gray.opacity(0.1), radius: 3, y: 1)
+        .onAppear {
+            fetchReviews(book:book.id, token:token)
+        }
     }
-}
+    func fetchReviews(book:String,token:String) {
+        // Replace with actual token handling
+        ReviewAPIService().GetReview(api_id: book, token: token) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let fetchedReviews):
+                    self.reviews = fetchedReviews
+                case .failure(let error):
+                    print("Error fetching reviews: \(error.localizedDescription)")
+                }
+            }
+        }
+    }}
+
+
 
 struct PrimaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {

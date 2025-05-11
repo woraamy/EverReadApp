@@ -20,6 +20,7 @@
 		2798C1882DBCD6B300000EFF /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798C1872DBCD6B300000EFF /* SignInView.swift */; };
 		2798C18A2DBCD6DC00000EFF /* MyShelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798C1892DBCD6DC00000EFF /* MyShelfView.swift */; };
 		2798C18C2DBCD74000000EFF /* BookCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798C18B2DBCD74000000EFF /* BookCard.swift */; };
+		279A99CE2DD0DD76004CDC48 /* ReviewAPIModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279A99CD2DD0DD76004CDC48 /* ReviewAPIModels.swift */; };
 		27A83AAA2DBE315B00E4613A /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A83AA92DBE315B00E4613A /* AuthenticationService.swift */; };
 		27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A8A8D12DB403D2000F166B /* ProfileView.swift */; };
 		27B463652DCCD64600457055 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B463642DCCD64600457055 /* UserSession.swift */; };
@@ -75,6 +76,7 @@
 		2798C1872DBCD6B300000EFF /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		2798C1892DBCD6DC00000EFF /* MyShelfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyShelfView.swift; sourceTree = "<group>"; };
 		2798C18B2DBCD74000000EFF /* BookCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCard.swift; sourceTree = "<group>"; };
+		279A99CD2DD0DD76004CDC48 /* ReviewAPIModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewAPIModels.swift; sourceTree = "<group>"; };
 		27A83AA92DBE315B00E4613A /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		27A8A8D12DB403D2000F166B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		27AC53CA2DB9227600A8CA7F /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 			children = (
 				7F7AAC0A2DB66FD600BCBB81 /* GoogleBooksViewModel.swift */,
 				7FCDD3892DCDFBB60038A7A1 /* BookAPIModels.swift */,
+				279A99CD2DD0DD76004CDC48 /* ReviewAPIModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -389,6 +392,7 @@
 				27B463652DCCD64600457055 /* UserSession.swift in Sources */,
 				2798C1842DBCD63700000EFF /* SignUpView.swift in Sources */,
 				7F7AAC112DB67CC900BCBB81 /* BookDetailsView.swift in Sources */,
+				279A99CE2DD0DD76004CDC48 /* ReviewAPIModels.swift in Sources */,
 				27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */,
 				7F7AAC132DB6823600BCBB81 /* DetailTabButton.swift in Sources */,
 				2798C18A2DBCD6DC00000EFF /* MyShelfView.swift in Sources */,
