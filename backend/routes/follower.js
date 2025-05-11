@@ -42,7 +42,7 @@ router.post('/follow',
 });
 
 // DELETE /api/follower/unfollow
-router.post('/unfollow',
+router.delete('/unfollow',
     [
     // Input validation
     body('followed_user_id', 'Followed ID (api_id) is required').not().isEmpty().trim(),
