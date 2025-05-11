@@ -34,6 +34,4 @@ const reviewSchema = new mongoose.Schema({
   },
 });
 
-reviewSchema.index({ user_id: 1, book_id: 1 }, { unique: true });
-
 module.exports = mongoose.model('Review', reviewSchema);
