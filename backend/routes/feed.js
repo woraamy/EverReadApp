@@ -70,7 +70,7 @@ router.get('/getHistory', async (req, res, next) => {
     const followingIds = followingList.map(f => f.followed_user_id);
 
     const followedHistory = await History.find({ user_id: { $in: followingIds } })
-      .populate('user_id', 'username')
+      .populate('user_id', 'username profile_img')
       .sort({ createdAt: -1 });
 
     const formattedHistory = followedHistory.map(h => {
@@ -85,9 +85,9 @@ router.get('/getHistory', async (req, res, next) => {
         ...historyObj,
         username: historyObj.user_id?.username || 'Unknown',
         user_id: historyObj.user_id?._id || null,
+        profile: historyObj.user_id?.profile_img || null,
         daysAgo
       };
- 
     });
 
     res.status(200).json(formattedHistory);
@@ -95,5 +95,6 @@ router.get('/getHistory', async (req, res, next) => {
     next(err);
   }
 });
+
 
 module.exports = router;
