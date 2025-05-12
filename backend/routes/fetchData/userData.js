@@ -88,7 +88,8 @@ router.get('/', async (req, res) => {
         yearly_book_read : yearlyBookread,
         monthly_book_read : monthlyBookread,
         page_read : pageRead,
-        reading_streak : readingStreak
+        reading_streak : readingStreak,
+        profile_img: user.profile_img || ""
     });
   }
    catch (err) {
