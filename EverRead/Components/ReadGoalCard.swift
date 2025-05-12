@@ -5,9 +5,10 @@ struct ReadGoalCard: View {
     var monthGoalValue:Int
     var yearGoalTotal:Int
     var monthGoalTotal:Int
-    
+    var reload:() -> Void
     @State var showYearlyDialog:Bool = false
     @State var showMonthlyDialog:Bool = false
+    
     var body: some View {
         let monthPercent: Float = {
                 guard monthGoalTotal != 0 else { return 0 }
@@ -75,73 +76,120 @@ struct ReadGoalCard: View {
                     }.padding().frame(width: 175,alignment: .leading).background(Color.redPink).clipShape(RoundedRectangle(cornerRadius: 10))
                 }.foregroundColor(.black)
             }
-            //.sheet(isPresented: $showYearlyDialog) {
-            //SetYearlytGoalView(goal:$yearGoalTotal)
-       // }
-        //.sheet(isPresented: $showMonthlyDialog) {
-        //SetMonthlytGoalView(goal:$monthGoalTotal)
-    //}
+            .sheet(isPresented: $showYearlyDialog) {
+            SetYearlytGoalView(goal:yearGoalTotal, onDismiss: reload)
+        }
+        .sheet(isPresented: $showMonthlyDialog) {
+            SetMonthlyGoalView(goal:monthGoalTotal, onDismiss: reload)
+    }
 }
     }
 }
 
 struct SetYearlytGoalView: View {
-    @Binding var goal: Int
+    var goal: Int
+    var onDismiss: () -> Void // <-- callback
+    @State var newGoal: Int = 0
     @Environment(\.dismiss) var dismiss
+    @AppStorage("authToken") var token = ""
+    private let apiService = ProfileEditAPIService()
+
     var body: some View {
-            ZStack(){
-                LinearGradient(
-                    gradient: Gradient(colors: [Color.pink.opacity(0.3), Color.white]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ).ignoresSafeArea()
-                VStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                {
-                    Text("Set Yearly Goal")
-                            .font(.title)
-                            .bold().padding()
-                    Text("Set the number of books you want to read this year!")
-                    TextField("Books", value: $goal, format: .number)
-                        .textFieldStyle(RoundedBorderTextFieldStyle()).multilineTextAlignment(.center).padding().onSubmit {
-                            dismiss()
-                        }
-                        .frame(width: 200)
-                }
-                .padding()
-                
+        ZStack {
+            LinearGradient(
+                gradient: Gradient(colors: [Color.pink.opacity(0.3), Color.white]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ).ignoresSafeArea()
+            VStack(alignment: .center) {
+                Text("Set Yearly Goal")
+                    .font(.title)
+                    .bold().padding()
+                Text("Set the number of books you want to read this year!")
+                TextField("Books", value: $newGoal, format: .number)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    .onSubmit {
+                        editYearGoal(goal: newGoal, token: token)
+                    }
+                    .frame(width: 200)
             }
-        
+            .padding()
+        }
+        .onAppear {
+            newGoal = goal
+        }
+    }
+
+    func editYearGoal(goal: Int, token: String) {
+        apiService.submitYearlyGoal(goal: goal, token: token) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    print("Update year goal successfully!")
+                    onDismiss() // <-- notify parent
+                    dismiss()
+                case .failure(let error):
+                    print("Update failed \(error)")
+                }
+            }
+        }
+    }
+    
+}
+struct SetMonthlyGoalView: View {
+    var goal: Int
+    var onDismiss: () -> Void // <-- callback
+    @State var newGoal: Int = 0
+    @Environment(\.dismiss) var dismiss
+    @AppStorage("authToken") var token = ""
+    private let apiService = ProfileEditAPIService()
+
+    var body: some View {
+        ZStack {
+            LinearGradient(
+                gradient: Gradient(colors: [Color.pink.opacity(0.3), Color.white]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            ).ignoresSafeArea()
+            VStack(alignment: .center) {
+                Text("Set Monthly Goal")
+                    .font(.title)
+                    .bold().padding()
+                Text("Set the number of books you want to read this month!")
+                TextField("Books", value: $newGoal, format: .number)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .multilineTextAlignment(.center)
+                    .padding()
+                    .onSubmit {
+                        editMonthGoal(goal: newGoal, token: token)
+                    }
+                    .frame(width: 200)
+            }
+            .padding()
+        }
+        .onAppear {
+            newGoal = goal
+        }
+    }
+
+    func editMonthGoal(goal: Int, token: String) {
+        apiService.submitMonthGoal(goal: goal, token: token) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    print("Update month goal successfully!")
+                    onDismiss() // <-- notify parent
+                    dismiss()
+                case .failure(let error):
+                    print("Update failed \(error)")
+                }
+            }
+        }
     }
 }
 
-struct SetMonthlytGoalView: View {
-    @Binding var goal: Int
-    @Environment(\.dismiss) var dismiss
-    var body: some View {
-            ZStack(){
-                LinearGradient(
-                    gradient: Gradient(colors: [Color.pink.opacity(0.3), Color.white]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ).ignoresSafeArea()
-                VStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
-                {
-                    Text("Set Monthly Goal")
-                            .font(.title)
-                            .bold().padding()
-                    Text("Set the number of books you want to read this month!")
-                    TextField("Books", value: $goal, format: .number)
-                        .textFieldStyle(RoundedBorderTextFieldStyle()).multilineTextAlignment(.center).padding().onSubmit {
-                            dismiss()
-                        }
-                        .frame(width: 200)
-                }
-                .padding()
-                
-            }
-        
-    }
-}
 #Preview {
-    ReadGoalCard(yearGoalValue: 7, monthGoalValue: 1, yearGoalTotal: 30 , monthGoalTotal: 2)
+    ReadGoalCard(yearGoalValue: 7, monthGoalValue: 1, yearGoalTotal: 30 , monthGoalTotal: 2, reload: {print("reload")})
 }

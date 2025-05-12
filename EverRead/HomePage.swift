@@ -55,8 +55,10 @@ struct HomePage: View {
                                         yearGoalValue: user?.yearly_book_read ?? 0,
                                         monthGoalValue: user?.monthly_book_read ?? 0,
                                         yearGoalTotal: user?.yearly_goal ?? 0,
-                                        monthGoalTotal: user?.month_goal ?? 0
-                                    )
+                                        monthGoalTotal: user?.month_goal ?? 0,
+                                        reload:{
+                                            dataManager.fetchUser()
+                                        }                                    )
                                 }
                                 .padding(.horizontal)
                             }

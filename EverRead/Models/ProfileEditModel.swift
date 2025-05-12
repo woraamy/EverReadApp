@@ -198,7 +198,7 @@ class ProfileEditAPIService {
             return
         }
 
-        let body = EditMonthRequest(month_goal: goal)
+        let body = EditMonthGoalRequest(month_goal: goal)
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
