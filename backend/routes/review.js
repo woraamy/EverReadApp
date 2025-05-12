@@ -133,6 +133,39 @@ router.get('/getUserReview', async (req, res, next) => {
   }
 });
 
+// GET /api/review/getReviewByUserId
+router.get('/getReviewByUserId',
+  [
+    query('user_id', 'user_id is required').not().isEmpty().trim()
+  ] , async (req, res, next) => {
+  try {
+    if (!req.user || !req.user.userId) {
+      return res.status(401).json({ error: 'User not authenticated or userId missing from token.' });
+    }
+
+    const { user_id } = req.query;
+
+    // Get user once
+    const user = await User.findById(user_id).select('username');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    // Find all reviews by this user
+    const reviews = await Review.find({ user_id }).sort({ createdAt: -1 });
+
+    // Attach username to each review
+    const formattedReviews = reviews.map(review => ({
+      ...review.toObject(),
+      username: user.username
+    }));
+
+    res.status(200).json(formattedReviews);
+  } catch (err) {
+    next(err);
+  }
+});
 
 
 module.exports = router;

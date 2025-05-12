@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { body, validationResult } = require('express-validator');
+const { body, query, validationResult } = require('express-validator');
 const Follow = require('../models/Follow'); 
 
 // POST /api/follower/follow
@@ -81,5 +81,39 @@ router.delete('/unfollow',
 });
 
 
+
+// GET /api/follower/isFollowing
+router.get('/isFollowing',
+  [
+    query('followed_user_id', 'Followed ID is required').notEmpty().trim(),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({ error: 'User not authenticated or userId missing from token.' });
+      }
+
+      const followed_user_id = req.query.followed_user_id;
+      const user_id = req.user.userId;
+
+      const isFollowing = await Follow.findOne({
+        followed_user_id,
+        following_user_id: user_id
+      });
+
+      return res.status(200).json({
+        isFollowing: !!isFollowing,
+      });
+
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 module.exports = router;
