@@ -48,6 +48,7 @@ const userDataRoutes = require('./routes/fetchData/userData')
 const followerRoutes = require('./routes/follower')
 const historyRoutes = require('./routes/history')
 const profileRoutes = require('./routes/profile')
+const goalRoutes = require('./routes/goal')
 app.use(express.urlencoded({ extended: true }));
 
 //public route
@@ -61,6 +62,7 @@ app.use('/api/review', verifyToken, reviewRoutes);
 app.use('/api/follower', verifyToken, followerRoutes);
 app.use('/api/history', verifyToken, historyRoutes);
 app.use('/api/profile', verifyToken, profileRoutes);
+app.use('/api/goal', verifyToken, goalRoutes);
 
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Resource not found' });
