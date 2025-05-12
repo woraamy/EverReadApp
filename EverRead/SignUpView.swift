@@ -25,22 +25,7 @@ struct SignUpView: View {
                             .padding(.top, 20)
                             .padding(.bottom, 30)
                         
-                        GoogleSignInButton()
-                            .padding(5)
                         
-                        HStack {
-                            Rectangle()
-                                .fill(Color.gray)
-                                .frame(height: 1)
-                            
-                            Text("Or")
-                                .foregroundColor(.gray)
-                                .padding(.horizontal, 8)
-                            
-                            Rectangle()
-                                .fill(Color.gray)
-                                .frame(height: 1)
-                        }
                         .padding(.top, 20)
                         .padding(.bottom, 10)
                         
