@@ -66,16 +66,6 @@ struct ShelvesView: View {
     }
 }
 
-struct FeedView: View {
-    var body: some View {
-        ZStack {
-            Color.redPink.ignoresSafeArea()
-            Text("Feed Page")
-                .foregroundColor(.darkPinkBrown)
-                .navigationTitle("Feed") // Optional
-        }
-    }
-}
 
 struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {
