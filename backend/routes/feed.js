@@ -80,9 +80,7 @@ router.get('/getHistory',
       // Step 2: Get History of followed users
       const followedHistory = await History.find({
         user_id: { $in: followingIds }
-      })
-        .populate('user_id', 'username')
-        .sort({ createdAt: -1 });  // Adjust sorting based on your history data (e.g., creation date)
+      }).sort({ createdAt: -1 });  // Adjust sorting based on your history data (e.g., creation date)
 
       // Step 3: Send the combined feed of followed user histories
       res.status(200).json(followedHistory);
