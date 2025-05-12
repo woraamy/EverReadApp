@@ -22,4 +22,6 @@ struct UserData: Codable, Identifiable {
     let reading_streak: Int
     let profile_img: String
     let bio:String
+    let follower:Int
+    let following:Int
 }

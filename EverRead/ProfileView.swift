@@ -12,6 +12,7 @@ struct ProfileView: View {
     @StateObject private var dataManager = DataManager()
     @AppStorage("authToken") var token = ""
     @State private var reviews: [ReviewsItem] = []
+    @State private var histories: [HistoryItem] = []
     var body: some View {
         if !session.isLoggedIn{
             SignInView()
@@ -53,8 +54,14 @@ struct ProfileView: View {
                             Group {
                                 switch selectedTab {
                                 case .Activity:
-                                    ForEach(1..<5){ i in
-                                        ActivityCard(name:user?.username ?? "username", action: "Started reading The hobbit", recentDay: 2).padding(1)
+                                    ForEach(histories){ i in
+                                        ActivityCard(
+                                            name:user?.username ?? "username",
+                                            action: i.action,
+                                            recentDay: i.daysAgo,
+                                            book_name: "",
+                                            profile: user?.profile_img ?? ""
+                                        ).padding(1)
                                     }
                                 case .Review:
                                     if reviews.isEmpty {
@@ -95,6 +102,7 @@ struct ProfileView: View {
                     .onAppear{
                         dataManager.fetchUser()
                         fetchReviews(token: token)
+                        fetchHistory(token: token)
                     }
             
         }
@@ -111,7 +119,18 @@ struct ProfileView: View {
                     }
                 }
             }
+    func fetchHistory(token: String) {
+        HistoryAPIService().GetHistory(token: token) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let fetchedhistory):
+                    self.histories = fetchedhistory
+                case .failure(let error):
+                    print("Error fetching reviews: \(error.localizedDescription)")
+                }
+            }
         }
+    }        }
     
 
 

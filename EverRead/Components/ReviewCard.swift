@@ -20,8 +20,8 @@ struct ReviewCard: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Image("bookImg")
-                    .resizable().frame(width: 70, height: 100)
+               // Image("bookImg")
+                 //   .resizable().frame(width: 70, height: 100)
                 VStack(alignment: .leading) {
                     HStack {
                         Text(name).font(.title3)
