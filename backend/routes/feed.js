@@ -75,11 +75,19 @@ router.get('/getHistory', async (req, res, next) => {
 
     const formattedHistory = followedHistory.map(h => {
       const historyObj = h.toObject();
+
+      const createdAtDate = new Date(historyObj.created_at);
+      const today = new Date();
+      const timeDiff = Math.abs(today - createdAtDate);
+      const daysAgo = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
       return {
         ...historyObj,
         username: historyObj.user_id?.username || 'Unknown',
-        user_id: historyObj.user_id?._id || null
+        user_id: historyObj.user_id?._id || null,
+        daysAgo
       };
+ 
     });
 
     res.status(200).json(formattedHistory);
