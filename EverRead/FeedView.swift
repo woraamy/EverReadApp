@@ -65,7 +65,8 @@ struct FeedView: View {
                                         book: review.bookName,
                                         rating: review.rating,
                                         detail: review.description,
-                                        book_id: review.apiId
+                                        book_id: review.apiId,
+                                        userId: review.userId
                                     ).padding()
                                 }
                             }
@@ -81,7 +82,8 @@ struct FeedView: View {
                                         action: i.action,
                                         recentDay: i.daysAgo,
                                         book_name: "",
-                                        profile: i.profile 
+                                        profile: i.profile ,
+                                        userId: i.userId
                                     ).padding(1)
                                 }
                             }
@@ -121,5 +123,4 @@ struct FeedView: View {
     }}
 
 #Preview {
-    FeedView()
-}
+    FeedView().environmentObject(UserSession())}

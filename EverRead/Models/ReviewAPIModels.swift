@@ -40,9 +40,6 @@ struct ReviewsItem: Codable, Identifiable {
     }
 }
 
-struct GetReviewRequest:Codable{
-    let api_id:String
-}
 
 class ReviewAPIService {
     private let baseURL = URL(string: "https://everreadapp.onrender.com/api/review")!
@@ -177,5 +174,36 @@ class ReviewAPIService {
             }
         }.resume()
     }
-}
+    
+    func GetReviewByUserId(user_id:String, token:String ,completion: @escaping (Result<[ReviewsItem], APIError>) -> Void){
+        guard let url = URL(string: "\(baseURL)/getReviewByUserId?user_id=\(user_id)") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(.failure(.resourceNotFound))
+                return
+            }
+            // Log raw response string
+            if let rawResponse = String(data: data, encoding: .utf8) {
+                print("Raw response from server:\n\(rawResponse)")
+            }
+            
+            do {
+                let response = try JSONDecoder().decode([ReviewsItem].self, from: data)
+                print("Get review successful")
+                // Return the successful response with user details
+                completion(.success(response))
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(.decodingError(error)))
+            }
+        }.resume()
+    }}
 

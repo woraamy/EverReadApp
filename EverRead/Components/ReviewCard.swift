@@ -6,6 +6,7 @@ struct ReviewCard: View {
     var rating: Int
     var detail: String
     var book_id: String
+    var userId: String
     @State private var showDialog: Bool = false
     
     var slicedDetail: String {
@@ -16,7 +17,6 @@ struct ReviewCard: View {
             return ""
         }
     }
-
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -48,7 +48,7 @@ struct ReviewCard: View {
             showDialog = true
         }
         .sheet(isPresented: $showDialog) {
-            ReviewDialog(book: book, detail: detail, rating: rating, name: name)
+            ReviewDialog(book: book, detail: detail, rating: rating, name: name, userId:userId)
         }
     }
 }
@@ -58,37 +58,49 @@ struct ReviewDialog: View {
     var detail: String
     var rating: Int
     var name: String
+    var userId:String
 
     var body: some View {
-        ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [Color.pink.opacity(0.3), Color.white]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ).ignoresSafeArea()
-            
-            VStack(alignment: .leading, spacing: 15) {
-                Text(book)
-                    .font(.title)
-                    .bold()
-                Text("By: \(name)")
-                    .font(.subheadline)
-                Text("Rating: \(rating)/5")
-                    .font(.headline)
-                Divider()
-                Text(detail)
-                    .font(.body)
-                Spacer()
-                Button("Close") {
-                    dismiss()
+        NavigationView{
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(colors: [Color.pink.opacity(0.3), Color.white]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ).ignoresSafeArea()
+                
+                VStack(alignment: .leading, spacing: 15) {
+                    Text(book)
+                        .font(.title)
+                        .bold()
+                    if userId != "" {
+                        NavigationLink(destination: OtherProfileView(UserId: userId)) {
+                            Text("By: \(name)")
+                                .font(.subheadline)
+                                .foregroundColor(.blue)
+                                .underline()
+                        }
+                    } else {
+                        Text("By: \(name)")
+                            .font(.subheadline)
+                    }
+                    Text("Rating: \(rating)/5")
+                        .font(.headline)
+                    Divider()
+                    Text(detail)
+                        .font(.body)
+                    Spacer()
+                    Button("Close") {
+                        dismiss()
+                    }
+                    .padding(.top)
                 }
-                .padding(.top)
+                .padding()
             }
-            .padding()
         }
     }
 }
 
 #Preview {
-    ReviewCard(name:"Jane Reader", book: "Babel", rating: 5, detail:"What a good book to read! i cried when reading this", book_id: "")
+    ReviewCard(name:"Jane Reader", book: "Babel", rating: 5, detail:"What a good book to read! i cried when reading this", book_id: "", userId: "")
 }

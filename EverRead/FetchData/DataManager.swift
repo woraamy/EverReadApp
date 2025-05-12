@@ -37,7 +37,7 @@ class DataManager: ObservableObject {
         }.resume()
     }
     func fetchUserById(user_id:String) {
-        guard let url = URL(string: "https://everreadapp.onrender.com/api/fetchData/otherUserData?\(user_id)") else {
+        guard let url = URL(string: "https://everreadapp.onrender.com/api/fetchData/otherUserData?user_id=\(user_id)") else {
             print("Invalid URL")
             return
         }

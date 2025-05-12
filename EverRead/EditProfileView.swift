@@ -35,8 +35,8 @@ struct EditProfileView: View {
                             bookRead: String(user?.book_read ?? 0),
                             reading: String(user?.reading ?? 0),
                             review: String(user?.review ?? 0),
-                            follower: "432",
-                            following: "87",
+                            follower: String(user?.follower ?? 0),
+                            following: String(user?.following ?? 0),
                             profile: user?.profile_img ?? "",
                             bio: user?.bio ?? ""
                         )

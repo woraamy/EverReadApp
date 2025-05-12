@@ -335,7 +335,7 @@ struct BookReviewsTabView: View {
                 .padding(.bottom, 5)
             
             ForEach(reviews, id: \.id) { i in
-                ReviewCard(name: i.username, book: book.title, rating: i.rating , detail:i.description, book_id:book.id)
+                ReviewCard(name: i.username, book: book.title, rating: i.rating , detail:i.description, book_id:book.id, userId: i.userId)
                     .padding(.bottom, 5)
             }
             Divider()

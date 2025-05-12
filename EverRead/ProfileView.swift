@@ -34,8 +34,8 @@ struct ProfileView: View {
                                     bookRead: String(user?.book_read ?? 0),
                                     reading: String(user?.reading ?? 0),
                                     review: String(user?.review ?? 0),
-                                    follower: "432",
-                                    following: "87",
+                                    follower: String(user?.follower ?? 0),
+                                    following: String(user?.following ?? 0),
                                     profile: user?.profile_img ?? "",
                                     bio: user?.bio ?? ""
                                 ).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
@@ -60,7 +60,8 @@ struct ProfileView: View {
                                             action: i.action,
                                             recentDay: i.daysAgo,
                                             book_name: "",
-                                            profile: user?.profile_img ?? ""
+                                            profile: user?.profile_img ?? "",
+                                            userId: ""
                                         ).padding(1)
                                     }
                                 case .Review:
@@ -75,7 +76,8 @@ struct ProfileView: View {
                                                 book: review.bookName,
                                                 rating: review.rating,
                                                 detail: review.description,
-                                                book_id: review.apiId
+                                                book_id: review.apiId,
+                                                userId: ""
                                             )
                                         }
                                     }

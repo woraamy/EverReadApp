@@ -30,7 +30,7 @@ struct SummaryCard: View {
                 }
                     HStack{
                         VStack(alignment: .leading){
-                            Text("Average Rating")
+                            Text("Reviews")
                             Text("\(rating)").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold().padding(2)
                         }.frame(maxWidth: .infinity, alignment: .leading)
                         VStack(alignment: .leading){

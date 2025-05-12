@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct OtherProfileView: View {
+    var UserId:String
     @State private var selectedTab: Tab = .Activity
     @EnvironmentObject var session: UserSession
     @StateObject private var dataManager = DataManager()
@@ -10,13 +11,13 @@ struct OtherProfileView: View {
         if !session.isLoggedIn{
             SignInView()
         } else {
-            let user = dataManager.user
+            let user = dataManager.otherUser
            
             ZStack {
                 Color.softWhitePink
                     .ignoresSafeArea()
                 VStack(spacing: 0) {
-                    OtherProfileHeader()
+                    OtherProfileHeader(userId:UserId)
                     ScrollView{
                         VStack{
                             ProfileCard(
@@ -24,8 +25,8 @@ struct OtherProfileView: View {
                                 bookRead: String(user?.book_read ?? 0),
                                 reading: String(user?.reading ?? 0),
                                 review: String(user?.review ?? 0),
-                                follower: "432",
-                                following: "87",
+                                follower: String(user?.follower ?? 0),
+                                following: String(user?.following ?? 0),
                                 profile: user?.profile_img ?? "",
                                 bio: user?.bio ?? ""
                             ).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
@@ -51,7 +52,8 @@ struct OtherProfileView: View {
                                                book: review.bookName,
                                                rating: review.rating,
                                                detail: review.description,
-                                               book_id: review.apiId
+                                               book_id: review.apiId,
+                                               userId: ""
                                            )
                                        }
                                    }
@@ -60,14 +62,13 @@ struct OtherProfileView: View {
                 }
             }.foregroundColor(.darkPinkBrown)
                 .onAppear{
-                    dataManager.fetchUser()
-                    fetchReviews(token: token)
+                    dataManager.fetchUserById(user_id: UserId)
+                    fetchReviews(user_id:UserId, token: token)
                 }
-            
         }
     }
-            func fetchReviews(token: String) {
-                ReviewAPIService().GetUserReview(token: token) { result in
+    func fetchReviews(user_id:String, token: String) {
+        ReviewAPIService().GetReviewByUserId(user_id:user_id,token: token) { result in
                     DispatchQueue.main.async {
                         switch result {
                         case .success(let fetchedReviews):
@@ -83,5 +84,5 @@ struct OtherProfileView: View {
 
 
 #Preview {
-    OtherProfileView().environmentObject(UserSession())
+    OtherProfileView(UserId: "681c94d1ab5d1ac0b5051db2").environmentObject(UserSession())
 }
