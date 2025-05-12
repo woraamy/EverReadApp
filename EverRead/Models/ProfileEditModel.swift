@@ -7,6 +7,21 @@
 
 import Foundation
 import UIKit
+struct PostReviewRespond:Codable{
+    let message:String
+    let bookAPIId:String
+    let ReviewId:String
+    let Reviewer:String
+    let rating:Int
+    let description:String
+    let bookName:String
+}
+struct EditUsernameRequest:Codable{
+    let username:String
+}
+struct EditBioeRequest:Codable{
+    let bio:String
+}
 
 class ProfileEditAPIService {
     private let baseURL = URL(string: "https://everreadapp.onrender.com/api/profile")!
@@ -70,4 +85,74 @@ class ProfileEditAPIService {
                 }
             }.resume()
         }
+
+        func SubmitProfileEdit(username: String, bio: String, token: String, completion: @escaping (Result<Void, APIError>) -> Void) {
+            let group = DispatchGroup()
+            var errors: [APIError] = []
+
+            func makeRequest(endpoint: String, body: Data) {
+                guard let url = URL(string: "\(baseURL)/\(endpoint)") else {
+                    errors.append(.invalidURL)
+                    return
+                }
+
+                var request = URLRequest(url: url)
+                request.httpMethod = "PUT"
+                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                request.httpBody = body
+
+                group.enter()
+                URLSession.shared.dataTask(with: request) { data, response, error in
+                    defer { group.leave() }
+
+                    if let error = error {
+                        errors.append(.requestFailed(error))
+                        return
+                    }
+
+                    guard let httpResponse = response as? HTTPURLResponse else {
+                        errors.append(.invalidResponse)
+                        return
+                    }
+
+                    if !(200...299).contains(httpResponse.statusCode) {
+                        let message = data.flatMap { String(data: $0, encoding: .utf8) }
+                        errors.append(.statusCode(httpResponse.statusCode, message))
+                    }
+                }.resume()
+            }
+
+            if !username.isEmpty {
+                let body = EditUsernameRequest(username: username)
+                do {
+                    let encoded = try JSONEncoder().encode(body)
+                    makeRequest(endpoint: "name", body: encoded)
+                } catch {
+                    completion(.failure(.encodingError(error)))
+                    return
+                }
+            }
+
+            if !bio.isEmpty {
+                let body = EditBioeRequest(bio: bio)
+                do {
+                    let encoded = try JSONEncoder().encode(body)
+                    makeRequest(endpoint: "bio", body: encoded)
+                } catch {
+                    completion(.failure(.encodingError(error)))
+                    return
+                }
+            }
+
+            group.notify(queue: .main) {
+                if errors.isEmpty {
+                    completion(.success(()))
+                } else {
+                    completion(.failure(errors.first!)) 
+                }
+            }
+        }
+
+
     }
