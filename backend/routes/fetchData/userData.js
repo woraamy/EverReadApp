@@ -75,8 +75,8 @@ router.get('/', async (req, res) => {
         return streak;
       };
     const readingStreak = await getReadingStreak(id) || 0;
-    const follower = await Follow.countDocuments({followed_user_id : user_id})
-    const following = await Follow.countDocuments({following_user_id : user_id})
+    const follower = await Follow.countDocuments({followed_user_id : id})
+    const following = await Follow.countDocuments({following_user_id : id})
     res.json({
         id: id,
         username: user.username,
