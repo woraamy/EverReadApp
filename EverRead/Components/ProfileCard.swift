@@ -8,6 +8,7 @@ struct ProfileCard: View {
     var follower:String
     var following:String
     var profile: String
+    var bio:String
     var body: some View {
         VStack(alignment: .leading){
             // Profile
@@ -47,7 +48,7 @@ struct ProfileCard: View {
                 }
             }.padding(.bottom,5)
             //bio
-            Text("Book lover | Fantasy & Sci-Fi enthusiast | Always looking for new recommendations" ).font(.subheadline).padding(.bottom, 5)
+            Text(bio).font(.subheadline).padding(.bottom, 5)
             //info card
             HStack{
                 VStack{
@@ -79,5 +80,5 @@ struct ProfileCard: View {
 }
 
 #Preview {
-    ProfileCard(name:"Jane Reader",bookRead: "42", reading: "3",review: "10", follower: "432", following: "87", profile: "")
+    ProfileCard(name:"Jane Reader",bookRead: "42", reading: "3",review: "10", follower: "432", following: "87", profile: "", bio:"asdsadsadasdasdasdasdasdasdasdsadasdasdasdasdsadasdasdasdasdasdasdasdasdasdasdasdaasd")
 }

@@ -35,7 +35,9 @@ struct ProfileView: View {
                                     review: String(user?.review ?? 0),
                                     follower: "432",
                                     following: "87",
-                                    profile: user?.profile_img ?? "")
+                                    profile: user?.profile_img ?? "",
+                                    bio: user?.bio ?? ""
+                                ).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
                                 
                             }
                             // tab

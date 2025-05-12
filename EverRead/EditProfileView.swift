@@ -10,7 +10,7 @@ struct EditProfileView: View {
     @State private var nameText = ""
     @State private var selectedImage: UIImage?
     @State private var isShowingPicker = false
-    @State private var uploadStatusMessage: String?
+    @State private var StatusMessage: String?
     @State private var showUploadAlert = false
 
     private let apiService = ProfileEditAPIService()
@@ -37,7 +37,8 @@ struct EditProfileView: View {
                             review: String(user?.review ?? 0),
                             follower: "432",
                             following: "87",
-                            profile: user?.profile_img ?? ""
+                            profile: user?.profile_img ?? "",
+                            bio: user?.bio ?? ""
                         )
 
                         Divider()
@@ -72,10 +73,10 @@ struct EditProfileView: View {
                             )
 
                         Button("Submit Changes") {
-                            // Handle name/bio update here
+                            editProfileText(username: nameText, bio: bioText, token: token)
                         }
                         .buttonStyle(PrimaryButtonStyle())
-                        .disabled(nameText.isEmpty && bioText.isEmpty && selectedImage == nil)
+                        .disabled(nameText.isEmpty && bioText.isEmpty)
                     }
                     .frame(width: 350)
                 }
@@ -93,10 +94,10 @@ struct EditProfileView: View {
                             DispatchQueue.main.async {
                                 switch result {
                                 case .success(_):
-                                    uploadStatusMessage = "Profile image uploaded successfully!"
+                                    StatusMessage = "Profile image uploaded successfully!"
                                     dataManager.fetchUser()
                                 case .failure(let error):
-                                    uploadStatusMessage = "Upload failed: \(error.localizedDescription)"
+                                    StatusMessage = "Upload failed: \(error.localizedDescription)"
                                 }
                                 showUploadAlert = true
                             }
@@ -106,11 +107,24 @@ struct EditProfileView: View {
                 )
             }
             .alert(isPresented: $showUploadAlert) {
-                Alert(title: Text("Upload Status"), message: Text(uploadStatusMessage ?? ""), dismissButton: .default(Text("OK")))
+                Alert(title: Text("Change Status"), message: Text(StatusMessage ?? ""), dismissButton: .default(Text("OK")))
             }
         }
     }
-}
+    func editProfileText(username: String, bio: String, token: String){
+        apiService.SubmitProfileEdit(username: username, bio: bio, token: token){ result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    StatusMessage = "Update change successfully!"
+                    dataManager.fetchUser()
+                case .failure(let error):
+                    StatusMessage = "Update failed: \(error.localizedDescription)"
+                }
+                showUploadAlert = true
+            }
+            }
+        }}
 
 #Preview {
     EditProfileView().environmentObject(UserSession())

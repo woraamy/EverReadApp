@@ -7,15 +7,7 @@
 
 import Foundation
 import UIKit
-struct PostReviewRespond:Codable{
-    let message:String
-    let bookAPIId:String
-    let ReviewId:String
-    let Reviewer:String
-    let rating:Int
-    let description:String
-    let bookName:String
-}
+
 struct EditUsernameRequest:Codable{
     let username:String
 }

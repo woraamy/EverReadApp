@@ -21,4 +21,5 @@ struct UserData: Codable, Identifiable {
     let page_read: Int
     let reading_streak: Int
     let profile_img: String
+    let bio:String
 }
