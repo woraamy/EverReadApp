@@ -15,6 +15,7 @@
 		276079942DB4F664001F66C1 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079932DB4F664001F66C1 /* TabButton.swift */; };
 		276079962DB50220001F66C1 /* ActivityCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079952DB50220001F66C1 /* ActivityCard.swift */; };
 		276079982DB50C61001F66C1 /* ReviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276079972DB50C61001F66C1 /* ReviewCard.swift */; };
+		2765065F2DD1E36A00173413 /* ProfileEditModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2765065E2DD1E36A00173413 /* ProfileEditModel.swift */; };
 		276F97E32DD12B4600C86FEE /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276F97E22DD12B4600C86FEE /* EditProfileView.swift */; };
 		2798C1842DBCD63700000EFF /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798C1832DBCD63700000EFF /* SignUpView.swift */; };
 		2798C1862DBCD66700000EFF /* GoogleSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798C1852DBCD66700000EFF /* GoogleSignInButton.swift */; };
@@ -25,6 +26,7 @@
 		27A83AAA2DBE315B00E4613A /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A83AA92DBE315B00E4613A /* AuthenticationService.swift */; };
 		27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A8A8D12DB403D2000F166B /* ProfileView.swift */; };
 		27B463652DCCD64600457055 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27B463642DCCD64600457055 /* UserSession.swift */; };
+		27BC08FC2DD1E6EE00EA5E5B /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BC08FB2DD1E6EE00EA5E5B /* ImagePicker.swift */; };
 		27BEAD662DD1359A008DC5B3 /* OtherProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEAD652DD1359A008DC5B3 /* OtherProfileView.swift */; };
 		27BEAD682DD1374C008DC5B3 /* OtherProfileHeder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BEAD672DD1374C008DC5B3 /* OtherProfileHeder.swift */; };
 		27F4F5152DCD1A85004DF522 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27F4F5142DCD1A85004DF522 /* DataManager.swift */; };
@@ -74,6 +76,7 @@
 		276079932DB4F664001F66C1 /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		276079952DB50220001F66C1 /* ActivityCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCard.swift; sourceTree = "<group>"; };
 		276079972DB50C61001F66C1 /* ReviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCard.swift; sourceTree = "<group>"; };
+		2765065E2DD1E36A00173413 /* ProfileEditModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditModel.swift; sourceTree = "<group>"; };
 		276F97E22DD12B4600C86FEE /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		2798C1832DBCD63700000EFF /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		2798C1852DBCD66700000EFF /* GoogleSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInButton.swift; sourceTree = "<group>"; };
@@ -85,6 +88,7 @@
 		27A8A8D12DB403D2000F166B /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		27AC53CA2DB9227600A8CA7F /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		27B463642DCCD64600457055 /* UserSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
+		27BC08FB2DD1E6EE00EA5E5B /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		27BEAD652DD1359A008DC5B3 /* OtherProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileView.swift; sourceTree = "<group>"; };
 		27BEAD672DD1374C008DC5B3 /* OtherProfileHeder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileHeder.swift; sourceTree = "<group>"; };
 		27F4F5142DCD1A85004DF522 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
@@ -152,6 +156,7 @@
 				2798C1852DBCD66700000EFF /* GoogleSignInButton.swift */,
 				2798C18B2DBCD74000000EFF /* BookCard.swift */,
 				27BEAD672DD1374C008DC5B3 /* OtherProfileHeder.swift */,
+				27BC08FB2DD1E6EE00EA5E5B /* ImagePicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -257,6 +262,7 @@
 				7F7AAC0A2DB66FD600BCBB81 /* GoogleBooksViewModel.swift */,
 				7FCDD3892DCDFBB60038A7A1 /* BookAPIModels.swift */,
 				279A99CD2DD0DD76004CDC48 /* ReviewAPIModels.swift */,
+				2765065E2DD1E36A00173413 /* ProfileEditModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -405,12 +411,14 @@
 				7F7AAC112DB67CC900BCBB81 /* BookDetailsView.swift in Sources */,
 				279A99CE2DD0DD76004CDC48 /* ReviewAPIModels.swift in Sources */,
 				27A8A8D22DB403DB000F166B /* ProfileView.swift in Sources */,
+				2765065F2DD1E36A00173413 /* ProfileEditModel.swift in Sources */,
 				7F7AAC132DB6823600BCBB81 /* DetailTabButton.swift in Sources */,
 				2798C18A2DBCD6DC00000EFF /* MyShelfView.swift in Sources */,
 				7F7AAC0B2DB66FD600BCBB81 /* GoogleBooksViewModel.swift in Sources */,
 				276079982DB50C61001F66C1 /* ReviewCard.swift in Sources */,
 				276079922DB4DAD7001F66C1 /* ColorExtension.swift in Sources */,
 				7FCDD3902DCF05430038A7A1 /* SecureImage.swift in Sources */,
+				27BC08FC2DD1E6EE00EA5E5B /* ImagePicker.swift in Sources */,
 				2798C1862DBCD66700000EFF /* GoogleSignInButton.swift in Sources */,
 				7F6079A22DB8917300BC5DD2 /* MainTabView.swift in Sources */,
 				7FCDD38E2DCE47160038A7A1 /* BookStatusUpdateView.swift in Sources */,

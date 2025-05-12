@@ -25,8 +25,9 @@ struct OtherProfileView: View {
                                 reading: String(user?.reading ?? 0),
                                 review: String(user?.review ?? 0),
                                 follower: "432",
-                                following: "87")
-                        }
+                                following: "87",
+                                profile: user?.profile_img ?? "")
+                                }
                         // tab
                         HStack {
                             Text("Review")
