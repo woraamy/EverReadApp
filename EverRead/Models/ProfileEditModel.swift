@@ -15,8 +15,16 @@ struct EditBioeRequest:Codable{
     let bio:String
 }
 
+struct EditYearlyGoalRequest: Codable {
+    let yearly_goal: Int
+}
+
+struct EditMonthGoalRequest: Codable {
+    let month_goal: Int
+}
+
 class ProfileEditAPIService {
-    private let baseURL = URL(string: "https://everreadapp.onrender.com/api/profile")!
+    private let baseURL = URL(string: "https://everreadapp.onrender.com/api")!
     enum APIError: Error, LocalizedError {
             case invalidURL, requestFailed(Error), invalidResponse, statusCode(Int, String?), decodingError(Error), encodingError(Error), noToken, resourceNotFound
             var errorDescription: String? {
@@ -33,7 +41,7 @@ class ProfileEditAPIService {
             }
         }
     func uploadProfileImage(image: UIImage, userToken: String, completion: @escaping (Result<Data, APIError>) -> Void) {
-            let url = baseURL.appendingPathComponent("upload")
+            let url = baseURL.appendingPathComponent("profile/upload")
             
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
@@ -119,7 +127,7 @@ class ProfileEditAPIService {
                 let body = EditUsernameRequest(username: username)
                 do {
                     let encoded = try JSONEncoder().encode(body)
-                    makeRequest(endpoint: "name", body: encoded)
+                    makeRequest(endpoint: "profile/name", body: encoded)
                 } catch {
                     completion(.failure(.encodingError(error)))
                     return
@@ -130,7 +138,7 @@ class ProfileEditAPIService {
                 let body = EditBioeRequest(bio: bio)
                 do {
                     let encoded = try JSONEncoder().encode(body)
-                    makeRequest(endpoint: "bio", body: encoded)
+                    makeRequest(endpoint: "profile/bio", body: encoded)
                 } catch {
                     completion(.failure(.encodingError(error)))
                     return
@@ -146,5 +154,83 @@ class ProfileEditAPIService {
             }
         }
 
+    func submitYearlyGoal(goal: Int, token: String, completion: @escaping (Result<Void, APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/goal/year") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+
+        let body = EditYearlyGoalRequest(yearly_goal: goal)
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        do {
+            request.httpBody = try JSONEncoder().encode(body)
+        } catch {
+            completion(.failure(.encodingError(error)))
+            return
+        }
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(.requestFailed(error)))
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(.failure(.invalidResponse))
+                return
+            }
+
+            if (200...299).contains(httpResponse.statusCode) {
+                completion(.success(()))
+            } else {
+                let message = data.flatMap { String(data: $0, encoding: .utf8) }
+                completion(.failure(.statusCode(httpResponse.statusCode, message)))
+            }
+        }.resume()
+    }
+    func submitMonthGoal(goal: Int, token: String, completion: @escaping (Result<Void, APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/goal/month") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+
+        let body = EditMonthRequest(month_goal: goal)
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+        do {
+            request.httpBody = try JSONEncoder().encode(body)
+        } catch {
+            completion(.failure(.encodingError(error)))
+            return
+        }
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(.requestFailed(error)))
+                return
+            }
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(.failure(.invalidResponse))
+                return
+            }
+
+            if (200...299).contains(httpResponse.statusCode) {
+                completion(.success(()))
+            } else {
+                let message = data.flatMap { String(data: $0, encoding: .utf8) }
+                completion(.failure(.statusCode(httpResponse.statusCode, message)))
+            }
+        }.resume()
+    }
+
+        
 
     }
