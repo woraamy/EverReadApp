@@ -4,7 +4,8 @@ const Book = require('../../models/Book');
 const Review = require('../../models/Review');
 const History = require('../../models/History');
 const router = express.Router();
-const mongoose = require('mongoose');
+const Follow = require('../../models/Follow');
+
 
 // GET /api/fetchData/userData - fetch user data
 router.get('/', async (req, res) => {
@@ -74,7 +75,8 @@ router.get('/', async (req, res) => {
         return streak;
       };
     const readingStreak = await getReadingStreak(id) || 0;
-
+    const follower = await Follow.countDocuments({followed_user_id : id})
+    const following = await Follow.countDocuments({following_user_id : id})
     res.json({
         id: id,
         username: user.username,
@@ -88,7 +90,11 @@ router.get('/', async (req, res) => {
         yearly_book_read : yearlyBookread,
         monthly_book_read : monthlyBookread,
         page_read : pageRead,
-        reading_streak : readingStreak
+        reading_streak : readingStreak,
+        profile_img: user.profile_img || "",
+        bio: user.bio || "",
+        follower,
+        following
     });
   }
    catch (err) {

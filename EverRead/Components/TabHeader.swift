@@ -7,7 +7,9 @@ struct TabHeader: View {
     var body: some View {
         HStack {
             HStack{
-                Image(systemName: "arrow.left")
+                NavigationLink(destination: EditProfileView()) {
+                    Image(systemName: "pencil")
+                } .foregroundColor(.blue)
                 Text(title)
                     .font(.headline)
                     .foregroundColor(.black)

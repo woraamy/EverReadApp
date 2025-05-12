@@ -29,6 +29,14 @@ const userSchema = new mongoose.Schema({
     type: Number,
     min: [0, 'Monthly goal cannot be negative'],
   },
+  profile_img:{
+    type: String,
+    required: false
+  },
+  bio:{
+    type: String,
+    required: false
+  },
   created_at: {
     type: Date,
     default: Date.now,

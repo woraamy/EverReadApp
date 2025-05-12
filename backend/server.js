@@ -39,27 +39,33 @@ const verifyToken = (req, res, next) => {
 };
 
 // route
-const bookRoutes = require('./routes/book');
 const signUpRoutes = require('./routes/auth/register');
 const signInRoutes = require('./routes/auth/login');
-// const taskRoutes = require('./routes/task');
-
+const bookProgressRoutes = require('./routes/book'); 
+const reviewRoutes = require('./routes/review'); 
+const userDataRoutes = require('./routes/fetchData/userData');
+const followerRoutes = require('./routes/follower');
+const historyRoutes = require('./routes/history');
+const profileRoutes = require('./routes/profile');
+const goalRoutes = require('./routes/goal');
+const feedRoutes = require('./routes/feed');
+const otherUserDataRoutes = require('./routes/fetchData/otherUserData');
 app.use(express.urlencoded({ extended: true }));
 
 //public route
 app.use('/api/auth/register', signUpRoutes);
 app.use('/api/auth/login', signInRoutes);
-app.use('/api/book', bookRoutes);
-// app.use('/api/tasks', taskRoutes);
 
 // Protected Route (Requires Login)
-const userDataRoutes = require('./routes/fetchData/userData')
-app.get('/api/hello', verifyToken , (req, res) => {
-  res.json({ message: `Hello user ${req.user.userId}` });
-});
-
-app.use('/api/fetchData/userData',verifyToken, userDataRoutes)
-
+app.use('/api/fetchData/userData',verifyToken, userDataRoutes);
+app.use('/api/fetchData/otherUserData',verifyToken, otherUserDataRoutes);
+app.use('/api/books/progress', verifyToken, bookProgressRoutes);
+app.use('/api/review', verifyToken, reviewRoutes);
+app.use('/api/follower', verifyToken, followerRoutes);
+app.use('/api/history', verifyToken, historyRoutes);
+app.use('/api/profile', verifyToken, profileRoutes);
+app.use('/api/goal', verifyToken, goalRoutes);
+app.use('/api/feed', verifyToken, feedRoutes);
 
 app.use((req, res, next) => {
   res.status(404).json({ error: 'Resource not found' });

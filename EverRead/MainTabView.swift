@@ -11,42 +11,49 @@ import SwiftUI
 
 struct MainTabView: View {
     @State private var selectedTab = 0
-
+    @EnvironmentObject var session: UserSession
+    private let authenticationService = AuthenticationService()
+    
     var body: some View {
-        TabView(selection: $selectedTab) {
+        if session.isLoggedIn == false {
+            SignInView()
+        } else {
             
-            HomePage()
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
-                .tag(0) 
-            
-            SearchView()
-                .tabItem {
-                    Label("Search", systemImage: "magnifyingglass")
-                }
-                .tag(1)
-            
-            MyShelfView()
-                .tabItem {
-                    Label("Shelves", systemImage: "books.vertical")
-                }
-                .tag(2)
-
-            FeedView()
-                .tabItem {
-                    Label("Feed", systemImage: "newspaper")                }
-                .tag(3)
-
-            ProfileView()
-                .tabItem {
-                    Label("Profile", systemImage: "person")
-                }
-                .tag(4)
+            TabView(selection: $selectedTab) {
+                
+                HomePage()
+                    .tabItem {
+                        Label("Home", systemImage: "house")
+                    }
+                    .tag(0)
+                
+                SearchView()
+                    .tabItem {
+                        Label("Search", systemImage: "magnifyingglass")
+                    }
+                    .tag(1)
+                
+                MyShelfView()
+                    .tabItem {
+                        Label("Shelves", systemImage: "books.vertical")
+                    }
+                    .tag(2)
+                
+                FeedView()
+                    .tabItem {
+                        Label("Feed", systemImage: "newspaper")                }
+                    .tag(3)
+                
+                ProfileView()
+                    .tabItem {
+                        Label("Profile", systemImage: "person")
+                    }
+                    .tag(4)
+            }
+            .accentColor(.darkPinkBrown)
         }
-        .accentColor(.darkPinkBrown)
-    }
-}
+    }}
+    
 
 struct ShelvesView: View {
     var body: some View {
@@ -59,19 +66,9 @@ struct ShelvesView: View {
     }
 }
 
-struct FeedView: View {
-    var body: some View {
-        ZStack {
-            Color.redPink.ignoresSafeArea()
-            Text("Feed Page")
-                .foregroundColor(.darkPinkBrown)
-                .navigationTitle("Feed") // Optional
-        }
-    }
-}
 
 struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {
-        MainTabView()
+        MainTabView().environmentObject(UserSession())
     }
 }

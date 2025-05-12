@@ -7,12 +7,36 @@ struct ProfileCard: View {
     var review:String
     var follower:String
     var following:String
+    var profile: String
+    var bio:String
     var body: some View {
         VStack(alignment: .leading){
             // Profile
             HStack{
-                Image(systemName: "person.crop.circle")
-                    .font(.system(size: 80))
+                if profile == ""{
+                    Image(systemName: "person.crop.circle")
+                        .font(.system(size: 80))
+                }else {
+                    AsyncImage(url: URL(string: profile)) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 80, height:80)
+                                .clipShape(Circle())
+                        case .failure:
+                            Image(systemName: "person.crop.circle.badge.exclam")
+                                .font(.system(size: 80))
+                                .foregroundColor(.red)
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                }
+
                 VStack(alignment: .leading) {
                     Text(name).font(.title2)
                     Text("@\(name)").font(.subheadline).padding(.bottom, 5)
@@ -24,7 +48,7 @@ struct ProfileCard: View {
                 }
             }.padding(.bottom,5)
             //bio
-            Text("Book lover | Fantasy & Sci-Fi enthusiast | Always looking for new recommendations" ).font(.subheadline).padding(.bottom, 5)
+            Text(bio).font(.subheadline).padding(.bottom, 5)
             //info card
             HStack{
                 VStack{
@@ -56,5 +80,5 @@ struct ProfileCard: View {
 }
 
 #Preview {
-    ProfileCard(name:"Jane Reader",bookRead: "42", reading: "3",review: "10", follower: "432", following: "87")
+    ProfileCard(name:"Jane Reader",bookRead: "42", reading: "3",review: "10", follower: "432", following: "87", profile: "", bio:"asdsadsadasdasdasdasdasdasdasdsadasdasdasdasdsadasdasdasdasdasdasdasdasdasdasdasdaasd")
 }

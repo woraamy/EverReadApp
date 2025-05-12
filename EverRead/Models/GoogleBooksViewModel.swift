@@ -8,12 +8,15 @@
 import Foundation
 import Combine
 
+
+
 @MainActor
 class GoogleBooksViewModel: ObservableObject {
     @Published var searchResults: [Book] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
-
+    @Published var selectedBook: Book? = nil
+    
     private var searchCancellable: AnyCancellable?
     
     struct APIConfig {
@@ -36,7 +39,6 @@ class GoogleBooksViewModel: ObservableObject {
         }
         
         let urlString = "https://www.googleapis.com/books/v1/volumes?q=\(urlEncodedQuery)&key=\(APIConfig.googleBooksKey)&maxResults=10"
-        print(urlString)
 
         guard let url = URL(string: urlString) else {
             self.errorMessage = "Invalid URL"
@@ -90,4 +92,38 @@ class GoogleBooksViewModel: ObservableObject {
 
         self.searchResults = [book1, book2]
     }
+    
+    func fetchBookById(by id: String) {
+        let urlString = "https://www.googleapis.com/books/v1/volumes/\(id)?key=\(APIConfig.googleBooksKey)"
+        
+        guard let url = URL(string: urlString) else {
+            self.errorMessage = "Invalid URL for book ID"
+            return
+        }
+
+        isLoading = true
+        errorMessage = nil
+
+        searchCancellable?.cancel()
+
+        searchCancellable = URLSession.shared.dataTaskPublisher(for: url)
+            .map(\.data)
+            .decode(type: Book.self, decoder: JSONDecoder())
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                self?.isLoading = false
+                switch completion {
+                case .finished:
+                    print("Book fetch finished successfully.")
+                case .failure(let error):
+                    print("Book fetch failed: \(error)")
+                    self?.errorMessage = "Failed to fetch book: \(error.localizedDescription)"
+                    self?.selectedBook = nil
+                }
+            }, receiveValue: { [weak self] book in
+                self?.selectedBook = book
+            })
+    }
+
+
 }
